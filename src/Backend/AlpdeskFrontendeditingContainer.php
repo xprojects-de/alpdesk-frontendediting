@@ -10,10 +10,11 @@ class AlpdeskFrontendeditingContainer {
 
   public function generate(): string {
 
-    $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting.js|async';
-    $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting.css';
+    $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_be.js|async';
+    $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_be.css';
 
     $containerTemplate = new BackendTemplate('be_alpdeskfrontendediting_container');
+    $containerTemplate->token = REQUEST_TOKEN;
 
     return $containerTemplate->parse();
   }

@@ -1,0 +1,6 @@
+services:
+    Alpdesk\AlpdeskFrontendediting\Listener\HooksListener:
+        tags:
+            - { name: contao.hook, hook: getPageLayout, method: onGetPageLayout, priority: 0 }
+            - { name: contao.hook, hook: parseTemplate, method: onParseTemplate, priority: 0 }
+            - { name: contao.hook, hook: getContentElement, method: onGetContentElement, priority: 0 }
