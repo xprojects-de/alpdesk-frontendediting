@@ -1,0 +1,5 @@
+<div>
+  <a href="/contao?do=article&table=tl_content&id=98&rt=<?= REQUEST_TOKEN ?>" class="icon-alert" title="" onclick="Backend.openModalIframe({'title': 'test', 'url': this.href}); return false;">Artikel</a>
+  <a href="/contao?do=article&table=tl_content&id=21&act=edit&rt=<?= REQUEST_TOKEN ?>" class="icon-alert" title="" onclick="Backend.openModalIframe({'title': 'test', 'url': this.href}); return false;">Contentelement</a>
+  <iframe src="/" width="100%" height="600" style="border:none;"></iframe>
+</div>
