@@ -1,5 +1,9 @@
 services:
     Alpdesk\AlpdeskFrontendediting\Listener\HooksListener:
+        arguments:
+            - '@contao.framework'
+            - '@security.helper'
+            - '%contao.preview_script%'
         tags:
             - { name: contao.hook, hook: getPageLayout, method: onGetPageLayout, priority: 0 }
             - { name: contao.hook, hook: parseTemplate, method: onParseTemplate, priority: 0 }
