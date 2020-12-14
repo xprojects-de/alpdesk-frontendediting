@@ -5,51 +5,26 @@ declare(strict_types=1);
 namespace Alpdesk\AlpdeskFrontendediting\Utils;
 
 use Contao\Module;
+use Contao\ModuleNavigation;
+use Contao\ModuleCustomnav;
 use Contao\BackendUser;
 
+/**
+ * @todo Better Algo for loading Mods and and Ce-Elements!
+ * 
+ */
 class Utils {
 
-  public static $mod_DoTypes = [
-      'navigation' => 'page',
-      'customnav' => 'page',
-      'breadcrumb' => 'page',
-      'quicknav' => 'page',
-      'quicklink' => 'page',
-      'booknav' => 'page',
-      'sitemap' => 'page',
-      'rocksolid_slider' => 'rocksolid_slider',
-      'form' => 'form',
-  ];
   public static $ce_DoTypes = [
-      'rocksolid_slider' => 'rocksolid_slider',
-      'form' => 'form',
+      'rocksolid_slider' => 'rocksolid_slider'
   ];
 
   public static function getModDoType(Module $module) {
 
     $type = null;
 
-    // @TODO
-    // Check Fragment Controller
-    $moduleType = null;
-    foreach ($GLOBALS['FE_MOD'] as $key => $value) {
-      if (\is_array($value)) {
-        foreach ($value as $subKey => $subValue) {
-          if ($module instanceof $subValue) {
-            $moduleType = $subKey;
-            break 2;
-          }
-        }
-      } else {
-        if ($module instanceof $value) {
-          $moduleType = $subKey;
-          break;
-        }
-      }
-    }
-
-    if ($moduleType !== null && \array_key_exists($moduleType, self::$mod_DoTypes)) {
-      $type = self::$mod_DoTypes[$moduleType];
+    if ($module instanceof ModuleNavigation || $module instanceof ModuleCustomnav) {
+      $type = 'page';
     }
 
     $backendUser = BackendUser::getInstance();
@@ -66,8 +41,12 @@ class Utils {
 
     $type = null;
 
-    if (\array_key_exists($element, self::$ce_DoTypes)) {
-      $type = self::$ce_DoTypes[$element];
+    switch ($element) {
+      case 'rocksolid_slider':
+        $type = 'rocksolid_slider';
+        break;
+      default:
+        break;
     }
 
     return $type;
