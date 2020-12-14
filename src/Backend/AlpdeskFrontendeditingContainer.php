@@ -10,7 +10,7 @@ class AlpdeskFrontendeditingContainer {
 
   public function generate(): string {
 
-    $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_be.js|async';
+    $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_be.js';
     $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_be.css';
 
     $containerTemplate = new BackendTemplate('be_alpdeskfrontendediting_container');
