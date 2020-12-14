@@ -37,16 +37,10 @@
 
       let targetType = parent.getAttribute("data-alpdeskfee-type");
       let targetSubType = parent.getAttribute("data-alpdeskfee-subtype");
-      let targetDesc = parent.getAttribute("data-alpdeskfee-desc");
       let targetDo = parent.getAttribute("data-alpdeskfee-do");
       let targetId = parent.getAttribute("data-alpdeskfee-id");
       let targetPid = parent.getAttribute("data-alpdeskfee-pid");
       let targetPageId = parent.getAttribute("data-alpdeskfee-pageid");
-
-      /*const desc = document.createElement('div');
-       desc.classList.add('alpdeskfee-utilscontainer-desccontainer');
-       desc.innerHTML = targetDesc;
-       c.appendChild(desc);*/
 
       if (targetType === 'ce') {
         const pEdit = document.createElement('div');

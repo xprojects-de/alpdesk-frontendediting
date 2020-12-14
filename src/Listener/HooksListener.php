@@ -88,7 +88,6 @@ class HooksListener {
       $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
           'data-alpdeskfee-type' => 'ce',
           'data-alpdeskfee-subtype' => ($modDoType !== '' ? $modDoType : ''),
-          'data-alpdeskfee-desc' => $GLOBALS['TL_LANG']['alpdeskfee']['ce'],
           'data-alpdeskfee-do' => str_replace('tl_', '', $element->ptable),
           'data-alpdeskfee-id' => $element->id,
           'data-alpdeskfee-pid' => $element->pid,
@@ -107,7 +106,6 @@ class HooksListener {
       if ($modDoType !== null) {
         $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
             'data-alpdeskfee-type' => 'mod',
-            'data-alpdeskfee-desc' => $GLOBALS['TL_LANG']['alpdeskfee']['mod'],
             'data-alpdeskfee-do' => $modDoType,
             'data-alpdeskfee-pageid' => $this->currentPageId
         ]);

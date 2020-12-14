@@ -22,5 +22,5 @@ header,
 
 #tl_listing .listing_focus div.tl_content, 
 #tl_listing .listing_focus div.limit_toggler {
-  background-color: rgba(244, 124, 0, 0.1);
+  /*background-color: rgba(244, 124, 0, 0.1);*/
 }
