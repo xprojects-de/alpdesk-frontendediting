@@ -12,10 +12,15 @@ header,
 }
 
 #tl_listing li {
-  opacity: 0.4;
+  opacity: 1;
 }
 
 #tl_listing .listing_focus {
   border: 1px solid rgb(244, 124, 0);
   opacity: 1;
+}
+
+#tl_listing .listing_focus div.tl_content, 
+#tl_listing .listing_focus div.limit_toggler {
+  background-color: rgba(244, 124, 0, 0.1);
 }

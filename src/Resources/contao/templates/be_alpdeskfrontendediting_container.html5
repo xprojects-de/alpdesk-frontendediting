@@ -14,10 +14,49 @@
         }
       }
       ready(function () {
+
         new AlpdeskBackend('<?= $this->token ?>', Backend, 'alpdesk-fee-frame', 'alpdesk-fee-alpdeskloading');
+
+        var initHeight = (window.getHeight() - 200);
+        document.getElementById('alpdesk-fee-frame-container').style.height = initHeight + 'px';
+        document.getElementById('setdevice').onclick = function () {
+          var device = document.getElementById('getdevice').value;
+          if (device === 'phone') {
+            document.getElementById('alpdesk-fee-frame-container').style.width = 375 + 'px';
+            document.getElementById('alpdesk-fee-frame-container').style.height = (initHeight < 667 ? initHeight : 667) + 'px';
+          } else if (device === 'phone_landscape') {
+            document.getElementById('alpdesk-fee-frame-container').style.height = (initHeight < 375 ? initHeight : 375) + 'px';
+            document.getElementById('alpdesk-fee-frame-container').style.width = 667 + 'px';
+          } else if (device === 'tablet') {
+            document.getElementById('alpdesk-fee-frame-container').style.width = 760 + 'px';
+            document.getElementById('alpdesk-fee-frame-container').style.height = (initHeight < 1024 ? initHeight : 1024) + 'px';
+          } else if (device === 'tablet_landscape') {
+            document.getElementById('alpdesk-fee-frame-container').style.height = (initHeight < 760 ? initHeight : 760) + 'px';
+            document.getElementById('alpdesk-fee-frame-container').style.width = 1024 + 'px';
+          } else {
+            document.getElementById('alpdesk-fee-frame-container').style.width = '100%';
+            document.getElementById('alpdesk-fee-frame-container').style.height = initHeight + 'px';
+          }
+        };
+
       }, false);
     })(window, document);
   </script>
-  <iframe id="alpdesk-fee-frame" src="/contao/preview" width="100%" height="600"></iframe>
+  <div id="alpdesk-fee-frame-legend">
+    <div class="w33 widget">
+      <select id="getdevice" class="tl_select">
+        <option value="desktop">Desktop</option>
+        <option value="tablet">Tablet</option>
+        <option value="tablet_landscape">Tablet landscape</option>
+        <option value="phone">Phone</option>
+        <option value="phone_landscape">Phone landscape</option>
+      </select>
+      <button id="setdevice" class="tl_submit">set</button>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div id="alpdesk-fee-frame-container">
+    <iframe id="alpdesk-fee-frame" src="/contao/preview" width="100%" height="100%"></iframe>
+  </div>
   <div id="alpdesk-fee-alpdeskloading"></div>
 </div>

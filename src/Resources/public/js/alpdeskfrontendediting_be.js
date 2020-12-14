@@ -12,7 +12,6 @@ class AlpdeskBackend {
     AlpdeskBackend.CONTAO_BACKEND = CONTAO_BACKEND;
     AlpdeskBackend.FRAME = FRAME;
     AlpdeskBackend.LOADING = LOADING;
-    document.getElementById(AlpdeskBackend.FRAME).style.height = (window.getHeight() - 150) + 'px';
     window.document.addEventListener(this.ALPDESK_EVENTNAME, AlpdeskBackend.handleEvent, false);
     AlpdeskBackend.iframeLoaded();
   }

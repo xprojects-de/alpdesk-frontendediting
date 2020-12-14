@@ -18,6 +18,7 @@ class HooksListener {
 
   private $tokenChecker = null;
   private $backendUser = null;
+  private $currentPageId = null;
 
   public function __construct(TokenChecker $tokenChecker) {
     $this->tokenChecker = $tokenChecker;
@@ -25,6 +26,8 @@ class HooksListener {
   }
 
   private function getBackendUser() {
+    global $objPage;
+    $this->currentPageId = $objPage->id;
     if ($this->tokenChecker->hasBackendUser()) {
       $this->backendUser = BackendUser::getInstance();
     }
@@ -40,7 +43,9 @@ class HooksListener {
 
   private function checkAccess(): bool {
     if (TL_MODE == 'FE' && $this->backendUser !== null) {
-      return true;
+      if ($this->backendUser->hasAccess($this->currentPageId, 'pagemounts')) {
+        return true;
+      }
     }
     return false;
   }
@@ -86,7 +91,8 @@ class HooksListener {
           'data-alpdeskfee-desc' => $GLOBALS['TL_LANG']['alpdeskfee']['ce'],
           'data-alpdeskfee-do' => str_replace('tl_', '', $element->ptable),
           'data-alpdeskfee-id' => $element->id,
-          'data-alpdeskfee-pid' => $element->pid
+          'data-alpdeskfee-pid' => $element->pid,
+          'data-alpdeskfee-pageid' => $this->currentPageId
       ]);
     }
 
@@ -102,7 +108,8 @@ class HooksListener {
         $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
             'data-alpdeskfee-type' => 'mod',
             'data-alpdeskfee-desc' => $GLOBALS['TL_LANG']['alpdeskfee']['mod'],
-            'data-alpdeskfee-do' => $modDoType
+            'data-alpdeskfee-do' => $modDoType,
+            'data-alpdeskfee-pageid' => $this->currentPageId
         ]);
       }
     }

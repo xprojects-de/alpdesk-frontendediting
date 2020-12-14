@@ -18,13 +18,14 @@
 
     const ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event';
 
-    var dispatchAlpdeskEvent = function (targetType, targetDo, id, pid) {
+    var dispatchAlpdeskEvent = function (targetType, targetPageId, targetDo, id, pid) {
       window.parent.document.dispatchEvent(new CustomEvent(ALPDESK_EVENTNAME, {
         detail: {
           targetType: targetType,
           targetDo: targetDo,
           id: id,
-          pid: pid
+          pid: pid,
+          targetPageId: targetPageId
         }
       }));
     };
@@ -40,11 +41,12 @@
       let targetDo = parent.getAttribute("data-alpdeskfee-do");
       let targetId = parent.getAttribute("data-alpdeskfee-id");
       let targetPid = parent.getAttribute("data-alpdeskfee-pid");
+      let targetPageId = parent.getAttribute("data-alpdeskfee-pageid");
 
-      const desc = document.createElement('div');
-      desc.classList.add('alpdeskfee-utilscontainer-desccontainer');
-      desc.innerHTML = targetDesc;
-      c.appendChild(desc);
+      /*const desc = document.createElement('div');
+       desc.classList.add('alpdeskfee-utilscontainer-desccontainer');
+       desc.innerHTML = targetDesc;
+       c.appendChild(desc);*/
 
       if (targetType === 'ce') {
         const pEdit = document.createElement('div');
@@ -53,7 +55,7 @@
         c.appendChild(pEdit);
         pEdit.onclick = function (e) {
           if (targetType !== null && targetDo !== null) {
-            dispatchAlpdeskEvent(targetType, targetDo, targetId, targetPid);
+            dispatchAlpdeskEvent(targetType, targetPageId, targetDo, targetId, targetPid);
           }
         };
       }
@@ -65,7 +67,7 @@
         c.appendChild(sEdit);
         sEdit.onclick = function (e) {
           if (targetType !== null && targetDo !== null) {
-            dispatchAlpdeskEvent('mod', targetSubType, null, null);
+            dispatchAlpdeskEvent('mod', targetPageId, targetSubType, null, null);
           }
         };
       }
@@ -76,7 +78,7 @@
       c.appendChild(cEdit);
       cEdit.onclick = function (e) {
         if (targetType !== null && targetDo !== null) {
-          dispatchAlpdeskEvent(targetType, targetDo, targetId, null);
+          dispatchAlpdeskEvent(targetType, targetPageId, targetDo, targetId, null);
         }
       };
 
