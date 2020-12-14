@@ -7,7 +7,7 @@ if (Input::get('alpdeskmodal') == 1) {
   $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_backendutils.css';
 }
 
-$GLOBALS['BE_MOD']['alpdeskfrontendediting_legend']['alpdeskfrontendediting'] = [
+$GLOBALS['BE_MOD']['content']['alpdeskfrontendediting'] = [
     'callback' => AlpdeskFrontendeditingContainer::class
 ];
 

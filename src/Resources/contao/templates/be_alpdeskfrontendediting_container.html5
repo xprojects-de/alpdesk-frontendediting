@@ -1,10 +1,23 @@
-<div>
+<div id="alpdesk-fee-backendcontainer">
   <script>
     (function (window, document) {
-      document.addEventListener('DOMContentLoaded', function () {
-        new AlpdeskBackend('<?= $this->token ?>', Backend, 'alpdesk-fee-frame');
+      function ready(callback) {
+        if (document.readyState !== 'loading') {
+          callback();
+        } else if (document.addEventListener) {
+          document.addEventListener('DOMContentLoaded', callback);
+        } else {
+          document.attachEvent('onreadystatechange', function () {
+            if (document.readyState === 'complete')
+              callback();
+          });
+        }
+      }
+      ready(function () {
+        new AlpdeskBackend('<?= $this->token ?>', Backend, 'alpdesk-fee-frame', 'alpdesk-fee-alpdeskloading');
       }, false);
     })(window, document);
   </script>
-  <iframe id="alpdesk-fee-frame" src="/contao/preview" width="100%" height="600" style="border:none;"></iframe>
+  <iframe id="alpdesk-fee-frame" src="/contao/preview" width="100%" height="600"></iframe>
+  <div id="alpdesk-fee-alpdeskloading"></div>
 </div>

@@ -5,3 +5,4 @@ services:
         tags:
             - { name: contao.hook, hook: getPageLayout, method: onGetPageLayout, priority: 0 }
             - { name: contao.hook, hook: getContentElement, method: onGetContentElement, priority: 0 }
+            - { name: contao.hook, hook: getFrontendModule, method: onGetFrontendModule, priority: 0 }
