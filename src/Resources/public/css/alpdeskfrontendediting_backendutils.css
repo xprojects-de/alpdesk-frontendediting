@@ -3,6 +3,7 @@ header,
 #tl_buttons,
 .split-button,
 .tl_panel,
+.tl_header,
 #main_headline {
   display: none;
 }
@@ -11,16 +12,6 @@ header,
   padding-top: 0px;
 }
 
-#tl_listing li {
-  opacity: 1;
-}
-
 #tl_listing .listing_focus {
   border: 1px solid rgb(244, 124, 0);
-  opacity: 1;
-}
-
-#tl_listing .listing_focus div.tl_content, 
-#tl_listing .listing_focus div.limit_toggler {
-  /*background-color: rgba(244, 124, 0, 0.1);*/
 }

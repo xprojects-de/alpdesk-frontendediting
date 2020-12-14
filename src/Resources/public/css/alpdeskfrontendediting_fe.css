@@ -9,12 +9,11 @@
 
 div.alpdeskfee-utilscontainer {
   background-color: rgba(255, 255, 255, 1);
-  /*border: 1px solid rgb(244, 124, 0);*/
-  width: 200px;
+  width: 300px;
   height: auto;
   top: 0;
   left: 50%;
-  margin-left: -100px;
+  margin-left: -150px;
   text-align: center;
   position: absolute;
   display: none;
@@ -45,7 +44,7 @@ div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-editcontainer {
 }
 
 div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-editcontainer {
-  background-size: 20px 20px;
+  background-size: 18px 18px;
 }
 
 div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-edit {
@@ -58,6 +57,22 @@ div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-pedit {
 
 div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-sedit {
   background-image: url('../../../system/themes/flexible/icons/modules.svg');
+}
+
+div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-new {
+  background-image: url('../../../system/themes/flexible/icons/new.svg');
+}
+
+div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-visible {
+  background-image: url('../../../system/themes/flexible/icons/visible.svg');
+}
+
+div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-cut {
+  background-image: url('../../../system/themes/flexible/icons/cut.svg');
+}
+
+div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-delete {
+  background-image: url('../../../system/themes/flexible/icons/delete.svg');
 }
 
 div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-clearcontainer {
