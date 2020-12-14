@@ -42,31 +42,31 @@ class AlpdeskBackend {
 
   }
 
-  static callModal(targetDo, table, id = null, act = null) {
+  static callModal(targetDo, table, id, pid, act) {
     if (AlpdeskBackend.REQUEST_TOKEN !== null && AlpdeskBackend.CONTAO_BACKEND !== null) {
       if (id !== null) {
         if (act !== null) {
           AlpdeskBackend.CONTAO_BACKEND.openModalIframe({'title': 'Frontend-View', 'url': '/contao?alpdeskmodal=1&do=' + targetDo + '&table=' + table + '&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&act=' + act + '&id=' + id});
         } else {
-          AlpdeskBackend.CONTAO_BACKEND.openModalIframe({'title': 'Frontend-View', 'url': '/contao?alpdeskmodal=1&do=' + targetDo + '&table=' + table + '&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + id});
+          AlpdeskBackend.CONTAO_BACKEND.openModalIframe({'title': 'Frontend-View', 'url': '/contao?alpdeskmodal=1&alpdeskfocus_listitem=' + id + '&do=' + targetDo + '&table=' + table + '&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + pid});
         }
       } else {
         AlpdeskBackend.CONTAO_BACKEND.openModalIframe({'title': 'Frontend-View', 'url': '/contao?alpdeskmodal=1&do=' + targetDo + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
       }
       AlpdeskBackend.modalCloseListener();
-  }
+    }
   }
 
   static handleEvent(e) {
     const data = e.detail;
     if (data.targetType === 'ce') {
       if (data.pid !== null) {
-        AlpdeskBackend.callModal(data.targetDo, 'tl_content', data.pid);
+        AlpdeskBackend.callModal(data.targetDo, 'tl_content', data.id, data.pid, null);
       } else {
-        AlpdeskBackend.callModal(data.targetDo, 'tl_content', data.id, 'edit');
+        AlpdeskBackend.callModal(data.targetDo, 'tl_content', data.id, data.pid, 'edit');
       }
     } else if (data.targetType === 'mod') {
-      AlpdeskBackend.callModal(data.targetDo);
+      AlpdeskBackend.callModal(data.targetDo, null, null, null, null);
     }
 
   }

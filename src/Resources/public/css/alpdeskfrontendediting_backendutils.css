@@ -1,12 +1,21 @@
 
-header {
+header,
+#tl_buttons,
+.split-button,
+.tl_panel,
+#main_headline {
   display: none;
 }
 
-#tl_buttons {
-  display: none;
+#container {
+  padding-top: 0px;
 }
 
-.split-button {
-  display: none;
+#tl_listing li {
+  opacity: 0.4;
+}
+
+#tl_listing .listing_focus {
+  border: 1px solid rgb(244, 124, 0);
+  opacity: 1;
 }
