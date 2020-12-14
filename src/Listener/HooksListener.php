@@ -9,41 +9,34 @@ use Contao\PageModel;
 use Contao\PageRegular;
 use Contao\Template;
 use Contao\ContentModel;
-use Contao\CoreBundle\Framework\ContaoFramework;
-use Symfony\Component\Security\Core\Security;
+use Contao\ArticleModel;
+use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
 
 class HooksListener {
 
-  private $framework;
-  private $security;
-  private $previewscript;
+  private $tokenChecker;
+  private $backendUser;
 
-  public function __construct(ContaoFramework $framework, Security $security, string $previewscript) {
-    $this->framework = $framework;
-    $this->security = $security;
-    $this->previewscript = $previewscript;
+  public function __construct(TokenChecker $tokenChecker) {
+    $this->tokenChecker = $tokenChecker;
+    $this->backendUser = $this->tokenChecker->getBackendUsername();
   }
 
   public function onGetPageLayout(PageModel $objPage, LayoutModel $objLayout, PageRegular $objPageRegular): void {
 
-    //$user = $this->security->getUser();
-    if ($this->previewscript == '/preview.php') {
+    if ($this->tokenChecker->hasBackendUser() && $this->backendUser !== null) {
       $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_fe.js|async';
       $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_fe.css';
     }
   }
 
-  public function onParseTemplate(Template $objTemplate) {
-    
-  }
-
   public function onGetContentElement(ContentModel $element, string $buffer): string {
 
-    if (TL_MODE == 'FE' && $this->previewscript == '/preview.php') {
+    if (TL_MODE == 'FE' && $this->tokenChecker->hasBackendUser() && $this->backendUser !== null) {
 
       $classes = 'alpdeskfee-ce';
 
-      $dataAttributes = \array_filter(['data-alpdeskfee-id' => $element->id], function ($v) {
+      $dataAttributes = \array_filter(['data-alpdeskfee-id' => $element->id, 'data-alpdeskfee-pid' => $element->pid, 'data-alpdeskfee-ptable' => str_replace('tl_', '', $element->ptable)], function ($v) {
         return null !== $v;
       });
 

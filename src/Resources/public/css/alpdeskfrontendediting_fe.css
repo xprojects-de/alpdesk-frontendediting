@@ -1,6 +1,45 @@
 
+div[data-alpdeskfee-id] {
+  position: relative;
+}
+
 div.alpdeskfee-active {
-  border-top: 5px solid #F47C00;
-  border-bottom: 2px solid #F47C00;
+  background-color: rgba(244, 124, 0, 0.1);
+}
+
+div.alpdeskfee-utilscontainer {
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(244, 124, 0, 1);
+  width: 140px;
+  height: 20px;
+  left: 50%;
+  margin-left: -70px;
+  padding: 5px;
+  text-align: center;
+  position: absolute;
+  top: 0px;
+  color: #fff;
+  display: none;
+}
+
+div.alpdeskfee-active div.alpdeskfee-utilscontainer {
+  display: block;
+  clear: both;
+}
+
+div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-editcontainer {
+  background-repeat: no-repeat;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
   cursor: pointer;
+  float: left;
+}
+
+div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-edit {
+  background-image: url('../../../system/themes/flexible/icons/edit.svg');
+}
+
+div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-pedit {
+  background-image: url('../../../system/themes/flexible/icons/header.svg');
 }

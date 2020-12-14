@@ -4,12 +4,31 @@ class AlpdeskBackend {
   ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event';
   static REQUEST_TOKEN = null;
   static CONTAO_BACKEND = null;
+  static FRAME = null;
 
   constructor(REQUEST_TOKEN, CONTAO_BACKEND, FRAME) {
     AlpdeskBackend.REQUEST_TOKEN = REQUEST_TOKEN;
     AlpdeskBackend.CONTAO_BACKEND = CONTAO_BACKEND;
-    document.getElementById(FRAME).style.height = (window.getHeight() - 150) + 'px';
-    window.document.addEventListener(this.ALPDESK_EVENTNAME, this.handleEvent, false);
+    AlpdeskBackend.FRAME = FRAME;
+    document.getElementById(AlpdeskBackend.FRAME).style.height = (window.getHeight() - 150) + 'px';
+    window.document.addEventListener(this.ALPDESK_EVENTNAME, AlpdeskBackend.handleEvent, false);
+  }
+
+  static modalCloseListener() {
+    const modalOverlay = document.getElementById('simple-modal-overlay');
+    modalOverlay.onclick = function (e) {
+      document.getElementById(AlpdeskBackend.FRAME).contentWindow.location.reload();
+    };
+    const modal = document.getElementById('simple-modal');
+    for (var i = 0; i < modal.childNodes.length; i++) {
+      if (modal.childNodes[i].className === 'close') {
+        modal.childNodes[i].onclick = function (e) {
+          document.getElementById(AlpdeskBackend.FRAME).contentWindow.location.reload();
+        };
+        break;
+      }
+    }
+
   }
 
   static callModal(target, table, id, act) {
@@ -19,20 +38,21 @@ class AlpdeskBackend {
       } else {
         AlpdeskBackend.CONTAO_BACKEND.openModalIframe({'title': 'Alpdesk', 'url': '/contao?alpdeskmodal=1&do=' + target + '&table=' + table + '&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + id});
       }
+      AlpdeskBackend.modalCloseListener();
     }
   }
 
-  handleEvent(e) {
+  static handleEvent(e) {
     const data = e.detail;
     switch (data.type) {
-      case 'article':
+      case 'parent':
       {
-        AlpdeskBackend.callModal('article', 'tl_content', data.id, null);
+        AlpdeskBackend.callModal(data.ptable, 'tl_content', data.pid, null);
         break;
       }
-      case 'content':
+      case 'element':
       {
-        AlpdeskBackend.callModal('article', 'tl_content', data.id, 'edit');
+        AlpdeskBackend.callModal(data.ptable, 'tl_content', data.id, 'edit');
         break;
       }
       default:
