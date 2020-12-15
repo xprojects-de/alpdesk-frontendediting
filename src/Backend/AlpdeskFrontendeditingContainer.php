@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Alpdesk\AlpdeskFrontendediting\Backend;
 
 use Contao\BackendTemplate;
+use Contao\Environment;
 
 class AlpdeskFrontendeditingContainer {
 
@@ -15,6 +16,7 @@ class AlpdeskFrontendeditingContainer {
 
     $containerTemplate = new BackendTemplate('be_alpdeskfrontendediting_container');
     $containerTemplate->token = REQUEST_TOKEN;
+    $containerTemplate->base = Environment::get('base');
 
     return $containerTemplate->parse();
   }

@@ -5,7 +5,6 @@ div.alpdeskfee-article-container {
 }
 
 .alpdeskfee-article-container:hover {
-  background-color: rgba(255, 252, 225, 0.8);
   border-right: 3px solid rgb(244, 124, 0);
 }
 

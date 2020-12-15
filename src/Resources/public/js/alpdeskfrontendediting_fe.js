@@ -225,18 +225,27 @@
       }
     };
 
-    scanAlpdeskElements();
+    var checkInIframe = function () {
+      return (window.location !== window.parent.location);
+    };
 
-    if (showPageEdit === true && globalTargetPageId !== null && globalTargetPageId !== '' && globalTargetPageId !== undefined && globalTargetPageId !== 0) {
-      const bodyElement = document.body;
-      if (bodyElement !== null && bodyElement !== undefined) {
-        bodyElement.setAttribute('data-alpdeskfee-type', TARGETTYPE_PAGE);
-        bodyElement.setAttribute('data-alpdeskfee-desc', 'Page');
-        bodyElement.setAttribute('data-alpdeskfee-do', TARGETTYPE_PAGE);
-        bodyElement.setAttribute('data-alpdeskfee-id', globalTargetPageId);
-        bodyElement.setAttribute('data-alpdeskfee-pageid', globalTargetPageId);
-        appendAlpdeskUtilsContainer(bodyElement, true);
+    // Maybe problem at MultiDomain-Webpage
+    if (checkInIframe() === true) {
+
+      scanAlpdeskElements();
+
+      if (showPageEdit === true && globalTargetPageId !== null && globalTargetPageId !== '' && globalTargetPageId !== undefined && globalTargetPageId !== 0) {
+        const bodyElement = document.body;
+        if (bodyElement !== null && bodyElement !== undefined) {
+          bodyElement.setAttribute('data-alpdeskfee-type', TARGETTYPE_PAGE);
+          bodyElement.setAttribute('data-alpdeskfee-desc', 'Page');
+          bodyElement.setAttribute('data-alpdeskfee-do', TARGETTYPE_PAGE);
+          bodyElement.setAttribute('data-alpdeskfee-id', globalTargetPageId);
+          bodyElement.setAttribute('data-alpdeskfee-pageid', globalTargetPageId);
+          appendAlpdeskUtilsContainer(bodyElement, true);
+        }
       }
+
     }
 
   }, false);
