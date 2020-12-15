@@ -8,8 +8,9 @@
       document.addEventListener('DOMContentLoaded', callback);
     } else {
       document.attachEvent('onreadystatechange', function () {
-        if (document.readyState === 'complete')
+        if (document.readyState === 'complete') {
           callback();
+        }
       });
     }
   }
@@ -27,24 +28,24 @@
     const ACTION_ELEMENT_EDIT = 'element_edit';
     const ACTION_ELEMENT_SHOW = 'element_show';
 
-    var globalTargetPageId = null;
-    var showPageEdit = false;
+    let globalTargetPageId = null;
+    let showPageEdit = false;
 
-    var dispatchAlpdeskEvent = function (params) {
+    function dispatchEvent(params) {
       window.parent.document.dispatchEvent(new CustomEvent(ALPDESK_EVENTNAME, {
         detail: params
       }));
-    };
+    }
 
-    var createEditElement = function (parent, elementclass) {
+    function createContainerElement(parent, elementclass) {
       const element = document.createElement('div');
       element.classList.add('alpdeskfee-utilscontainer-editcontainer');
       element.classList.add(elementclass);
       parent.appendChild(element);
       return element;
-    };
+    }
 
-    var appendAlpdeskUtilsContainer = function (parent, notUseParent) {
+    function appendUtilsContainer(parent, notUseParent) {
 
       let targetType = parent.getAttribute('data-alpdeskfee-type');
       let targetDesc = parent.getAttribute('data-alpdeskfee-desc');
@@ -90,9 +91,9 @@
       }
 
       if (targetType === TARGETTYPE_PAGE) {
-        const cEdit = createEditElement(c, 'alpdeskfee-utilscontainer-edit');
+        const cEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
         cEdit.onclick = function () {
-          dispatchAlpdeskEvent({
+          dispatchEvent({
             action: ACTION_ELEMENT_EDIT,
             targetType: targetType,
             targetDo: targetDo,
@@ -100,9 +101,9 @@
             targetPageId: targetPageId
           });
         };
-        const cShow = createEditElement(c, 'alpdeskfee-utilscontainer-root');
+        const cShow = createContainerElement(c, 'alpdeskfee-utilscontainer-root');
         cShow.onclick = function () {
-          dispatchAlpdeskEvent({
+          dispatchEvent({
             action: ACTION_ELEMENT_SHOW,
             targetType: TARGETTYPE_PAGE,
             targetDo: TARGETTYPE_PAGE,
@@ -110,9 +111,9 @@
             targetPageId: targetPageId
           });
         };
-        const cEditArticles = createEditElement(c, 'alpdeskfee-utilscontainer-rootarticle');
+        const cEditArticles = createContainerElement(c, 'alpdeskfee-utilscontainer-rootarticle');
         cEditArticles.onclick = function () {
-          dispatchAlpdeskEvent({
+          dispatchEvent({
             action: ACTION_ELEMENT_SHOW,
             targetType: TARGETTYPE_ARTICLE,
             targetDo: TARGETTYPE_ARTICLE,
@@ -122,9 +123,9 @@
         };
       } else if (targetType === TARGETTYPE_ARTICLE) {
         if (canEditArticle === true) {
-          const cEdit = createEditElement(c, 'alpdeskfee-utilscontainer-articles');
+          const cEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-articles');
           cEdit.onclick = function () {
-            dispatchAlpdeskEvent({
+            dispatchEvent({
               action: ACTION_ELEMENT_EDIT,
               targetType: targetType,
               targetDo: targetDo,
@@ -132,9 +133,9 @@
               targetPageId: targetPageId
             });
           };
-          const pEdit = createEditElement(c, 'alpdeskfee-utilscontainer-edit');
+          const pEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
           pEdit.onclick = function () {
-            dispatchAlpdeskEvent({
+            dispatchEvent({
               action: ACTION_PARENT_EDIT,
               targetType: targetType,
               targetDo: targetDo,
@@ -146,9 +147,9 @@
         }
       } else if (targetType === TARGETTYPE_CE) {
         if (canEditArticle === true) {
-          const pEdit = createEditElement(c, 'alpdeskfee-utilscontainer-pedit');
+          const pEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-pedit');
           pEdit.onclick = function () {
-            dispatchAlpdeskEvent({
+            dispatchEvent({
               action: ACTION_PARENT_EDIT,
               targetType: targetType,
               targetDo: targetDo,
@@ -157,9 +158,9 @@
               targetPageId: targetPageId
             });
           };
-          const cEdit = createEditElement(c, 'alpdeskfee-utilscontainer-edit');
+          const cEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
           cEdit.onclick = function () {
-            dispatchAlpdeskEvent({
+            dispatchEvent({
               action: ACTION_ELEMENT_EDIT,
               targetType: targetType,
               targetDo: targetDo,
@@ -168,9 +169,9 @@
             });
           };
           if (targetSubType !== null && targetSubType !== '') {
-            const sEdit = createEditElement(c, 'alpdeskfee-utilscontainer-sedit');
+            const sEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-sedit');
             sEdit.onclick = function () {
-              dispatchAlpdeskEvent({
+              dispatchEvent({
                 action: ACTION_ELEMENT_EDIT,
                 targetType: TARGETTYPE_MOD,
                 targetDo: targetSubType,
@@ -181,9 +182,9 @@
         }
       } else if (targetType === TARGETTYPE_MOD) {
         if (canEditArticle === true) {
-          const cEdit = createEditElement(c, 'alpdeskfee-utilscontainer-edit');
+          const cEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
           cEdit.onclick = function () {
-            dispatchAlpdeskEvent({
+            dispatchEvent({
               action: ACTION_ELEMENT_EDIT,
               targetType: targetType,
               targetDo: targetDo,
@@ -198,15 +199,15 @@
       cClear.classList.add('alpdeskfee-utilscontainer-clearcontainer');
       c.appendChild(cClear);
 
-    };
+    }
 
-    var scanAlpdeskElements = function () {
+    function scanElements() {
       let data = document.querySelectorAll("*[data-alpdeskfee-type]");
       for (let i = 0; i < data.length; i++) {
         if (data[i].getAttribute('data-alpdeskfee-type') === TARGETTYPE_ARTICLE) {
           let parentNode = data[i].parentElement;
           parentNode.classList.add('alpdeskfee-article-container');
-          appendAlpdeskUtilsContainer(data[i], false);
+          appendUtilsContainer(data[i], false);
           parentNode.onmouseover = function () {
             data[i].classList.add("alpdeskfee-parent-active");
           };
@@ -214,7 +215,7 @@
             data[i].classList.remove("alpdeskfee-parent-active");
           };
         } else {
-          appendAlpdeskUtilsContainer(data[i], true);
+          appendUtilsContainer(data[i], true);
           data[i].onmouseover = function () {
             data[i].classList.add("alpdeskfee-active");
           };
@@ -223,16 +224,16 @@
           };
         }
       }
-    };
+    }
 
-    var checkInIframe = function () {
+    function checkInIframe() {
       return (window.location !== window.parent.location);
-    };
+    }
 
     // Maybe problem at MultiDomain-Webpage
     if (checkInIframe() === true) {
 
-      scanAlpdeskElements();
+      scanElements();
 
       if (showPageEdit === true && globalTargetPageId !== null && globalTargetPageId !== '' && globalTargetPageId !== undefined && globalTargetPageId !== 0) {
         const bodyElement = document.body;
@@ -242,7 +243,7 @@
           bodyElement.setAttribute('data-alpdeskfee-do', TARGETTYPE_PAGE);
           bodyElement.setAttribute('data-alpdeskfee-id', globalTargetPageId);
           bodyElement.setAttribute('data-alpdeskfee-pageid', globalTargetPageId);
-          appendAlpdeskUtilsContainer(bodyElement, true);
+          appendUtilsContainer(bodyElement, true);
         }
       }
 
