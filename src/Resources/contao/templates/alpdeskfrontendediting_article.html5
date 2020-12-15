@@ -5,4 +5,5 @@
      data-alpdeskfee-id="<?= $this->aid ?>"
      data-alpdeskfee-articleChmodEdit="<?= $this->articleChmodEdit ?>"
      data-alpdeskfee-chmodpageedit="<?= $this->pageChmodEdit ?>"
-     data-alpdeskfee-pageid="<?= $this->pageid ?>"></div>
+     data-alpdeskfee-pageid="<?= $this->pageid ?>">
+</div>

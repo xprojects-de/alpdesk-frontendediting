@@ -15,7 +15,7 @@
       }
       ready(function () {
 
-        new AlpdeskBackend('<?= $this->token ?>', Backend, 'alpdesk-fee-frame', 'alpdesk-fee-alpdeskloading');
+        AlpdeskBackend.init('<?= $this->token ?>', Backend, 'alpdesk-fee-frame', 'alpdesk-fee-alpdeskloading');
 
         var initHeight = (window.getHeight() - 200);
         document.getElementById('alpdesk-fee-frame-container').style.height = initHeight + 'px';

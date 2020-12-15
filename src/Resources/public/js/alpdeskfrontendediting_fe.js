@@ -82,7 +82,7 @@
         c.classList.add('alpdeskfee-utilscontainer');
       }
 
-      if (targetType !== TARGETTYPE_PAGE && targetDesc !== null && targetDesc !== undefined && targetDesc !== '') {
+      if (targetDesc !== null && targetDesc !== undefined && targetDesc !== '') {
         const cDesc = document.createElement('div');
         cDesc.classList.add('alpdeskfee-utilscontainer-desc');
         c.appendChild(cDesc);
@@ -122,6 +122,16 @@
         };
       } else if (targetType === TARGETTYPE_ARTICLE) {
         if (canEditArticle === true) {
+          const cEdit = createEditElement(c, 'alpdeskfee-utilscontainer-articles');
+          cEdit.onclick = function () {
+            dispatchAlpdeskEvent({
+              action: ACTION_ELEMENT_EDIT,
+              targetType: targetType,
+              targetDo: targetDo,
+              id: targetId,
+              targetPageId: targetPageId
+            });
+          };
           const pEdit = createEditElement(c, 'alpdeskfee-utilscontainer-edit');
           pEdit.onclick = function () {
             dispatchAlpdeskEvent({
@@ -130,16 +140,6 @@
               targetDo: targetDo,
               id: targetId,
               pid: targetPid,
-              targetPageId: targetPageId
-            });
-          };
-          const cEdit = createEditElement(c, 'alpdeskfee-utilscontainer-pedit');
-          cEdit.onclick = function () {
-            dispatchAlpdeskEvent({
-              action: ACTION_ELEMENT_EDIT,
-              targetType: targetType,
-              targetDo: targetDo,
-              id: targetId,
               targetPageId: targetPageId
             });
           };
@@ -231,6 +231,7 @@
       const bodyElement = document.body;
       if (bodyElement !== null && bodyElement !== undefined) {
         bodyElement.setAttribute('data-alpdeskfee-type', TARGETTYPE_PAGE);
+        bodyElement.setAttribute('data-alpdeskfee-desc', 'Page');
         bodyElement.setAttribute('data-alpdeskfee-do', TARGETTYPE_PAGE);
         bodyElement.setAttribute('data-alpdeskfee-id', globalTargetPageId);
         bodyElement.setAttribute('data-alpdeskfee-pageid', globalTargetPageId);

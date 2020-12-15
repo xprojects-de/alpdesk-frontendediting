@@ -1,30 +1,25 @@
 
 class AlpdeskBackend {
 
-  ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event';
-  static REQUEST_TOKEN = null;
-  static CONTAO_BACKEND = null;
-  static FRAME = null;
-  static LOADING = null;
+  static init(REQUEST_TOKEN, CONTAO_BACKEND, FRAME, LOADING) {
 
-  static TARGETTYPE_PAGE = 'page';
-  static TARGETTYPE_ARTICLE = 'article';
-  static TARGETTYPE_CE = 'ce';
-  static TARGETTYPE_MOD = 'mod';
-
-  static ACTION_PARENT_EDIT = 'parent_edit';
-  static ACTION_ELEMENT_EDIT = 'element_edit';
-  static ACTION_ELEMENT_SHOW = 'element_show';
-
-  static MODAL_TITLE = 'Frontend-View';
-
-  constructor(REQUEST_TOKEN, CONTAO_BACKEND, FRAME, LOADING) {
     AlpdeskBackend.REQUEST_TOKEN = REQUEST_TOKEN;
     AlpdeskBackend.CONTAO_BACKEND = CONTAO_BACKEND;
     AlpdeskBackend.FRAME = FRAME;
     AlpdeskBackend.LOADING = LOADING;
-    window.document.addEventListener(this.ALPDESK_EVENTNAME, AlpdeskBackend.handleEvent, false);
+    AlpdeskBackend.ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event';
+    AlpdeskBackend.TARGETTYPE_PAGE = 'page';
+    AlpdeskBackend.TARGETTYPE_ARTICLE = 'article';
+    AlpdeskBackend.TARGETTYPE_CE = 'ce';
+    AlpdeskBackend.TARGETTYPE_MOD = 'mod';
+    AlpdeskBackend.ACTION_PARENT_EDIT = 'parent_edit';
+    AlpdeskBackend.ACTION_ELEMENT_EDIT = 'element_edit';
+    AlpdeskBackend.ACTION_ELEMENT_SHOW = 'element_show';
+    AlpdeskBackend.MODAL_TITLE = 'Frontend-View';
+
+    window.document.addEventListener(AlpdeskBackend.ALPDESK_EVENTNAME, AlpdeskBackend.handleEvent, false);
     AlpdeskBackend.iframeLoaded();
+
   }
 
   static iframeLoaded() {
@@ -87,6 +82,5 @@ class AlpdeskBackend {
       }
 
     }
-
   }
 }

@@ -16,11 +16,11 @@ div.alpdeskfee-article-container {
 div.alpdeskfee-utilscontainer,
 div.alpdeskfee-utilscontainer-page {
   background-color: rgba(255, 255, 255, 1);
-  width: 320px;
+  width: 200px;
   height: auto;
   top: 0;
   left: 50%;
-  margin-left: -160px;
+  margin-left: -100px;
   text-align: center;
   position: absolute;
   display: none;
@@ -37,7 +37,7 @@ div.alpdeskfee-utilscontainer-page {
   left: 0%;
   margin-left: 0px;
   display: block;
-  width: 150px;
+  width: 165px;
 }
 
 .alpdeskfee-article-container div.alpdeskfee-parent-active {
@@ -60,10 +60,10 @@ div.alpdeskfee-utilscontainer-page {
 
 .alpdeskfee-utilscontainer-editcontainer {
   background-repeat: no-repeat;
-  width: 35px;
+  width: 30px;
   height: 35px;
-  margin-left: 3px;
-  margin-right: 3px;
+  margin-left: 2px;
+  margin-right: 2px;
   background-position: center center;
   cursor: pointer;
   float: left;
@@ -88,6 +88,10 @@ div.alpdeskfee-utilscontainer-page {
 
 .alpdeskfee-utilscontainer-rootarticle {
   background-image: url('../../../system/themes/flexible/icons/regular.svg');
+}
+
+.alpdeskfee-utilscontainer-articles {
+  background-image: url('../../../system/themes/flexible/icons/articles.svg');
 }
 
 .alpdeskfee-utilscontainer-clearcontainer {
