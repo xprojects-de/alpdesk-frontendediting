@@ -8,25 +8,26 @@
       document.addEventListener('DOMContentLoaded', callback);
     } else {
       document.attachEvent('onreadystatechange', function () {
-        if (document.readyState === 'complete')
+        if (document.readyState === 'complete') {
           callback();
+        }
       });
     }
   }
 
   ready(function () {
 
-    var getUrlParam = function getSearchParams(k) {
-      var p = {};
+    function getUrlParams(k) {
+      let p = {};
       location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (s, k, v) {
         p[k] = v;
       });
       return k ? p[k] : p;
-    };
+    }
 
-    var displayHeader = true;
-    var hideHeader = getUrlParam('alpdesk_hideheader');
-    if (hideHeader !== null && hideHeader !== undefined && hideHeader == 1) {
+    let displayHeader = true;
+    let hideHeader = getUrlParams('alpdesk_hideheader');
+    if (hideHeader !== null && hideHeader !== undefined && hideHeader === '1') {
       displayHeader = false;
     }
     if (displayHeader === true) {
@@ -36,22 +37,12 @@
       }
     }
 
-    var focusElementId = getUrlParam('alpdeskfocus_listitem');
+    let focusElementId = getUrlParams('alpdeskfocus_listitem');
     if (focusElementId !== null && focusElementId !== undefined) {
-      var e = document.getElementById('li_' + focusElementId);
+      let e = document.getElementById('li_' + focusElementId);
       if (e !== null && e !== undefined) {
         e.classList.add('listing_focus');
         e.style.display = 'block';
-      }
-    }
-
-    var hideElements = getUrlParam('alpdesk_hideelements');
-    if (hideElements !== null && hideElements !== undefined && hideElements == 1) {
-      let hideOtherElements = document.querySelectorAll('.tl_listing_container li');
-      for (let i = 0; i < hideOtherElements.length; i++) {
-        if (hideOtherElements[i].id !== 'li_' + focusElementId) {
-          hideOtherElements[i].style.display = 'none';
-        }
       }
     }
 
