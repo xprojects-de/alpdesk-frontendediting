@@ -1,19 +1,26 @@
 
-*[data-alpdeskfee-type] {
+*[data-alpdeskfee-type],
+div.alpdeskfee-article-container {
   position: relative;
+}
+
+.alpdeskfee-article-container:hover {
+  background-color: rgba(255, 252, 225, 0.8);
+  border-right: 3px solid rgb(244, 124, 0);
 }
 
 .alpdeskfee-active {
   background-color: rgba(244, 124, 0, 0.1);
 }
 
-div.alpdeskfee-utilscontainer {
+div.alpdeskfee-utilscontainer,
+div.alpdeskfee-utilscontainer-page {
   background-color: rgba(255, 255, 255, 1);
-  width: 300px;
+  width: 320px;
   height: auto;
   top: 0;
   left: 50%;
-  margin-left: -150px;
+  margin-left: -160px;
   text-align: center;
   position: absolute;
   display: none;
@@ -22,17 +29,36 @@ div.alpdeskfee-utilscontainer {
   font-size:.875rem;
   line-height:1;
   color:#444;
+  border-bottom: 2px solid rgb(244, 124, 0);
+  z-index: 1000;
 }
 
-.alpdeskfee-active div.alpdeskfee-utilscontainer {
+div.alpdeskfee-utilscontainer-page {
+  left: 0%;
+  margin-left: 0px;
+  display: block;
+  width: 150px;
+}
+
+.alpdeskfee-article-container div.alpdeskfee-parent-active {
+  width: auto;
+  left: auto;
+  right:0;
+  margin-left: 0px;
+  z-index: 1001;  
+}
+
+.alpdeskfee-active div.alpdeskfee-utilscontainer,
+.alpdeskfee-article-container div.alpdeskfee-parent-active {
   display: block;
 }
 
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-desccontainer {
+.alpdeskfee-utilscontainer-desc {
   float: left;
+  margin: 10px;
 }
 
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-editcontainer {
+.alpdeskfee-utilscontainer-editcontainer {
   background-repeat: no-repeat;
   width: 35px;
   height: 35px;
@@ -41,40 +67,29 @@ div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-editcontainer {
   background-position: center center;
   cursor: pointer;
   float: left;
-}
-
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-editcontainer {
   background-size: 18px 18px;
 }
 
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-edit {
+.alpdeskfee-utilscontainer-edit {
   background-image: url('../../../system/themes/flexible/icons/edit.svg');
 }
 
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-pedit {
+.alpdeskfee-utilscontainer-pedit {
   background-image: url('../../../system/themes/flexible/icons/header.svg');
 }
 
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-sedit {
+.alpdeskfee-utilscontainer-sedit {
   background-image: url('../../../system/themes/flexible/icons/modules.svg');
 }
 
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-new {
-  background-image: url('../../../system/themes/flexible/icons/new.svg');
+.alpdeskfee-utilscontainer-root {
+  background-image: url('../../../system/themes/flexible/icons/root.svg');
 }
 
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-visible {
-  background-image: url('../../../system/themes/flexible/icons/visible.svg');
+.alpdeskfee-utilscontainer-rootarticle {
+  background-image: url('../../../system/themes/flexible/icons/regular.svg');
 }
 
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-cut {
-  background-image: url('../../../system/themes/flexible/icons/cut.svg');
-}
-
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-delete {
-  background-image: url('../../../system/themes/flexible/icons/delete.svg');
-}
-
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-clearcontainer {
+.alpdeskfee-utilscontainer-clearcontainer {
   clear: both;
 }

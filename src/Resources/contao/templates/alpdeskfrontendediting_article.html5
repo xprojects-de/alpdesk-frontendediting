@@ -1,0 +1,8 @@
+<div class="alpdeskfee-article"
+     data-alpdeskfee-type="<?= $this->type ?>"
+     data-alpdeskfee-desc="<?= $this->desc ?>"
+     data-alpdeskfee-do="<?= $this->do ?>"
+     data-alpdeskfee-id="<?= $this->aid ?>"
+     data-alpdeskfee-articleChmodEdit="<?= $this->articleChmodEdit ?>"
+     data-alpdeskfee-chmodpageedit="<?= $this->pageChmodEdit ?>"
+     data-alpdeskfee-pageid="<?= $this->pageid ?>"></div>

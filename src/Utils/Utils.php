@@ -27,11 +27,8 @@ class Utils {
       $type = 'page';
     }
 
-    $backendUser = BackendUser::getInstance();
-    if (!$backendUser->isAdmin) {
-      if (\count($backendUser->modules) <= 0 || !\in_array($type, $backendUser->modules)) {
-        $type = null;
-      }
+    if (!BackendUser::getInstance()->hasAccess($type, 'modules')) {
+      $type = null;
     }
 
     return $type;
