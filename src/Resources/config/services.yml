@@ -4,5 +4,6 @@ services:
             - '@contao.security.token_checker'
         tags:
             - { name: contao.hook, hook: getPageLayout, method: onGetPageLayout, priority: 0 }
+            - { name: contao.hook, hook: compileArticle, method: onCompileArticle, priority: 0 }
             - { name: contao.hook, hook: getContentElement, method: onGetContentElement, priority: 0 }
             - { name: contao.hook, hook: getFrontendModule, method: onGetFrontendModule, priority: 0 }

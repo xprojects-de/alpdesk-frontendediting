@@ -1,65 +1,98 @@
 
-*[data-alpdeskfee-type] {
+*[data-alpdeskfee-type],
+div.alpdeskfee-article-container {
   position: relative;
+}
+
+.alpdeskfee-article-container:hover {
+  border-right: 3px solid rgb(244, 124, 0);
 }
 
 .alpdeskfee-active {
   background-color: rgba(244, 124, 0, 0.1);
 }
 
-.alpdeskfee-utilscontainer-desccontainer {
-  padding: 5px;
-  font-size: 13px;
-}
-
-.alpdeskfee-active div.alpdeskfee-utilscontainer {
-  display: block;
+div.alpdeskfee-utilscontainer,
+div.alpdeskfee-utilscontainer-page {
+  background-color: rgba(255, 255, 255, 1);
+  width: 200px;
+  height: auto;
+  top: 0;
+  left: 50%;
+  margin-left: -100px;
+  text-align: center;
+  position: absolute;
+  display: none;
   font-family:-apple-system,system-ui,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
   font-weight:400;
   font-size:.875rem;
   line-height:1;
   color:#444;
+  border-bottom: 2px solid rgb(244, 124, 0);
+  z-index: 1000;
 }
 
-div.alpdeskfee-utilscontainer {
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgb(244, 124, 0);
-  width: auto;
-  height: auto;
+div.alpdeskfee-utilscontainer-page {
   left: 0%;
-  text-align: center;
-  position: absolute;
-  top: 0px;
-  display: none;
+  margin-left: 0px;
+  display: block;
+  width: 165px;
 }
 
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-desccontainer {
+.alpdeskfee-article-container div.alpdeskfee-parent-active {
+  width: auto;
+  left: auto;
+  right:0;
+  margin-left: 0px;
+  z-index: 1001;  
+}
+
+.alpdeskfee-active div.alpdeskfee-utilscontainer,
+.alpdeskfee-article-container div.alpdeskfee-parent-active {
+  display: block;
+}
+
+.alpdeskfee-utilscontainer-desc {
   float: left;
+  margin: 10px;
 }
 
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-editcontainer {
+.alpdeskfee-utilscontainer-editcontainer {
   background-repeat: no-repeat;
-  width: 25px;
-  height: 25px;
-  margin-left: 3px;
-  margin-right: 3px;
+  width: 30px;
+  height: 35px;
+  margin-left: 2px;
+  margin-right: 2px;
   background-position: center center;
   cursor: pointer;
   float: left;
+  background-size: 18px 18px;
 }
 
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-edit {
+.alpdeskfee-utilscontainer-edit {
   background-image: url('../../../system/themes/flexible/icons/edit.svg');
 }
 
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-pedit {
+.alpdeskfee-utilscontainer-pedit {
   background-image: url('../../../system/themes/flexible/icons/header.svg');
 }
 
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-sedit {
+.alpdeskfee-utilscontainer-sedit {
   background-image: url('../../../system/themes/flexible/icons/modules.svg');
 }
 
-div.alpdeskfee-utilscontainer .alpdeskfee-utilscontainer-clearcontainer {
+.alpdeskfee-utilscontainer-root {
+  background-image: url('../../../system/themes/flexible/icons/root.svg');
+}
+
+.alpdeskfee-utilscontainer-rootarticle {
+  background-image: url('../../../system/themes/flexible/icons/regular.svg');
+}
+
+.alpdeskfee-utilscontainer-articles {
+  background-image: url('../../../system/themes/flexible/icons/articles.svg');
+}
+
+.alpdeskfee-utilscontainer-clearcontainer {
   clear: both;
 }
