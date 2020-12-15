@@ -1,4 +1,5 @@
 
+// Currently all is static so no instance can be created
 class AlpdeskBackend {
 
   static init(REQUEST_TOKEN, CONTAO_BACKEND, FRAME, LOADING, FRAMECHANGEDEVENT) {
@@ -8,22 +9,22 @@ class AlpdeskBackend {
     AlpdeskBackend.FRAME = FRAME;
     AlpdeskBackend.LOADING = LOADING;
     AlpdeskBackend.FRAMECHANGEDEVENT = FRAMECHANGEDEVENT;
+
     AlpdeskBackend.ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event';
+
     AlpdeskBackend.TARGETTYPE_PAGE = 'page';
     AlpdeskBackend.TARGETTYPE_ARTICLE = 'article';
     AlpdeskBackend.TARGETTYPE_CE = 'ce';
     AlpdeskBackend.TARGETTYPE_MOD = 'mod';
+
     AlpdeskBackend.ACTION_PARENT_EDIT = 'parent_edit';
     AlpdeskBackend.ACTION_ELEMENT_EDIT = 'element_edit';
     AlpdeskBackend.ACTION_ELEMENT_SHOW = 'element_show';
+
     AlpdeskBackend.MODAL_TITLE = 'Frontend-View';
 
     window.document.addEventListener(AlpdeskBackend.ALPDESK_EVENTNAME, AlpdeskBackend.handleEvent, false);
-    AlpdeskBackend.iframeLoaded();
 
-  }
-
-  static iframeLoaded() {
     document.getElementById(AlpdeskBackend.FRAME).onload = function () {
       document.getElementById(AlpdeskBackend.LOADING).style.display = 'none';
       window.document.dispatchEvent(new CustomEvent(AlpdeskBackend.FRAMECHANGEDEVENT, {
@@ -32,6 +33,7 @@ class AlpdeskBackend {
         }
       }));
     };
+
   }
 
   static modalCloseListener() {
@@ -41,7 +43,7 @@ class AlpdeskBackend {
       document.getElementById(AlpdeskBackend.FRAME).contentWindow.location.reload();
     };
     const modal = document.getElementById('simple-modal');
-    for (var i = 0; i < modal.childNodes.length; i++) {
+    for (let i = 0; i < modal.childNodes.length; i++) {
       if (modal.childNodes[i].className === 'close') {
         modal.childNodes[i].onclick = function (e) {
           document.getElementById(AlpdeskBackend.LOADING).style.display = 'block';
@@ -50,7 +52,6 @@ class AlpdeskBackend {
         break;
       }
     }
-
   }
 
   static callModal(params) {
@@ -99,50 +100,57 @@ class AlpdeskBackend {
       document.addEventListener('DOMContentLoaded', callback);
     } else {
       document.attachEvent('onreadystatechange', function () {
-        if (document.readyState === 'complete')
+        if (document.readyState === 'complete') {
           callback();
+        }
       });
     }
   }
   ready(function () {
 
+    const previewLabel = 'preview.php';
     const frameChangedEvent = 'alpdesk_frontendediting_framechangedEvent';
     const rt = document.getElementById('alpdesk-fee-frame').getAttribute('data-request-token');
-    const base = document.getElementById('alpdesk-fee-frame').getAttribute('data-base') + 'preview.php/';
+    const base = document.getElementById('alpdesk-fee-frame').getAttribute('data-base') + previewLabel + '/';
 
     AlpdeskBackend.init(rt, Backend, 'alpdesk-fee-frame', 'alpdesk-fee-alpdeskloading', frameChangedEvent);
 
-    var initHeight = (window.getHeight() - 200);
+    let initHeight = (window.getHeight() - 200);
+    const phone_1 = 375;
+    const phone_2 = 667;
+    const tablet_1 = 760;
+    const tablet_2 = 1024;
+
     document.getElementById('alpdesk-fee-frame-container').style.height = initHeight + 'px';
     document.getElementById('setdevice').onclick = function () {
-      var device = document.getElementById('getdevice').value;
+      let device = document.getElementById('getdevice').value;
       if (device === 'phone') {
-        document.getElementById('alpdesk-fee-frame-container').style.width = 375 + 'px';
-        document.getElementById('alpdesk-fee-frame-container').style.height = (initHeight < 667 ? initHeight : 667) + 'px';
+        document.getElementById('alpdesk-fee-frame-container').style.width = phone_1 + 'px';
+        document.getElementById('alpdesk-fee-frame-container').style.height = (initHeight < phone_2 ? initHeight : phone_2) + 'px';
       } else if (device === 'phone_landscape') {
-        document.getElementById('alpdesk-fee-frame-container').style.height = (initHeight < 375 ? initHeight : 375) + 'px';
-        document.getElementById('alpdesk-fee-frame-container').style.width = 667 + 'px';
+        document.getElementById('alpdesk-fee-frame-container').style.height = (initHeight < phone_1 ? initHeight : phone_1) + 'px';
+        document.getElementById('alpdesk-fee-frame-container').style.width = phone_2 + 'px';
       } else if (device === 'tablet') {
-        document.getElementById('alpdesk-fee-frame-container').style.width = 760 + 'px';
-        document.getElementById('alpdesk-fee-frame-container').style.height = (initHeight < 1024 ? initHeight : 1024) + 'px';
+        document.getElementById('alpdesk-fee-frame-container').style.width = tablet_1 + 'px';
+        document.getElementById('alpdesk-fee-frame-container').style.height = (initHeight < tablet_2 ? initHeight : tablet_2) + 'px';
       } else if (device === 'tablet_landscape') {
-        document.getElementById('alpdesk-fee-frame-container').style.height = (initHeight < 760 ? initHeight : 760) + 'px';
-        document.getElementById('alpdesk-fee-frame-container').style.width = 1024 + 'px';
+        document.getElementById('alpdesk-fee-frame-container').style.height = (initHeight < tablet_1 ? initHeight : tablet_1) + 'px';
+        document.getElementById('alpdesk-fee-frame-container').style.width = tablet_2 + 'px';
       } else {
         document.getElementById('alpdesk-fee-frame-container').style.width = '100%';
         document.getElementById('alpdesk-fee-frame-container').style.height = initHeight + 'px';
       }
     };
 
-    var handleUrlParam = function () {
-      var urlparam = document.getElementById('urlparam').value;
+    function handleUrlParam() {
+      let urlparam = document.getElementById('urlparam').value;
       if (urlparam === null || urlparam === undefined || urlparam === '') {
-        urlparam = '/preview.php';
+        urlparam = '/' + previewLabel;
       } else {
-        urlparam = '/preview.php/' + urlparam;
+        urlparam = '/' + previewLabel + '/' + urlparam;
       }
       document.getElementById('alpdesk-fee-frame').src = urlparam;
-    };
+    }
 
     document.getElementById('seturl').onclick = function () {
       handleUrlParam();
@@ -156,8 +164,7 @@ class AlpdeskBackend {
     };
 
     window.document.addEventListener(frameChangedEvent, function (e) {
-      var location = e.detail.location.replace(base, '');
-      document.getElementById('urlparam').value = location;
+      document.getElementById('urlparam').value = e.detail.location.replace(base, '');
     });
 
   }, false);
