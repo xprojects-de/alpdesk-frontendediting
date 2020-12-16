@@ -85,9 +85,7 @@ class AlpdeskBackend {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&act=edit&id=' + data.id});
       }
     } else if (data.targetType === AlpdeskBackend.TARGETTYPE_MOD) {
-      if (data.action === AlpdeskBackend.ACTION_ELEMENT_EDIT) {
-        AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&' + data.targetDo + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
-      }
+      AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&' + data.targetDo + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
     } else if (data.targetType === AlpdeskBackend.TARGETTYPE_CE_MOD) {
       if (data.action === AlpdeskBackend.ACTION_ELEMENT_EDIT) {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&' + data.targetDo + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});

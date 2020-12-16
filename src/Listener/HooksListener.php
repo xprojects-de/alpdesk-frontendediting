@@ -16,6 +16,7 @@ use Contao\FrontendTemplate;
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
 use Alpdesk\AlpdeskFrontendediting\Utils\Utils;
 use Alpdesk\AlpdeskFrontendediting\Custom\Custom;
+use Alpdesk\AlpdeskFrontendediting\Custom\CustomResponse;
 
 class HooksListener {
 
@@ -102,8 +103,19 @@ class HooksListener {
 
     if ($this->checkAccess()) {
 
-      if (!$this->backendUser->hasAccess($element->type, 'elements') || !$this->backendUser->hasAccess($element->type, 'alpdesk_fee_elements')) {
-        return $buffer;
+      $modDoType = Custom::getModDoTypeCe($element);
+
+      // We have a module as content element
+      if ($modDoType->getType() == CustomResponse::$TYPE_MODULE) {
+        return $this->renderModuleOutput($modDoType, $buffer);
+      }
+
+      // We have a normale unmapped ContentElement
+      // So check if user has access
+      if ($modDoType->getValid() == false) {
+        if (!$this->backendUser->hasAccess($element->type, 'elements') || !$this->backendUser->hasAccess($element->type, 'alpdesk_fee_elements')) {
+          return $buffer;
+        }
       }
 
       $canEdit = true;
@@ -113,8 +125,6 @@ class HooksListener {
           $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $parentArticleModel->row());
         }
       }
-
-      $modDoType = Custom::getModDoTypeCe($element);
 
       $label = $GLOBALS['TL_LANG']['alpdeskfee_lables']['ce'];
       if ($modDoType->getValid() === true) {
@@ -134,10 +144,27 @@ class HooksListener {
           'data-alpdeskfee-type' => 'ce',
           'data-alpdeskfee-desc' => $label,
           'data-alpdeskfee-subtype' => ($modDoType->getValid() == true ? $modDoType->getPath() : ''),
+          'data-alpdeskfee-subtypeedit' => ($modDoType->getValid() == true ? $modDoType->getSublevelpath() : ''),
           'data-alpdeskfee-do' => str_replace('tl_', '', $element->ptable),
           'data-alpdeskfee-id' => $element->id,
           'data-alpdeskfee-pid' => $element->pid,
           'data-alpdeskfee-articleChmodEdit' => $canEdit,
+          'data-alpdeskfee-chmodpageedit' => $this->pageChmodEdit,
+          'data-alpdeskfee-pageid' => $this->currentPageId
+      ]);
+    }
+
+    return $buffer;
+  }
+
+  private function renderModuleOutput(CustomResponse $modDoType, string $buffer) {
+
+    if ($modDoType->getValid() === true && $modDoType->getType() == CustomResponse::$TYPE_MODULE) {
+      $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
+          'data-alpdeskfee-type' => 'mod',
+          'data-alpdeskfee-desc' => $modDoType->getLabel(),
+          'data-alpdeskfee-do' => $modDoType->getPath(),
+          'data-alpdeskfee-act' => $modDoType->getSublevelpath(),
           'data-alpdeskfee-chmodpageedit' => $this->pageChmodEdit,
           'data-alpdeskfee-pageid' => $this->currentPageId
       ]);
@@ -151,16 +178,7 @@ class HooksListener {
     if ($this->checkAccess()) {
 
       $modDoType = Custom::getModDoType($module);
-
-      if ($modDoType->getValid() === true) {
-        $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
-            'data-alpdeskfee-type' => 'mod',
-            'data-alpdeskfee-desc' => $modDoType->getLabel(),
-            'data-alpdeskfee-do' => $modDoType->getPath(),
-            'data-alpdeskfee-chmodpageedit' => $this->pageChmodEdit,
-            'data-alpdeskfee-pageid' => $this->currentPageId
-        ]);
-      }
+      return $this->renderModuleOutput($modDoType, $buffer);
     }
 
     return $buffer;

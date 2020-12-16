@@ -53,7 +53,7 @@ $GLOBALS['TL_DCA']['tl_alpdeskfrontendediting_mapping'] = [
         ]
     ],
     'palettes' => [
-        'default' => 'title;modules;elements,acteditident;fe_modules'
+        'default' => 'title;modules;elements,acteditident;fe_modules,fe_modules_sublevel'
     ],
     'fields' => [
         'id' => [
@@ -105,7 +105,15 @@ $GLOBALS['TL_DCA']['tl_alpdeskfrontendediting_mapping'] = [
             'filter' => true,
             'inputType' => 'select',
             'foreignKey' => 'tl_module.name',
-            'eval' => ['multiple' => false, 'helpwizard' => false, 'unique' => true, 'tl_class' => 'w50', 'includeBlankOption' => true],
+            'eval' => ['multiple' => false, 'helpwizard' => false, 'unique' => true, 'tl_class' => 'clr', 'includeBlankOption' => true],
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ],
+        'fe_modules_sublevel' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_alpdeskfrontendediting_mapping']['fe_modules_sublevel'],
+            'exclude' => true,
+            'filter' => true,
+            'inputType' => 'checkbox',
+            'eval' => ['multiple' => false, 'helpwizard' => false, 'unique' => true, 'tl_class' => 'w50'],
             'sql' => "int(10) unsigned NOT NULL default '0'"
         ],
     ]

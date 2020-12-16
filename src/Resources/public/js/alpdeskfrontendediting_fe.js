@@ -51,7 +51,9 @@
       let targetType = parent.getAttribute('data-alpdeskfee-type');
       let targetDesc = parent.getAttribute('data-alpdeskfee-desc');
       let targetSubType = parent.getAttribute("data-alpdeskfee-subtype");
+      let targetSubTypeEdit = parent.getAttribute("data-alpdeskfee-subtypeedit");
       let targetDo = parent.getAttribute('data-alpdeskfee-do');
+      let targetAct = parent.getAttribute('data-alpdeskfee-act');
       let targetId = parent.getAttribute('data-alpdeskfee-id');
       let targetPid = parent.getAttribute('data-alpdeskfee-pid');
       let targetPageId = parent.getAttribute('data-alpdeskfee-pageid');
@@ -159,18 +161,19 @@
               targetPageId: targetPageId
             });
           };
-          const cEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
-          cEdit.onclick = function () {
-            dispatchEvent({
-              action: ACTION_ELEMENT_EDIT,
-              targetType: targetType,
-              targetDo: targetDo,
-              id: targetId,
-              targetPageId: targetPageId
-            });
-          };
           if (targetSubType !== null && targetSubType !== '') {
-            const sEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-sedit');
+            if (targetSubTypeEdit !== null && targetSubTypeEdit !== '') {
+              const sEditSub = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
+              sEditSub.onclick = function () {
+                dispatchEvent({
+                  action: ACTION_ELEMENT_EDIT,
+                  targetType: TARGETTYPE_CE_MOD,
+                  targetDo: targetSubTypeEdit,
+                  targetPageId: targetPageId
+                });
+              };
+            }
+            const sEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-module');
             sEdit.onclick = function () {
               dispatchEvent({
                 action: ACTION_ELEMENT_EDIT,
@@ -179,18 +182,35 @@
                 targetPageId: targetPageId
               });
             };
+          } else {
+            const cEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
+            cEdit.onclick = function () {
+              dispatchEvent({
+                action: ACTION_ELEMENT_EDIT,
+                targetType: targetType,
+                targetDo: targetDo,
+                id: targetId,
+                targetPageId: targetPageId
+              });
+            };
           }
         }
       } else if (targetType === TARGETTYPE_MOD) {
         if (canEditArticle === true) {
-          const cEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
-          cEdit.onclick = function () {
+          const parentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-module');
+          parentEdit.onclick = function () {
             dispatchEvent({
-              action: ACTION_ELEMENT_EDIT,
-              targetType: targetType,
-              targetDo: targetDo,
-              id: targetId,
-              targetPageId: targetPageId
+              targetType: TARGETTYPE_MOD,
+              targetDo: targetDo
+            });
+          };
+        }
+        if (targetAct !== null && targetAct !== '') {
+          const contentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
+          contentEdit.onclick = function () {
+            dispatchEvent({
+              targetType: TARGETTYPE_MOD,
+              targetDo: targetAct
             });
           };
         }

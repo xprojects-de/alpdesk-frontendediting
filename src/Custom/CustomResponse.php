@@ -6,9 +6,21 @@ namespace Alpdesk\AlpdeskFrontendediting\Custom;
 
 class CustomResponse {
 
+  public static $TYPE_MODULE = 1;
+  public static $TYPE_CE = 2;
+  private $type = 0;
   private $valid = false;
   private $path = '';
+  private $sublevelpath = '';
   private $label = '';
+
+  function getType(): int {
+    return $this->type;
+  }
+
+  function setType(int $type): void {
+    $this->type = $type;
+  }
 
   function getValid(): bool {
     return $this->valid;
@@ -32,6 +44,14 @@ class CustomResponse {
 
   function setLabel(string $label): void {
     $this->label = $label;
+  }
+
+  function getSublevelpath(): string {
+    return $this->sublevelpath;
+  }
+
+  function setSublevelpath(string $sublevelpath): void {
+    $this->sublevelpath = $sublevelpath;
   }
 
 }
