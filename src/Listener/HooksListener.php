@@ -33,6 +33,7 @@ class HooksListener {
 
   private function getBackendUser() {
     if ($this->tokenChecker->hasBackendUser()) {
+      Utils::mergeUserGroupPersmissions();
       $this->backendUser = BackendUser::getInstance();
     }
   }
@@ -110,14 +111,24 @@ class HooksListener {
         return $this->renderModuleOutput($modDoType, $buffer);
       }
 
-      // We have a normale unmapped ContentElement
-      // So check if user has access
+      $hasAccess = true;
+      if (!$this->backendUser->hasAccess($element->type, 'elements') || !$this->backendUser->hasAccess($element->type, 'alpdesk_fee_elements')) {
+        $hasAccess = false;
+      }
+
+      // We have a normale ContentElement
+      // If it is not mapped in Backend we have to check the rights
+      // If it´s mapped we show to enable Backendmodule edit
+
       if ($modDoType->getValid() == false) {
-        if (!$this->backendUser->hasAccess($element->type, 'elements') || !$this->backendUser->hasAccess($element->type, 'alpdesk_fee_elements')) {
+        if ($hasAccess == false) {
           return $buffer;
         }
       }
 
+      // Check when Artikel if the element can be edited
+      // Maybe the element can be inserted by inserttags in other Module without Article
+      // @TODO Check whene Module has inserttag content then two bars will be shown because getContent and Module is triggered
       $canEdit = true;
       if ($element->ptable == 'tl_article') {
         $parentArticleModel = ArticleModel::findBy(['id=?'], $element->pid);
@@ -140,17 +151,23 @@ class HooksListener {
         }
       }
 
+      // Maybe the User should not edit ContentElements but edit mapped Module
+      // So only mapped path show be shown
+      $do = str_replace('tl_', '', $element->ptable);
+      if ($hasAccess == false) {
+        $do = '';
+      }
+
       $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
           'data-alpdeskfee-type' => 'ce',
           'data-alpdeskfee-desc' => $label,
-          'data-alpdeskfee-subtype' => ($modDoType->getValid() == true ? $modDoType->getPath() : ''),
-          'data-alpdeskfee-subtypeedit' => ($modDoType->getValid() == true ? $modDoType->getSublevelpath() : ''),
-          'data-alpdeskfee-do' => str_replace('tl_', '', $element->ptable),
+          'data-alpdeskfee-do' => $do,
           'data-alpdeskfee-id' => $element->id,
           'data-alpdeskfee-pid' => $element->pid,
           'data-alpdeskfee-articleChmodEdit' => $canEdit,
           'data-alpdeskfee-chmodpageedit' => $this->pageChmodEdit,
-          'data-alpdeskfee-pageid' => $this->currentPageId
+          'data-alpdeskfee-pageid' => $this->currentPageId,
+          'data-alpdeskfee-act' => ($modDoType->getValid() == true ? $modDoType->getPath() : '')
       ]);
     }
 

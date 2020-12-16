@@ -6,6 +6,9 @@ namespace Alpdesk\AlpdeskFrontendediting\Utils;
 
 use Contao\BackendUser;
 use Contao\PageModel;
+use Contao\Database;
+use Contao\Date;
+use Contao\StringUtil;
 
 class Utils {
 
@@ -31,6 +34,31 @@ class Utils {
     }
 
     return $check;
+  }
+
+  public static function mergeUserGroupPersmissions() {
+
+    $backendUser = BackendUser::getInstance();
+
+    if ($backendUser->inherit == 'group' || $backendUser->inherit == 'extend') {
+
+      $time = Date::floorToMinute();
+
+      foreach ((array) $backendUser->groups as $id) {
+        $objGroup = Database::getInstance()->prepare("SELECT alpdesk_fee_elements FROM tl_user_group WHERE id=? AND disable!='1' AND (start='' OR start<='$time') AND (stop='' OR stop>'$time')")->limit(1)->execute($id);
+        if ($objGroup->numRows > 0) {
+          $value = StringUtil::deserialize($objGroup->alpdesk_fee_elements, true);
+          if (!empty($value)) {
+            if ($backendUser->alpdesk_fee_elements === null) {
+              $backendUser->alpdesk_fee_elements = $value;
+            } else {
+              $backendUser->alpdesk_fee_elements = array_merge($backendUser->alpdesk_fee_elements, $value);
+            }
+            $backendUser->alpdesk_fee_elements = array_unique($backendUser->alpdesk_fee_elements);
+          }
+        }
+      }
+    }
   }
 
 }
