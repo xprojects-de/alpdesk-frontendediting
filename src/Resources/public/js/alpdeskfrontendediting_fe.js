@@ -22,6 +22,7 @@
     const TARGETTYPE_PAGE = 'page';
     const TARGETTYPE_ARTICLE = 'article';
     const TARGETTYPE_CE = 'ce';
+    const TARGETTYPE_CE_MOD = 'ce_mod';
     const TARGETTYPE_MOD = 'mod';
 
     const ACTION_PARENT_EDIT = 'parent_edit';
@@ -173,7 +174,7 @@
             sEdit.onclick = function () {
               dispatchEvent({
                 action: ACTION_ELEMENT_EDIT,
-                targetType: TARGETTYPE_MOD,
+                targetType: TARGETTYPE_CE_MOD,
                 targetDo: targetSubType,
                 targetPageId: targetPageId
               });

@@ -15,6 +15,7 @@ class AlpdeskBackend {
     AlpdeskBackend.TARGETTYPE_PAGE = 'page';
     AlpdeskBackend.TARGETTYPE_ARTICLE = 'article';
     AlpdeskBackend.TARGETTYPE_CE = 'ce';
+    AlpdeskBackend.TARGETTYPE_CE_MOD = 'ce_mod';
     AlpdeskBackend.TARGETTYPE_MOD = 'mod';
 
     AlpdeskBackend.ACTION_PARENT_EDIT = 'parent_edit';
@@ -87,7 +88,10 @@ class AlpdeskBackend {
       if (data.action === AlpdeskBackend.ACTION_ELEMENT_EDIT) {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&do=' + data.targetDo + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
       }
-
+    } else if (data.targetType === AlpdeskBackend.TARGETTYPE_CE_MOD) {
+      if (data.action === AlpdeskBackend.ACTION_ELEMENT_EDIT) {
+        AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&' + data.targetDo + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
+      }
     }
   }
 }

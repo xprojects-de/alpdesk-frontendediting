@@ -15,6 +15,7 @@ use Contao\BackendUser;
 use Contao\FrontendTemplate;
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
 use Alpdesk\AlpdeskFrontendediting\Utils\Utils;
+use Alpdesk\AlpdeskFrontendediting\Custom\Custom;
 
 class HooksListener {
 
@@ -101,7 +102,7 @@ class HooksListener {
 
     if ($this->checkAccess()) {
 
-      if (!$this->backendUser->hasAccess($element->type, 'elements')) {
+      if (!$this->backendUser->hasAccess($element->type, 'elements') || !$this->backendUser->hasAccess($element->type, 'alpdesk_fee_elements')) {
         return $buffer;
       }
 
@@ -113,11 +114,21 @@ class HooksListener {
         }
       }
 
-      $modDoType = Utils::getModDoTypeCe($element->type);
+      $modDoType = Custom::getModDoTypeCe($element);
+
+      $label = $GLOBALS['TL_LANG']['alpdeskfee_lables']['ce'];
+      $labelList = $GLOBALS['TL_LANG']['CTE'];
+      if (\array_key_exists($element->type, $labelList)) {
+        if (\is_array($labelList[$element->type]) && \count($labelList[$element->type]) >= 1) {
+          $label = $labelList[$element->type][0];
+        } else if ($labelList[$element->type] !== null && $labelList[$element->type] !== '') {
+          $label = $labelList[$element->type];
+        }
+      }
 
       $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
           'data-alpdeskfee-type' => 'ce',
-          'data-alpdeskfee-desc' => $GLOBALS['TL_LANG']['alpdeskfee_lables']['ce'],
+          'data-alpdeskfee-desc' => $label,
           'data-alpdeskfee-subtype' => ($modDoType !== '' ? $modDoType : ''),
           'data-alpdeskfee-do' => str_replace('tl_', '', $element->ptable),
           'data-alpdeskfee-id' => $element->id,
@@ -135,7 +146,7 @@ class HooksListener {
 
     if ($this->checkAccess()) {
 
-      $modDoType = Utils::getModDoType($module);
+      $modDoType = Custom::getModDoType($module);
       if ($modDoType !== null) {
         $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
             'data-alpdeskfee-type' => 'mod',
