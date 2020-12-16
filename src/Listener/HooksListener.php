@@ -44,7 +44,9 @@ class HooksListener {
       $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_fe.js|async';
       $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_fe.css';
 
-      $this->currentPageId = $objPage->id;
+      if ($this->backendUser->hasAccess('page', 'modules')) {
+        $this->currentPageId = $objPage->id;
+      }
       $this->pagemountAccess = Utils::hasPagemountAccess($objPage);
       $this->pageChmodEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_PAGE, $objPage->row());
     }
@@ -84,19 +86,22 @@ class HooksListener {
 
     if ($this->checkAccess()) {
 
-      $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $module->getModel()->row());
+      if ($this->backendUser->hasAccess('article', 'modules')) {
 
-      $templateArticle = new FrontendTemplate('alpdeskfrontendediting_article');
-      $templateArticle->type = 'article';
-      $templateArticle->desc = $GLOBALS['TL_LANG']['alpdeskfee_lables']['article'];
-      $templateArticle->do = 'article';
-      $templateArticle->aid = $data['id'];
-      $templateArticle->articleChmodEdit = $canEdit;
-      $templateArticle->pageChmodEdit = $this->pageChmodEdit;
-      $templateArticle->pageid = $this->currentPageId;
-      $elements = $template->elements;
-      array_unshift($elements, $templateArticle->parse());
-      $template->elements = $elements;
+        $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $module->getModel()->row());
+
+        $templateArticle = new FrontendTemplate('alpdeskfrontendediting_article');
+        $templateArticle->type = 'article';
+        $templateArticle->desc = $GLOBALS['TL_LANG']['alpdeskfee_lables']['article'];
+        $templateArticle->do = 'article';
+        $templateArticle->aid = $data['id'];
+        $templateArticle->articleChmodEdit = $canEdit;
+        $templateArticle->pageChmodEdit = $this->pageChmodEdit;
+        $templateArticle->pageid = $this->currentPageId;
+        $elements = $template->elements;
+        array_unshift($elements, $templateArticle->parse());
+        $template->elements = $elements;
+      }
     }
   }
 
@@ -111,9 +116,16 @@ class HooksListener {
         return $this->renderModuleOutput($modDoType, $buffer);
       }
 
-      $hasAccess = true;
+      // Check if access to element
+      $hasElementAccess = true;
       if (!$this->backendUser->hasAccess($element->type, 'elements') || !$this->backendUser->hasAccess($element->type, 'alpdesk_fee_elements')) {
-        $hasAccess = false;
+        $hasElementAccess = false;
+      }
+
+      // Check if access to parent element
+      $hasParentAccess = true;
+      if (!$this->backendUser->hasAccess(str_replace('tl_', '', $element->ptable), 'modules')) {
+        $hasParentAccess = false;
       }
 
       // We have a normale ContentElement
@@ -121,7 +133,7 @@ class HooksListener {
       // If it´s mapped we show to enable Backendmodule edit
 
       if ($modDoType->getValid() == false) {
-        if ($hasAccess == false) {
+        if (!$hasElementAccess || !$hasParentAccess) {
           return $buffer;
         }
       }
@@ -154,7 +166,7 @@ class HooksListener {
       // Maybe the User should not edit ContentElements but edit mapped Module
       // So only mapped path show be shown
       $do = str_replace('tl_', '', $element->ptable);
-      if ($hasAccess == false) {
+      if (!$hasElementAccess || !$hasParentAccess) {
         $do = '';
       }
 

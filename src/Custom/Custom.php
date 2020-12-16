@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Alpdesk\AlpdeskFrontendediting\Custom;
 
 use Contao\Module;
-use Contao\BackendModule;
 use Contao\ContentModel;
 use Contao\ModuleModel;
 use Contao\BackendUser;
-use Contao\Controller;
 use Alpdesk\AlpdeskFrontendediting\Model\AlpdeskFrontendeditingMappingModel;
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomResponse;
 
@@ -45,6 +43,11 @@ class Custom {
       return $response;
     }
 
+    // If user has no Access to BackendModule retrun
+    if (!BackendUser::getInstance()->hasAccess($mappingObject->modules, 'modules')) {
+      return $response;
+    }
+
     $do = 'do=' . $mappingObject->modules;
     $sublevelPath = '';
     if ($mappingObject->fe_modules_sublevel == 1 && $module->pid > 0) {
@@ -72,6 +75,11 @@ class Custom {
           return self::getModDoType($objModule);
         }
       }
+      return $response;
+    }
+
+    // If user has no Access to BackendModule retrun
+    if (!BackendUser::getInstance()->hasAccess($mappingObject->modules, 'modules')) {
       return $response;
     }
 
