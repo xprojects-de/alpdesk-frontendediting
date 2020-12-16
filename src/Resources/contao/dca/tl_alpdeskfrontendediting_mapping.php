@@ -7,6 +7,7 @@ use Contao\Backend;
 use Contao\StringUtil;
 
 System::loadLanguageFile('tl_user');
+System::loadLanguageFile('tl_content');
 Controller::loadDataContainer('tl_content');
 
 $GLOBALS['TL_DCA']['tl_alpdeskfrontendediting_mapping'] = [
@@ -113,7 +114,7 @@ $GLOBALS['TL_DCA']['tl_alpdeskfrontendediting_mapping'] = [
             'exclude' => true,
             'filter' => true,
             'inputType' => 'checkbox',
-            'eval' => ['multiple' => false, 'helpwizard' => false, 'unique' => true, 'tl_class' => 'w50'],
+            'eval' => ['multiple' => false, 'helpwizard' => false, 'unique' => false, 'tl_class' => 'w50'],
             'sql' => "int(10) unsigned NOT NULL default '0'"
         ],
     ]
@@ -156,7 +157,17 @@ class tl_alpdeskfrontendediting_mapping extends Backend {
   public function getContentElementsFields(DataContainer $dc) {
     $data = [];
     foreach ($GLOBALS['TL_DCA']['tl_content']['fields'] as $key => $value) {
-      $data[$key] = $key;
+      $label = $key;
+      if (\is_array($value) && \array_key_exists('label', $value)) {
+        if (\is_array($value['label'])) {
+          $label = $value['label'][0];
+        } else {
+          $label = $value['label'];
+        }
+      }
+      if ($label != '') {
+        $data[$key] = $label;
+      }
     }
     return $data;
   }
