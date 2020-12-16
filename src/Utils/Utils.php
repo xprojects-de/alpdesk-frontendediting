@@ -8,6 +8,7 @@ use Contao\Module;
 use Contao\ModuleNavigation;
 use Contao\ModuleCustomnav;
 use Contao\BackendUser;
+use Contao\PageModel;
 
 /**
  * @todo Better Algo for loading Mods and and Ce-Elements!
@@ -47,6 +48,30 @@ class Utils {
     }
 
     return $type;
+  }
+
+  public static function hasPagemountAccess(PageModel $objPage): bool {
+
+    $backendUser = BackendUser::getInstance();
+
+    if ($backendUser->isAdmin || $backendUser->hasAccess($objPage->id, 'pagemounts')) {
+      return true;
+    }
+
+    $check = false;
+
+    // Bad but fo not want to override PageModel-Reference from Hook
+    $objParentPage = PageModel::findById($objPage->id);
+    $pid = $objPage->pid;
+    while ($objParentPage !== null && $check === false && $pid > 0) {
+      $pid = $objParentPage->pid;
+      $check = $backendUser->hasAccess($objParentPage->id, 'pagemounts');
+      if ($check === false) {
+        $objParentPage = PageModel::findById($pid);
+      }
+    }
+
+    return $check;
   }
 
 }

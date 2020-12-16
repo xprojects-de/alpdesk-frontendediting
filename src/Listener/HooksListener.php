@@ -21,6 +21,7 @@ class HooksListener {
   private $tokenChecker = null;
   private $backendUser = null;
   private $currentPageId = null;
+  private $pagemountAccess = false;
   private $pageChmodEdit = false;
 
   public function __construct(TokenChecker $tokenChecker) {
@@ -29,8 +30,6 @@ class HooksListener {
   }
 
   private function getBackendUser() {
-    global $objPage;
-    $this->currentPageId = $objPage->id;
     if ($this->tokenChecker->hasBackendUser()) {
       $this->backendUser = BackendUser::getInstance();
     }
@@ -42,15 +41,15 @@ class HooksListener {
       $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_fe.js|async';
       $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_fe.css';
 
+      $this->currentPageId = $objPage->id;
+      $this->pagemountAccess = Utils::hasPagemountAccess($objPage);
       $this->pageChmodEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_PAGE, $objPage->row());
     }
   }
 
   private function checkAccess(): bool {
-    if (TL_MODE == 'FE' && $this->backendUser !== null) {
-      if ($this->backendUser->hasAccess($this->currentPageId, 'pagemounts')) {
-        return true;
-      }
+    if (TL_MODE == 'FE' && $this->backendUser !== null && $this->pagemountAccess == true) {
+      return true;
     }
     return false;
   }
