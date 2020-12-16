@@ -117,19 +117,23 @@ class HooksListener {
       $modDoType = Custom::getModDoTypeCe($element);
 
       $label = $GLOBALS['TL_LANG']['alpdeskfee_lables']['ce'];
-      $labelList = $GLOBALS['TL_LANG']['CTE'];
-      if (\array_key_exists($element->type, $labelList)) {
-        if (\is_array($labelList[$element->type]) && \count($labelList[$element->type]) >= 1) {
-          $label = $labelList[$element->type][0];
-        } else if ($labelList[$element->type] !== null && $labelList[$element->type] !== '') {
-          $label = $labelList[$element->type];
+      if ($modDoType->getValid() === true) {
+        $label = $modDoType->getLabel();
+      } else {
+        $labelList = $GLOBALS['TL_LANG']['CTE'];
+        if (\array_key_exists($element->type, $labelList)) {
+          if (\is_array($labelList[$element->type]) && \count($labelList[$element->type]) >= 1) {
+            $label = $labelList[$element->type][0];
+          } else if ($labelList[$element->type] !== null && $labelList[$element->type] !== '') {
+            $label = $labelList[$element->type];
+          }
         }
       }
 
       $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
           'data-alpdeskfee-type' => 'ce',
           'data-alpdeskfee-desc' => $label,
-          'data-alpdeskfee-subtype' => ($modDoType !== '' ? $modDoType : ''),
+          'data-alpdeskfee-subtype' => ($modDoType->getValid() == true ? $modDoType->getPath() : ''),
           'data-alpdeskfee-do' => str_replace('tl_', '', $element->ptable),
           'data-alpdeskfee-id' => $element->id,
           'data-alpdeskfee-pid' => $element->pid,
@@ -147,11 +151,12 @@ class HooksListener {
     if ($this->checkAccess()) {
 
       $modDoType = Custom::getModDoType($module);
-      if ($modDoType !== null) {
+
+      if ($modDoType->getValid() === true) {
         $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
             'data-alpdeskfee-type' => 'mod',
-            'data-alpdeskfee-desc' => $GLOBALS['TL_LANG']['alpdeskfee_lables']['mod'],
-            'data-alpdeskfee-do' => $modDoType,
+            'data-alpdeskfee-desc' => $modDoType->getLabel(),
+            'data-alpdeskfee-do' => $modDoType->getPath(),
             'data-alpdeskfee-chmodpageedit' => $this->pageChmodEdit,
             'data-alpdeskfee-pageid' => $this->currentPageId
         ]);
