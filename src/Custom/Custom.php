@@ -7,9 +7,9 @@ namespace Alpdesk\AlpdeskFrontendediting\Custom;
 use Contao\Module;
 use Contao\ContentModel;
 use Contao\ModuleModel;
-use Contao\BackendUser;
-use Alpdesk\AlpdeskFrontendediting\Model\AlpdeskFrontendeditingMappingModel;
-use Alpdesk\AlpdeskFrontendediting\Custom\CustomResponse;
+use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
+use Alpdesk\AlpdeskFrontendediting\Mapping\Mapping;
+use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventService;
 
 class Custom {
 
@@ -32,70 +32,28 @@ class Custom {
     }
   }
 
-  public static function getModDoType(Module $module): CustomResponse {
+  public static function processModule(Module $module, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher): CustomViewItem {
 
-    $response = new CustomResponse();
-    $response->setType(CustomResponse::$TYPE_MODULE);
+    $response = new CustomViewItem();
+    $response->setType(CustomViewItem::$TYPE_MODULE);
 
-    // Show Modules only if mapped in backend
-    $mappingObject = AlpdeskFrontendeditingMappingModel::findBy(['fe_modules=?'], $module->id);
-    if ($mappingObject === null) {
-      return $response;
-    }
-
-    // If user has no Access to BackendModule retrun
-    if (!BackendUser::getInstance()->hasAccess($mappingObject->modules, 'modules')) {
-      return $response;
-    }
-
-    $do = 'do=' . $mappingObject->modules;
-    $sublevelPath = '';
-    if ($mappingObject->fe_modules_sublevel == 1 && $module->pid > 0) {
-      $sublevelPath = '&table=tl_' . $mappingObject->modules . '&id=' . $module->pid;
-      $response->setSublevelpath($do . $sublevelPath . '&act=edit');
-    }
-
-    $response->setValid(true);
-    $response->setPath($do . $sublevelPath);
-    $response->setLabel($mappingObject->title);
-
-    return $response;
+    return (new Mapping($alpdeskfeeEventDispatcher))->mapModule($response, $module);
   }
 
-  public static function getModDoTypeCe(ContentModel $element): CustomResponse {
+  public static function processElement(ContentModel $element, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher): CustomViewItem {
 
-    $response = new CustomResponse();
-    $response->setType(CustomResponse::$TYPE_CE);
+    $response = new CustomViewItem();
+    $response->setType(CustomViewItem::$TYPE_CE);
 
-    $mappingObject = AlpdeskFrontendeditingMappingModel::findBy(['elements=?'], $element->type);
-    if ($mappingObject === null) {
-      if ($element->type === 'module') {
-        $objModule = self::getModuleTypeInstanceById($element->module);
-        if ($objModule !== null) {
-          return self::getModDoType($objModule);
-        }
+    if ($element->type === 'module') {
+      $objModule = self::getModuleTypeInstanceById($element->module);
+      if ($objModule !== null) {
+        return self::processModule($objModule, $alpdeskfeeEventDispatcher);
       }
       return $response;
     }
 
-    // If user has no Access to BackendModule retrun
-    if (!BackendUser::getInstance()->hasAccess($mappingObject->modules, 'modules')) {
-      return $response;
-    }
-
-    $actEdit = '';
-    if ($mappingObject->acteditident !== null && $mappingObject->acteditident != '') {
-      $elementRows = $element->row();
-      if (\array_key_exists($mappingObject->acteditident, $elementRows)) {
-        $actEdit = '&act=edit&id=' . \intval($elementRows[$mappingObject->acteditident]);
-      }
-    }
-
-    $response->setValid(true);
-    $response->setPath('do=' . $mappingObject->modules . $actEdit);
-    $response->setLabel($mappingObject->title);
-
-    return $response;
+    return (new Mapping($alpdeskfeeEventDispatcher))->mapContentElement($response, $element);
   }
 
 }

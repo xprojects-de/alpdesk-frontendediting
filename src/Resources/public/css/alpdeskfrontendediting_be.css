@@ -45,8 +45,8 @@
   margin-left: 0px;
 }
 
-.wx50 {
-  width: calc(50% - 30px);
+.wx60 {
+  width: calc(60% - 30px);
   float: right;
   margin-right: 0px;
   text-align: right;
@@ -57,9 +57,9 @@
   width: 200px;
 }
 
-.wx50 .tl_text {
+.wx60 .tl_text {
   float: right;
-  width: 250px;
+  width: 225px;
 }
 
 .w33 button {
@@ -69,14 +69,14 @@
   margin-top: 3px;
 }
 
-.wx50 button {
+.wx60 button {
   float: right;
-  width: 75px;
+  width: 50px;
   margin-left: 10px;
   margin-top: 3px;
 }
 
-.wx50 strong {
+.wx60 strong {
   display: inline-block;
   padding-right: 10px;
   padding-top: 10px;

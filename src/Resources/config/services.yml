@@ -1,9 +1,21 @@
 services:
-    Alpdesk\AlpdeskFrontendediting\Listener\HooksListener:
-        arguments:
-            - '@contao.security.token_checker'
-        tags:
-            - { name: contao.hook, hook: getPageLayout, method: onGetPageLayout, priority: 0 }
-            - { name: contao.hook, hook: compileArticle, method: onCompileArticle, priority: 0 }
-            - { name: contao.hook, hook: getContentElement, method: onGetContentElement, priority: 0 }
-            - { name: contao.hook, hook: getFrontendModule, method: onGetFrontendModule, priority: 0 }
+
+  _defaults:
+    autoconfigure: true
+    autowire: true
+
+  alpdeskfrontendediting.eventservice:
+    class: Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventService
+    arguments:
+      - '@event_dispatcher'
+    public: true
+    
+  Alpdesk\AlpdeskFrontendediting\Listener\HooksListener:
+      arguments:
+          - '@contao.security.token_checker'
+          - '@alpdeskfrontendediting.eventservice'
+      tags:
+          - { name: contao.hook, hook: getPageLayout, method: onGetPageLayout, priority: 0 }
+          - { name: contao.hook, hook: compileArticle, method: onCompileArticle, priority: 0 }
+          - { name: contao.hook, hook: getContentElement, method: onGetContentElement, priority: 0 }
+          - { name: contao.hook, hook: getFrontendModule, method: onGetFrontendModule, priority: 0 }

@@ -12,22 +12,26 @@ use Contao\ContentModel;
 use Contao\ModuleModel;
 use Contao\Module;
 use Contao\BackendUser;
+use Contao\System;
 use Contao\FrontendTemplate;
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
 use Alpdesk\AlpdeskFrontendediting\Utils\Utils;
 use Alpdesk\AlpdeskFrontendediting\Custom\Custom;
-use Alpdesk\AlpdeskFrontendediting\Custom\CustomResponse;
+use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
+use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventService;
 
 class HooksListener {
 
   private $tokenChecker = null;
+  private $alpdeskfeeEventDispatcher = null;
   private $backendUser = null;
   private $currentPageId = null;
   private $pagemountAccess = false;
   private $pageChmodEdit = false;
 
-  public function __construct(TokenChecker $tokenChecker) {
+  public function __construct(TokenChecker $tokenChecker, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher) {
     $this->tokenChecker = $tokenChecker;
+    $this->alpdeskfeeEventDispatcher = $alpdeskfeeEventDispatcher;
     $this->getBackendUser();
   }
 
@@ -35,6 +39,7 @@ class HooksListener {
     if ($this->tokenChecker->hasBackendUser()) {
       Utils::mergeUserGroupPersmissions();
       $this->backendUser = BackendUser::getInstance();
+      System::loadLanguageFile('default');
     }
   }
 
@@ -73,7 +78,7 @@ class HooksListener {
       }
 
       foreach ($dataAttributes as $key => $value) {
-        $attributes .= ' ' . $key . '="' . $value . '"';
+        $attributes .= ' ' . $key . "='" . $value . "'";
       }
 
       return "<{$tag}{$attributes}>";
@@ -90,14 +95,18 @@ class HooksListener {
 
         $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $module->getModel()->row());
 
+        $tdata = [
+            'type' => 'article',
+            'desc' => $GLOBALS['TL_LANG']['alpdeskfee_lables']['article'],
+            'do' => 'article',
+            'id' => $data['id'],
+            'articleChmodEdit' => $canEdit,
+            'chmodpageedit' => $this->pageChmodEdit,
+            'pageid' => $this->currentPageId
+        ];
+
         $templateArticle = new FrontendTemplate('alpdeskfrontendediting_article');
-        $templateArticle->type = 'article';
-        $templateArticle->desc = $GLOBALS['TL_LANG']['alpdeskfee_lables']['article'];
-        $templateArticle->do = 'article';
-        $templateArticle->aid = $data['id'];
-        $templateArticle->articleChmodEdit = $canEdit;
-        $templateArticle->pageChmodEdit = $this->pageChmodEdit;
-        $templateArticle->pageid = $this->currentPageId;
+        $templateArticle->data = \json_encode($tdata);
         $elements = $template->elements;
         array_unshift($elements, $templateArticle->parse());
         $template->elements = $elements;
@@ -109,10 +118,10 @@ class HooksListener {
 
     if ($this->checkAccess()) {
 
-      $modDoType = Custom::getModDoTypeCe($element);
+      $modDoType = Custom::processElement($element, $this->alpdeskfeeEventDispatcher);
 
       // We have a module as content element
-      if ($modDoType->getType() == CustomResponse::$TYPE_MODULE) {
+      if ($modDoType->getType() == CustomViewItem::$TYPE_MODULE) {
         return $this->renderModuleOutput($modDoType, $buffer);
       }
 
@@ -143,7 +152,7 @@ class HooksListener {
       // @TODO Check whene Module has inserttag content then two bars will be shown because getContent and Module is triggered
       $canEdit = true;
       if ($element->ptable == 'tl_article') {
-        $parentArticleModel = ArticleModel::findBy(['id=?'], $element->pid);
+        $parentArticleModel = ArticleModel::findBy(['id = ?'], $element->pid);
         if ($parentArticleModel !== null) {
           $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $parentArticleModel->row());
         }
@@ -170,32 +179,39 @@ class HooksListener {
         $do = '';
       }
 
+      $data = [
+          'type' => 'ce',
+          'desc' => $label,
+          'do' => $do,
+          'id' => $element->id,
+          'pid' => $element->pid,
+          'articleChmodEdit' => $canEdit,
+          'chmodpageedit' => $this->pageChmodEdit,
+          'pageid' => $this->currentPageId,
+          'act' => ($modDoType->getValid() == true ? $modDoType->getPath() : ''),
+      ];
       $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
-          'data-alpdeskfee-type' => 'ce',
-          'data-alpdeskfee-desc' => $label,
-          'data-alpdeskfee-do' => $do,
-          'data-alpdeskfee-id' => $element->id,
-          'data-alpdeskfee-pid' => $element->pid,
-          'data-alpdeskfee-articleChmodEdit' => $canEdit,
-          'data-alpdeskfee-chmodpageedit' => $this->pageChmodEdit,
-          'data-alpdeskfee-pageid' => $this->currentPageId,
-          'data-alpdeskfee-act' => ($modDoType->getValid() == true ? $modDoType->getPath() : '')
+          'data-alpdeskfee' => \json_encode($data)
       ]);
     }
 
     return $buffer;
   }
 
-  private function renderModuleOutput(CustomResponse $modDoType, string $buffer) {
+  private function renderModuleOutput(CustomViewItem $modDoType, string $buffer) {
 
-    if ($modDoType->getValid() === true && $modDoType->getType() == CustomResponse::$TYPE_MODULE) {
+    if ($modDoType->getValid() === true && $modDoType->getType() == CustomViewItem::$TYPE_MODULE) {
+      $data = [
+          'type' => 'mod',
+          'desc' => $modDoType->getLabel(),
+          'do' => $modDoType->getPath(),
+          'act' => $modDoType->getSublevelpath(),
+          'chmodpageedit' => $this->pageChmodEdit,
+          'pageid' => $this->currentPageId,
+          'subviewitems' => $modDoType->getDecodesSubviewItems(),
+      ];
       $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
-          'data-alpdeskfee-type' => 'mod',
-          'data-alpdeskfee-desc' => $modDoType->getLabel(),
-          'data-alpdeskfee-do' => $modDoType->getPath(),
-          'data-alpdeskfee-act' => $modDoType->getSublevelpath(),
-          'data-alpdeskfee-chmodpageedit' => $this->pageChmodEdit,
-          'data-alpdeskfee-pageid' => $this->currentPageId
+          'data-alpdeskfee' => \json_encode($data)
       ]);
     }
 
@@ -206,7 +222,7 @@ class HooksListener {
 
     if ($this->checkAccess()) {
 
-      $modDoType = Custom::getModDoType($module);
+      $modDoType = Custom::processModule($module, $this->alpdeskfeeEventDispatcher);
       return $this->renderModuleOutput($modDoType, $buffer);
     }
 
