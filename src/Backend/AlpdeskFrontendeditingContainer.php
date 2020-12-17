@@ -49,7 +49,7 @@ class AlpdeskFrontendeditingContainer {
     $containerTemplate->token = REQUEST_TOKEN;
     $containerTemplate->base = Environment::get('base');
     $alias = System::getContainer()->get('session')->get('alpdeskfee_pageselect');
-    if ($alias !== '') {
+    if ($alias !== null && $alias !== '') {
       $objUrlGenerator = System::getContainer()->get('contao.routing.url_generator');
       $containerTemplate->url = '/preview.php' . $objUrlGenerator->generate($alias);
     } else {
