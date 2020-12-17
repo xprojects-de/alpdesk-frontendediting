@@ -3,7 +3,7 @@
   "description": "Frontendediting for Contao 4",
   "keywords": ["contao", "frontendediting"],
   "type": "contao-bundle",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "homepage": "https://github.com/xprojects-de/alpdesk-frontendediting",
   "license": "LGPL-3.0-or-later",
   "authors": [
