@@ -43,6 +43,12 @@ Die Erweiterung sollte voll funktionsfähig sein, bis auf die Bugs die ich selbe
 -  Das Event wird bei bei jedem Rendern eines FrontendModules und Inhaltselement getriggert und liefert jeweils das Model und das spezifische FrontendEditing-Object (Hooks getContentElement und getFrontendModule). Auf diesem Wege können vorhandene Frontend-Bar-Items angepasst werden oder sogar neue, eigene Frontend-Bar-Items hinzugefügt werden und mit passender Logik zum BackendModul versehen werden.
 - Ist kein Backend-User eingelogged wird der ganze "zusätzliche" Code NICHT ausgeführt und die Hooks werden sofort wieder verlassen. Somit gibt es hier keine Performanceprobleme im normalen Betrieb.
 
+## Was ist noch zu tun?
+
+- Derzeit werden (eigentlich bewusst) die Add,Delete,Visible Symbole nicht in der Bar angezeigt. Technisch wäre das kein Problem. Persönlich finde ich es übersichtlicher über das "Einstellungen-Symbol" die ganzen Elemente zu sehen (das ausgewählte wird ja hervorgehoben). Mal sehen ...
+- Module optimieren (z.B. möglich machen die Teaser der Newsliste auch einzeln bearbeitbar zu machen)
+- ...
+
 Für diese Erweiterung übernehme ich keinerlei Haftung!
 
 ## Bilder

@@ -161,6 +161,21 @@ class AlpdeskBackend {
       }
     };
 
+    document.getElementById('pageselect').onclick = function () {
+      Backend.openModalSelector({
+        id: 'tl_listing',
+        title: 'Frontend-View',
+        url: '/contao/picker?context=page&fieldType=radio',
+        callback: function (table, value) {
+          if (value !== null && value !== undefined) {
+            if (value.length > 0) {
+              window.location.href = window.location.href + "&pageselect=" + value[0];
+            }
+          }
+        }
+      });
+    };
+
     window.document.addEventListener(frameChangedEvent, function (e) {
       document.getElementById('urlparam').value = e.detail.location.replace(base, '');
       document.getElementById('alpdesk-fee-alpdeskloading').style.display = 'none';
