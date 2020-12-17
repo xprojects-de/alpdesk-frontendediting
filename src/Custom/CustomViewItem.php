@@ -13,45 +13,72 @@ class CustomViewItem {
   private $path = '';
   private $sublevelpath = '';
   private $label = '';
+  private $subviewitems = [];
 
-  function getType(): int {
+  public function getType(): int {
     return $this->type;
   }
 
-  function setType(int $type): void {
+  public function setType(int $type): void {
     $this->type = $type;
   }
 
-  function getValid(): bool {
+  public function getValid(): bool {
     return $this->valid;
   }
 
-  function getPath(): string {
+  public function getPath(): string {
     return $this->path;
   }
 
-  function getLabel(): string {
+  public function getLabel(): string {
     return $this->label;
   }
 
-  function setValid(bool $valid): void {
+  public function setValid(bool $valid): void {
     $this->valid = $valid;
   }
 
-  function setPath(string $path): void {
+  public function setPath(string $path): void {
     $this->path = $path;
   }
 
-  function setLabel(string $label): void {
+  public function setLabel(string $label): void {
     $this->label = $label;
   }
 
-  function getSublevelpath(): string {
+  public function getSublevelpath(): string {
     return $this->sublevelpath;
   }
 
-  function setSublevelpath(string $sublevelpath): void {
+  public function setSublevelpath(string $sublevelpath): void {
     $this->sublevelpath = $sublevelpath;
+  }
+
+  public function getSubviewitems(): CustomSubviewItem {
+    return $this->subviewitems;
+  }
+
+  public function addSubviewitems(CustomSubviewItem $subviewitem): void {
+    \array_push($this->subviewitems, $subviewitem);
+  }
+
+  public function getDecodesSubviewItems() {
+
+    if (\count($this->subviewitems) > 0) {
+
+      $data = [];
+      foreach ($this->subviewitems as $subItem) {
+        \array_push($data, [
+            'path' => $subItem->getPath(),
+            'icon' => $subItem->getIcon(),
+            'iconclass' => $subItem->getIconclass()
+        ]);
+      }
+      return $data;
+    }
+
+    return '';
   }
 
 }

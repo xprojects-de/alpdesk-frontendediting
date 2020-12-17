@@ -8,8 +8,6 @@ use Contao\Module;
 use Contao\ContentModel;
 use Contao\BackendUser;
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
-use Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeNavigation;
-use Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeRockSolidSlider;
 
 abstract class Base {
 
@@ -49,6 +47,12 @@ abstract class Base {
     } else if (class_exists('\Contao\ModuleNewsList') && $module instanceof \Contao\ModuleNewsList) {
       if (self::checkModuleAccess('news')) {
         $class = new TypeNewslist();
+        $class->module = $module;
+        return $class;
+      }
+    } else if (class_exists('\Contao\ModuleNewsReader') && $module instanceof \Contao\ModuleNewsReader) {
+      if (self::checkModuleAccess('news')) {
+        $class = new TypeNewsReader();
         $class->module = $module;
         return $class;
       }

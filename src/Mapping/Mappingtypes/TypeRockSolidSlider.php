@@ -13,9 +13,20 @@ class TypeRockSolidSlider extends Base {
 
   public function run(CustomViewItem $item): CustomViewItem {
 
+    $do = self::$DO . '&act=edit&id=' . $this->element->rsts_id;
+
+    if (class_exists('\MadeYourDay\RockSolidSlider\Model\SliderModel')) {
+      $sliderModel = \MadeYourDay\RockSolidSlider\Model\SliderModel::findById($this->element->rsts_id);
+      if ($sliderModel !== null) {
+        if ($sliderModel->type == 'content') {
+          $do = self::$DO . '&table=tl_rocksolid_slide&id=' . $this->element->rsts_id;
+        }
+      }
+    }
+
     $item->setValid(true);
-    $item->setPath(self::$DO . '&act=edit&id=' . $this->element->rsts_id);
-    $item->setLabel('News');
+    $item->setPath($do);
+    $item->setLabel('RockSolidSlider');
 
     return $item;
   }
