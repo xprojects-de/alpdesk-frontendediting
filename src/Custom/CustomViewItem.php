@@ -65,9 +65,9 @@ class CustomViewItem {
 
   public function getDecodesSubviewItems() {
 
-    if (\count($this->subviewitems) > 0) {
+    $data = [];
 
-      $data = [];
+    if (\count($this->subviewitems) > 0) {
       foreach ($this->subviewitems as $subItem) {
         \array_push($data, [
             'path' => $subItem->getPath(),
@@ -75,10 +75,9 @@ class CustomViewItem {
             'iconclass' => $subItem->getIconclass()
         ]);
       }
-      return $data;
     }
 
-    return '';
+    return $data;
   }
 
 }

@@ -40,7 +40,9 @@
     function createContainerElement(parent, elementclass) {
       const element = document.createElement('div');
       element.classList.add('alpdeskfee-utilscontainer-editcontainer');
-      element.classList.add(elementclass);
+      if (elementclass !== '') {
+        element.classList.add(elementclass);
+      }
       parent.appendChild(element);
       return element;
     }
@@ -178,6 +180,19 @@
                 targetDo: obj.act
               });
             };
+          }
+          if (obj.subviewitems.length > 0) {
+            for (let si = 0; si < obj.subviewitems.length; si++) {
+              const subMod = createContainerElement(c, 'alpdeskfee-utilscontainer-' + obj.subviewitems[si].icon);
+              subMod.classList.add(obj.subviewitems[si].iconclass);
+              subMod.style.backgroundImage = "url('../../../system/themes/flexible/icons/" + obj.subviewitems[si].icon + ".svg')";
+              subMod.onclick = function () {
+                dispatchEvent({
+                  targetType: TARGETTYPE_MOD,
+                  targetDo: obj.subviewitems[si].path
+                });
+              };
+            }
           }
         }
 
