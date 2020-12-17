@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Alpdesk\AlpdeskFrontendediting\Custom;
 
-class CustomResponse {
+class CustomViewItem {
 
   public static $TYPE_MODULE = 1;
   public static $TYPE_CE = 2;

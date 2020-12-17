@@ -16,18 +16,21 @@ use Contao\FrontendTemplate;
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
 use Alpdesk\AlpdeskFrontendediting\Utils\Utils;
 use Alpdesk\AlpdeskFrontendediting\Custom\Custom;
-use Alpdesk\AlpdeskFrontendediting\Custom\CustomResponse;
+use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
+use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventService;
 
 class HooksListener {
 
   private $tokenChecker = null;
+  private $alpdeskfeeEventDispatcher = null;
   private $backendUser = null;
   private $currentPageId = null;
   private $pagemountAccess = false;
   private $pageChmodEdit = false;
 
-  public function __construct(TokenChecker $tokenChecker) {
+  public function __construct(TokenChecker $tokenChecker, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher) {
     $this->tokenChecker = $tokenChecker;
+    $this->alpdeskfeeEventDispatcher = $alpdeskfeeEventDispatcher;
     $this->getBackendUser();
   }
 
@@ -109,10 +112,10 @@ class HooksListener {
 
     if ($this->checkAccess()) {
 
-      $modDoType = Custom::getModDoTypeCe($element);
+      $modDoType = Custom::processElement($element, $this->alpdeskfeeEventDispatcher);
 
       // We have a module as content element
-      if ($modDoType->getType() == CustomResponse::$TYPE_MODULE) {
+      if ($modDoType->getType() == CustomViewItem::$TYPE_MODULE) {
         return $this->renderModuleOutput($modDoType, $buffer);
       }
 
@@ -186,9 +189,9 @@ class HooksListener {
     return $buffer;
   }
 
-  private function renderModuleOutput(CustomResponse $modDoType, string $buffer) {
+  private function renderModuleOutput(CustomViewItem $modDoType, string $buffer) {
 
-    if ($modDoType->getValid() === true && $modDoType->getType() == CustomResponse::$TYPE_MODULE) {
+    if ($modDoType->getValid() === true && $modDoType->getType() == CustomViewItem::$TYPE_MODULE) {
       $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
           'data-alpdeskfee-type' => 'mod',
           'data-alpdeskfee-desc' => $modDoType->getLabel(),
@@ -206,7 +209,7 @@ class HooksListener {
 
     if ($this->checkAccess()) {
 
-      $modDoType = Custom::getModDoType($module);
+      $modDoType = Custom::processModule($module, $this->alpdeskfeeEventDispatcher);
       return $this->renderModuleOutput($modDoType, $buffer);
     }
 
