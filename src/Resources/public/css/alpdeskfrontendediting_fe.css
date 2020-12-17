@@ -12,6 +12,10 @@ div.alpdeskfee-article-container {
   background-color: rgba(244, 124, 0, 0.1);
 }
 
+.alpdeskfee-ce {
+  position: relative;
+}
+
 div.alpdeskfee-utilscontainer,
 div.alpdeskfee-utilscontainer-page {
   background-color: rgba(255, 255, 255, 1);

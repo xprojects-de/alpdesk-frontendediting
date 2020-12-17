@@ -13,7 +13,7 @@
       <img src="system/themes/flexible/icons/published.svg">
     </button>
   </div>
-  <div class="wx50 widget">
+  <div class="wx60 widget">
     <button id="seturl" class="tl_submit">
       <img src="system/themes/flexible/icons/published.svg">
     </button>

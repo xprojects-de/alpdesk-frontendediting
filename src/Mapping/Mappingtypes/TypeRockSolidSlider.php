@@ -26,7 +26,7 @@ class TypeRockSolidSlider extends Base {
 
     $item->setValid(true);
     $item->setPath($do);
-    $item->setLabel('RockSolidSlider');
+    $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['rocksolidslider']);
 
     return $item;
   }

@@ -6,7 +6,6 @@ namespace Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes;
 
 use Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\Base;
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
-use Alpdesk\AlpdeskFrontendediting\Custom\CustomSubviewItem;
 
 class TypeNavigation extends Base {
 
@@ -16,7 +15,7 @@ class TypeNavigation extends Base {
 
     $item->setValid(true);
     $item->setPath(self::$DO);
-    $item->setLabel('Navigation');
+    $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['navigation']);
 
     return $item;
   }

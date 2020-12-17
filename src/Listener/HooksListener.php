@@ -12,6 +12,7 @@ use Contao\ContentModel;
 use Contao\ModuleModel;
 use Contao\Module;
 use Contao\BackendUser;
+use Contao\System;
 use Contao\FrontendTemplate;
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
 use Alpdesk\AlpdeskFrontendediting\Utils\Utils;
@@ -38,6 +39,7 @@ class HooksListener {
     if ($this->tokenChecker->hasBackendUser()) {
       Utils::mergeUserGroupPersmissions();
       $this->backendUser = BackendUser::getInstance();
+      System::loadLanguageFile('default');
     }
   }
 

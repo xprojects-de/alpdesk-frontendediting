@@ -140,6 +140,7 @@ class AlpdeskBackend {
     };
 
     function handleUrlParam() {
+      document.getElementById('alpdesk-fee-alpdeskloading').style.display = 'block';
       let urlparam = document.getElementById('urlparam').value;
       if (urlparam === null || urlparam === undefined || urlparam === '') {
         urlparam = '/' + previewLabel;
@@ -162,6 +163,7 @@ class AlpdeskBackend {
 
     window.document.addEventListener(frameChangedEvent, function (e) {
       document.getElementById('urlparam').value = e.detail.location.replace(base, '');
+      document.getElementById('alpdesk-fee-alpdeskloading').style.display = 'none';
     });
 
   }, false);
