@@ -52,8 +52,8 @@ Die Erweiterung sollte voll funktionsfähig sein, bis auf die Bugs die ich selbe
 Für diese Erweiterung übernehme ich keinerlei Haftung!
 
 ## Bilder
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b1.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b2.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b_1.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b_2.png" alt=""></p>  
 <p><img src="https://x-projects.de/files/alpdesk/frontendediting/b3.png" alt=""></p>  
 <p><img src="https://x-projects.de/files/alpdesk/frontendediting/b4.png" alt=""></p>  
 <p><img src="https://x-projects.de/files/alpdesk/frontendediting/b5.png" alt=""></p>  
