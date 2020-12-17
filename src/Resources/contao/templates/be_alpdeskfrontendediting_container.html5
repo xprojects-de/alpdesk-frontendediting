@@ -14,6 +14,16 @@
     </button>
   </div>
   <div class="wx60 widget">
+    <form method="post">
+      <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->token ?>">
+      <input type="hidden" name="toggleFullsize" value="1">
+      <button  id="fullsize" class="tl_submit">
+        <img width="15" src="bundles/alpdeskfrontendediting/images/fullsize.png">
+      </button>
+    </form>
+    <button id="pageselect" class="tl_submit">
+      <img src="system/themes/flexible/icons/root.svg">
+    </button>
     <button id="seturl" class="tl_submit">
       <img src="system/themes/flexible/icons/published.svg">
     </button>
@@ -23,7 +33,7 @@
   <div class="clear"></div>
 </div>
 <div id="alpdesk-fee-frame-container">
-  <iframe data-base="<?= $this->base ?>" data-request-token="<?= $this->token ?>" id="alpdesk-fee-frame" src="/preview.php" width="100%" height="100%"></iframe>
+  <iframe data-base="<?= $this->base ?>" data-request-token="<?= $this->token ?>" id="alpdesk-fee-frame" src="<?= $this->url ?>" width="100%" height="100%"></iframe>
 </div>
 <div id="alpdesk-fee-alpdeskloading"></div>
 </div>
