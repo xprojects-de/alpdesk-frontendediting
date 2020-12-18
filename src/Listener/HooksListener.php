@@ -94,15 +94,21 @@ class HooksListener {
       if ($this->backendUser->hasAccess('article', 'modules')) {
 
         $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $module->getModel()->row());
+        $canDelete = $this->backendUser->isAllowed(BackendUser::CAN_DELETE_ARTICLES, $module->getModel()->row());
+        $canPublish = $this->backendUser->hasAccess('tl_article::published', 'alexf');
 
         $tdata = [
             'type' => 'article',
-            'desc' => $GLOBALS['TL_LANG']['alpdeskfee_lables']['article'],
             'do' => 'article',
             'id' => $data['id'],
-            'articleChmodEdit' => $canEdit,
-            'chmodpageedit' => $this->pageChmodEdit,
-            'pageid' => $this->currentPageId
+            'invisible' => ($data['published'] == 0 ? true : false),
+            'canEdit' => $canEdit,
+            'canDelete' => $canDelete,
+            'canPublish' => $canPublish,
+            'canPageEdit' => $this->pageChmodEdit,
+            'pageid' => $this->currentPageId,
+            'desc' => $GLOBALS['TL_LANG']['alpdeskfee_lables']['article'],
+            'labels' => $GLOBALS['TL_LANG']['alpdeskfee_lables'],
         ];
 
         $templateArticle = new FrontendTemplate('alpdeskfrontendediting_article');
@@ -157,6 +163,7 @@ class HooksListener {
           $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $parentArticleModel->row());
         }
       }
+      $canPublish = $this->backendUser->hasAccess('tl_content::invisible', 'alexf');
 
       $label = $GLOBALS['TL_LANG']['alpdeskfee_lables']['ce'];
       if ($modDoType->getValid() === true) {
@@ -181,14 +188,17 @@ class HooksListener {
 
       $data = [
           'type' => 'ce',
-          'desc' => $label,
           'do' => $do,
           'id' => $element->id,
           'pid' => $element->pid,
-          'articleChmodEdit' => $canEdit,
-          'chmodpageedit' => $this->pageChmodEdit,
+          'invisible' => ($element->invisible == 1 ? true : false),
+          'canEdit' => $canEdit,
+          'canPublish' => $canPublish,
+          'canPageEdit' => $this->pageChmodEdit,
           'pageid' => $this->currentPageId,
           'act' => ($modDoType->getValid() == true ? $modDoType->getPath() : ''),
+          'desc' => $label,
+          'labels' => $GLOBALS['TL_LANG']['alpdeskfee_lables']
       ];
       $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
           'data-alpdeskfee' => \json_encode($data)
@@ -203,12 +213,13 @@ class HooksListener {
     if ($modDoType->getValid() === true && $modDoType->getType() == CustomViewItem::$TYPE_MODULE) {
       $data = [
           'type' => 'mod',
-          'desc' => $modDoType->getLabel(),
           'do' => $modDoType->getPath(),
           'act' => $modDoType->getSublevelpath(),
-          'chmodpageedit' => $this->pageChmodEdit,
+          'canPageEdit' => $this->pageChmodEdit,
           'pageid' => $this->currentPageId,
           'subviewitems' => $modDoType->getDecodesSubviewItems(),
+          'desc' => $modDoType->getLabel(),
+          'labels' => $GLOBALS['TL_LANG']['alpdeskfee_lables']
       ];
       $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
           'data-alpdeskfee' => \json_encode($data)
