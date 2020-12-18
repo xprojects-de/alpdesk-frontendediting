@@ -15,7 +15,7 @@ class Custom {
 
   public static function getModuleTypeInstanceById($moduleId) {
     try {
-      $moduleObject = ModuleModel::findBy(['id=?'], $moduleId);
+      $moduleObject = ModuleModel::findById($moduleId);
       $strClass = Module::findClass($moduleObject->type);
       if (!class_exists($strClass)) {
         return null;
