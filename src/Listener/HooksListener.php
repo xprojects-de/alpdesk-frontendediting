@@ -94,13 +94,16 @@ class HooksListener {
       if ($this->backendUser->hasAccess('article', 'modules')) {
 
         $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $module->getModel()->row());
+        $canPublish = $this->backendUser->hasAccess('tl_article::published', 'alexf');
 
         $tdata = [
             'type' => 'article',
             'desc' => $GLOBALS['TL_LANG']['alpdeskfee_lables']['article'],
             'do' => 'article',
             'id' => $data['id'],
+            'invisible' => ($data['published'] == 0 ? true : false),
             'articleChmodEdit' => $canEdit,
+            'canPublish' => $canPublish,
             'chmodpageedit' => $this->pageChmodEdit,
             'pageid' => $this->currentPageId
         ];
@@ -157,6 +160,7 @@ class HooksListener {
           $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $parentArticleModel->row());
         }
       }
+      $canPublish = $this->backendUser->hasAccess('tl_content::invisible', 'alexf');
 
       $label = $GLOBALS['TL_LANG']['alpdeskfee_lables']['ce'];
       if ($modDoType->getValid() === true) {
@@ -185,7 +189,9 @@ class HooksListener {
           'do' => $do,
           'id' => $element->id,
           'pid' => $element->pid,
+          'invisible' => ($element->invisible == 1 ? true : false),
           'articleChmodEdit' => $canEdit,
+          'canPublish' => $canPublish,
           'chmodpageedit' => $this->pageChmodEdit,
           'pageid' => $this->currentPageId,
           'act' => ($modDoType->getValid() == true ? $modDoType->getPath() : ''),

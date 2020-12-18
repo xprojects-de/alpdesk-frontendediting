@@ -80,6 +80,14 @@ div.alpdeskfee-utilscontainer-page {
   background-image: url('../../../system/themes/flexible/icons/edit.svg');
 }
 
+.alpdeskfee-utilscontainer-visible {
+  background-image: url('../../../system/themes/flexible/icons/visible.svg');
+}
+
+.alpdeskfee-utilscontainer-invisible {
+  background-image: url('../../../system/themes/flexible/icons/invisible.svg');
+}
+
 .alpdeskfee-utilscontainer-pedit {
   background-image: url('../../../system/themes/flexible/icons/header.svg');
 }

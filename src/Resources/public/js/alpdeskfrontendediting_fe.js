@@ -26,6 +26,7 @@
 
     const ACTION_PARENT_EDIT = 'parent_edit';
     const ACTION_ELEMENT_EDIT = 'element_edit';
+    const ACTION_ELEMENT_VISIBILITY = 'element_visibility';
     const ACTION_ELEMENT_SHOW = 'element_show';
 
     let globalTargetPageId = null;
@@ -132,6 +133,17 @@
                 targetPageId: obj.pageid
               });
             };
+            if (obj.canPublish === true) {
+              const elementVisibility = createContainerElement(c, (obj.invisible === true ? 'alpdeskfee-utilscontainer-invisible' : 'alpdeskfee-utilscontainer-visible'));
+              elementVisibility.onclick = function () {
+                dispatchEvent({
+                  action: ACTION_ELEMENT_VISIBILITY,
+                  targetType: TARGETTYPE_ARTICLE,
+                  id: obj.id,
+                  state: (obj.invisible === true ? 1 : 0)
+                });
+              };
+            }
           }
         } else if (obj.type === TARGETTYPE_CE) {
           if (obj.articleChmodEdit === true && obj.do !== null && obj.do !== '') {
@@ -154,6 +166,18 @@
                 id: obj.id
               });
             };
+            if (obj.canPublish === true) {
+              const elementVisibility = createContainerElement(c, (obj.invisible === true ? 'alpdeskfee-utilscontainer-invisible' : 'alpdeskfee-utilscontainer-visible'));
+              elementVisibility.onclick = function () {
+                dispatchEvent({
+                  action: ACTION_ELEMENT_VISIBILITY,
+                  targetType: TARGETTYPE_CE,
+                  id: obj.id,
+                  pid: obj.pid,
+                  state: (obj.invisible === true ? 1 : 0)
+                });
+              };
+            }
           }
           if (obj.act !== null && obj.act !== '') {
             const modEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-module');
