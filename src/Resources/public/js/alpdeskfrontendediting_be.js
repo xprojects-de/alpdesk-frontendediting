@@ -22,6 +22,7 @@ class AlpdeskBackend {
     AlpdeskBackend.ACTION_ELEMENT_VISIBILITY = 'element_visibility';
     AlpdeskBackend.ACTION_ELEMENT_DELETE = 'element_delete';
     AlpdeskBackend.ACTION_ELEMENT_SHOW = 'element_show';
+    AlpdeskBackend.ACTION_ELEMENT_NEW = 'element_new';
 
     AlpdeskBackend.MODAL_TITLE = 'Frontend-View';
 
@@ -39,11 +40,13 @@ class AlpdeskBackend {
   }
 
   static modalCloseListener() {
+
     const modalOverlay = document.getElementById('simple-modal-overlay');
     modalOverlay.onclick = function (e) {
       document.getElementById(AlpdeskBackend.LOADING).style.display = 'block';
       document.getElementById(AlpdeskBackend.FRAME).contentWindow.location.reload();
     };
+
     const modal = document.getElementById('simple-modal');
     for (let i = 0; i < modal.childNodes.length; i++) {
       if (modal.childNodes[i].className === 'close') {
@@ -57,6 +60,7 @@ class AlpdeskBackend {
   }
 
   static callModal(params) {
+
     if (AlpdeskBackend.REQUEST_TOKEN !== null && AlpdeskBackend.CONTAO_BACKEND !== null) {
       AlpdeskBackend.CONTAO_BACKEND.openModalIframe(params);
       AlpdeskBackend.modalCloseListener();
@@ -64,6 +68,7 @@ class AlpdeskBackend {
   }
 
   static callVisibilityArticle(id, state) {
+
     new Request.Contao({
       'url': '/contao?do=article&tid=' + id + '&state=' + state + '&rt=' + AlpdeskBackend.REQUEST_TOKEN,
       followRedirects: false,
@@ -71,6 +76,7 @@ class AlpdeskBackend {
         // Callback not working!!!!
       }
     }).get();
+
     // No fine but onSuccess-Callback not working
     setTimeout(function () {
       document.getElementById(AlpdeskBackend.LOADING).style.display = 'block';
@@ -78,14 +84,16 @@ class AlpdeskBackend {
     }, 400);
   }
 
-  static callVisibilityElement(pid, id, state) {
+  static callVisibilityElement(dotype, pid, id, state) {
+
     new Request.Contao({
-      'url': '/contao?do=article&table=tl_content&id=' + pid + '&cid=' + id + '&state=' + state + '&rt=' + AlpdeskBackend.REQUEST_TOKEN,
+      'url': '/contao?do=' + dotype + '&table=tl_content&id=' + pid + '&cid=' + id + '&state=' + state + '&rt=' + AlpdeskBackend.REQUEST_TOKEN,
       followRedirects: false,
       onSuccess: function (txt, json) {
         // Callback not working!!!!
       }
     }).get();
+
     // No fine but onSuccess-Callback not working
     setTimeout(function () {
       document.getElementById(AlpdeskBackend.LOADING).style.display = 'block';
@@ -94,6 +102,7 @@ class AlpdeskBackend {
   }
 
   static callDeleteArticle(id) {
+
     new Request.Contao({
       'url': '/contao?do=article&act=delete&id=' + id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN,
       followRedirects: false,
@@ -101,6 +110,7 @@ class AlpdeskBackend {
         // Callback not working!!!!
       }
     }).get();
+
     // No fine but onSuccess-Callback not working
     setTimeout(function () {
       document.getElementById(AlpdeskBackend.LOADING).style.display = 'block';
@@ -108,14 +118,16 @@ class AlpdeskBackend {
     }, 400);
   }
 
-  static callDeleteElement(id) {
+  static callDeleteElement(dotype, id) {
+
     new Request.Contao({
-      'url': '/contao?do=article&table=tl_content&act=delete&id=' + id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN,
+      'url': '/contao?do=' + dotype + '&table=tl_content&act=delete&id=' + id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN,
       followRedirects: false,
       onSuccess: function (txt, json) {
         // Callback not working!!!!
       }
     }).get();
+
     // No fine but onSuccess-Callback not working
     setTimeout(function () {
       document.getElementById(AlpdeskBackend.LOADING).style.display = 'block';
@@ -124,6 +136,7 @@ class AlpdeskBackend {
   }
 
   static handleEvent(e) {
+
     const data = e.detail;
     if (data.targetType === AlpdeskBackend.TARGETTYPE_PAGE) {
       if (data.action === AlpdeskBackend.ACTION_ELEMENT_EDIT) {
@@ -138,6 +151,8 @@ class AlpdeskBackend {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.id});
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_SHOW) {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&pn=' + data.targetPageId + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
+      } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_NEW) {
+        AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&id=' + data.id + '&act=create&mode=2&pid=' + data.id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_VISIBILITY) {
         AlpdeskBackend.callVisibilityArticle(data.id, data.state);
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_DELETE) {
@@ -148,10 +163,12 @@ class AlpdeskBackend {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&alpdesk_hideheader=1&alpdeskfocus_listitem=' + data.id + '&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.pid});
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_EDIT) {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&act=edit&id=' + data.id});
+      } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_NEW) {
+        AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&id=' + data.pid + '&act=create&mode=1&pid=' + data.id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_VISIBILITY) {
-        AlpdeskBackend.callVisibilityElement(data.pid, data.id, data.state);
+        AlpdeskBackend.callVisibilityElement(data.targetDo, data.pid, data.id, data.state);
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_DELETE) {
-        AlpdeskBackend.callDeleteElement(data.id);
+        AlpdeskBackend.callDeleteElement(data.targetDo, data.id);
       }
     } else if (data.targetType === AlpdeskBackend.TARGETTYPE_MOD) {
       AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&' + data.targetDo + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
@@ -160,6 +177,7 @@ class AlpdeskBackend {
 }
 
 (function (window, document) {
+
   function ready(callback) {
     if (document.readyState !== 'loading') {
       callback();
@@ -173,6 +191,7 @@ class AlpdeskBackend {
       });
     }
   }
+
   ready(function () {
 
     const previewLabel = 'preview.php';
@@ -189,6 +208,7 @@ class AlpdeskBackend {
     const tablet_2 = 1024;
 
     document.getElementById('alpdesk-fee-frame-container').style.height = initHeight + 'px';
+
     document.getElementById('setdevice').onclick = function () {
       let device = document.getElementById('getdevice').value;
       if (device === 'phone') {
@@ -210,13 +230,17 @@ class AlpdeskBackend {
     };
 
     function handleUrlParam() {
+
       document.getElementById('alpdesk-fee-alpdeskloading').style.display = 'block';
+
       let urlparam = document.getElementById('urlparam').value;
+
       if (urlparam === null || urlparam === undefined || urlparam === '') {
         urlparam = '/' + previewLabel;
       } else {
         urlparam = '/' + previewLabel + '/' + urlparam;
       }
+
       document.getElementById('alpdesk-fee-frame').src = urlparam;
     }
 

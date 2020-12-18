@@ -7,6 +7,8 @@ namespace Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes;
 use Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\Base;
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 use Contao\BackendUser;
+use Contao\Input;
+use Contao\StringUtil;
 
 class TypeNewsReader extends Base {
 
@@ -14,10 +16,17 @@ class TypeNewsReader extends Base {
 
   public function run(CustomViewItem $item): CustomViewItem {
 
-    if (BackendUser::getInstance()->hasAccess($this->module->pid, 'news')) {
-      $item->setValid(true);
-      $item->setPath(self::$DO . '&id=' . $this->module->pid);
-      $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['news']);
+    if (class_exists('\Contao\NewsModel')) {
+      $newsarchives = StringUtil::deserialize($this->module->news_archives);
+      $objNews = \Contao\NewsModel::findPublishedByParentAndIdOrAlias(Input::get('items'), $newsarchives);
+      if ($objNews !== null) {
+        $objArchive = $objNews->getRelated('pid');
+        if (BackendUser::getInstance()->hasAccess($objArchive->id, 'news')) {
+          $item->setValid(true);
+          $item->setPath(self::$DO . '&id=' . $objNews->id);
+          $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['news']);
+        }
+      }
     }
 
     return $item;

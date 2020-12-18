@@ -43,9 +43,16 @@ class HooksListener {
     }
   }
 
+  private function addLabelsToHeader() {
+    $labels = \json_encode($GLOBALS['TL_LANG']['alpdeskfee_lables']);
+    $GLOBALS['TL_HEAD'][] = "<script>const alpdeskfeeLabels='" . $labels . "';</script>";
+  }
+
   public function onGetPageLayout(PageModel $objPage, LayoutModel $objLayout, PageRegular $objPageRegular): void {
 
     if ($this->backendUser !== null) {
+
+      $this->addLabelsToHeader();
       $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_fe.js|async';
       $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_fe.css';
 
@@ -107,8 +114,7 @@ class HooksListener {
             'canPublish' => $canPublish,
             'canPageEdit' => $this->pageChmodEdit,
             'pageid' => $this->currentPageId,
-            'desc' => $GLOBALS['TL_LANG']['alpdeskfee_lables']['article'],
-            'labels' => $GLOBALS['TL_LANG']['alpdeskfee_lables'],
+            'desc' => $GLOBALS['TL_LANG']['alpdeskfee_lables']['article']
         ];
 
         $templateArticle = new FrontendTemplate('alpdeskfrontendediting_article');
@@ -143,12 +149,18 @@ class HooksListener {
         $hasParentAccess = false;
       }
 
+      // Check custom type-Access e.g. news
+      $hasCustomTypeAccess = true;
+      if (!Utils::checkCustomTypeAccess(str_replace('tl_', '', $element->ptable), $element->pid)) {
+        $hasCustomTypeAccess = false;
+      }
+
       // We have a normale ContentElement
       // If it is not mapped in Backend we have to check the rights
       // If it´s mapped we show to enable Backendmodule edit
 
       if ($modDoType->getValid() == false) {
-        if (!$hasElementAccess || !$hasParentAccess) {
+        if (!$hasElementAccess || !$hasParentAccess || !$hasCustomTypeAccess) {
           return $buffer;
         }
       }
@@ -197,8 +209,7 @@ class HooksListener {
           'canPageEdit' => $this->pageChmodEdit,
           'pageid' => $this->currentPageId,
           'act' => ($modDoType->getValid() == true ? $modDoType->getPath() : ''),
-          'desc' => $label,
-          'labels' => $GLOBALS['TL_LANG']['alpdeskfee_lables']
+          'desc' => $label
       ];
       $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
           'data-alpdeskfee' => \json_encode($data)
@@ -218,8 +229,7 @@ class HooksListener {
           'canPageEdit' => $this->pageChmodEdit,
           'pageid' => $this->currentPageId,
           'subviewitems' => $modDoType->getDecodesSubviewItems(),
-          'desc' => $modDoType->getLabel(),
-          'labels' => $GLOBALS['TL_LANG']['alpdeskfee_lables']
+          'desc' => $modDoType->getLabel()
       ];
       $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
           'data-alpdeskfee' => \json_encode($data)
