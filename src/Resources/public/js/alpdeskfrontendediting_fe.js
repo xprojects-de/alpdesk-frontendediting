@@ -50,7 +50,7 @@
       return element;
     }
 
-    function appendUtilsContainer(obj, parent, notUseParent) {
+    function appendUtilsContainer(obj, parent, notUseParent, objLabels) {
 
       if (obj !== null && obj !== undefined) {
 
@@ -85,6 +85,7 @@
 
         if (obj.type === TARGETTYPE_PAGE) {
           const pageEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
+          pageEdit.setAttribute('title', objLabels.page_edit_top);
           pageEdit.onclick = function () {
             dispatchEvent({
               action: ACTION_ELEMENT_EDIT,
@@ -95,6 +96,7 @@
             });
           };
           const cShow = createContainerElement(c, 'alpdeskfee-utilscontainer-root');
+          cShow.setAttribute('title', objLabels.page_structure);
           cShow.onclick = function () {
             dispatchEvent({
               action: ACTION_ELEMENT_SHOW,
@@ -104,6 +106,7 @@
             });
           };
           const cEditArticles = createContainerElement(c, 'alpdeskfee-utilscontainer-rootarticle');
+          cEditArticles.setAttribute('title', objLabels.article_edit_top);
           cEditArticles.onclick = function () {
             dispatchEvent({
               action: ACTION_ELEMENT_SHOW,
@@ -115,6 +118,7 @@
         } else if (obj.type === TARGETTYPE_ARTICLE) {
           if (obj.canEdit === true) {
             const parentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-articles');
+            parentEdit.setAttribute('title', objLabels.article_all);
             parentEdit.onclick = function () {
               dispatchEvent({
                 action: ACTION_ELEMENT_EDIT,
@@ -125,6 +129,7 @@
               });
             };
             const articleEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
+            articleEdit.setAttribute('title', objLabels.edit_article);
             articleEdit.onclick = function () {
               dispatchEvent({
                 action: ACTION_PARENT_EDIT,
@@ -137,6 +142,7 @@
             };
             if (obj.canPublish === true) {
               const elementVisibility = createContainerElement(c, (obj.invisible === true ? 'alpdeskfee-utilscontainer-invisible' : 'alpdeskfee-utilscontainer-visible'));
+              elementVisibility.setAttribute('title', objLabels.article_visible);
               elementVisibility.onclick = function () {
                 dispatchEvent({
                   action: ACTION_ELEMENT_VISIBILITY,
@@ -148,8 +154,9 @@
             }
             if (obj.canDelete === true) {
               const elementDelete = createContainerElement(c, 'alpdeskfee-utilscontainer-delete');
+              elementDelete.setAttribute('title', objLabels.delete_article);
               elementDelete.onclick = function () {
-                if (confirm(obj.labels.delete_confirm_article)) {
+                if (confirm(objLabels.delete_confirm_article)) {
                   dispatchEvent({
                     action: ACTION_ELEMENT_DELETE,
                     targetType: TARGETTYPE_ARTICLE,
@@ -159,6 +166,7 @@
               };
             }
             const elementNew = createContainerElement(c, 'alpdeskfee-utilscontainer-new');
+            elementNew.setAttribute('title', objLabels.new_element_top);
             elementNew.onclick = function () {
               dispatchEvent({
                 action: ACTION_ELEMENT_NEW,
@@ -172,6 +180,7 @@
           if (obj.do !== null && obj.do !== '') {
             if (obj.canEdit === true) {
               const parentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-pedit');
+              parentEdit.setAttribute('title', objLabels.element_all);
               parentEdit.onclick = function () {
                 dispatchEvent({
                   action: ACTION_PARENT_EDIT,
@@ -182,6 +191,7 @@
                 });
               };
               const elementEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
+              elementEdit.setAttribute('title', objLabels.edit_element);
               elementEdit.onclick = function () {
                 dispatchEvent({
                   action: ACTION_ELEMENT_EDIT,
@@ -192,6 +202,7 @@
               };
               if (obj.canPublish === true) {
                 const elementVisibility = createContainerElement(c, (obj.invisible === true ? 'alpdeskfee-utilscontainer-invisible' : 'alpdeskfee-utilscontainer-visible'));
+                elementVisibility.setAttribute('title', objLabels.element_visible);
                 elementVisibility.onclick = function () {
                   dispatchEvent({
                     action: ACTION_ELEMENT_VISIBILITY,
@@ -203,8 +214,9 @@
                 };
               }
               const elementDelete = createContainerElement(c, 'alpdeskfee-utilscontainer-delete');
+              elementDelete.setAttribute('title', objLabels.delete_element);
               elementDelete.onclick = function () {
-                if (confirm(obj.labels.delete_confirm_element)) {
+                if (confirm(objLabels.delete_confirm_element)) {
                   dispatchEvent({
                     action: ACTION_ELEMENT_DELETE,
                     targetType: TARGETTYPE_CE,
@@ -213,6 +225,7 @@
                 }
               };
               const elementNew = createContainerElement(c, 'alpdeskfee-utilscontainer-new');
+              elementNew.setAttribute('title', objLabels.new_element);
               elementNew.onclick = function () {
                 dispatchEvent({
                   action: ACTION_ELEMENT_NEW,
@@ -226,6 +239,7 @@
           }
           if (obj.act !== null && obj.act !== '') {
             const modEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-module');
+            modEdit.setAttribute('title', objLabels.element_mod);
             modEdit.onclick = function () {
               dispatchEvent({
                 targetType: TARGETTYPE_MOD,
@@ -235,6 +249,7 @@
           }
         } else if (obj.type === TARGETTYPE_MOD) {
           const parentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-module');
+          parentEdit.setAttribute('title', objLabels.element_mod);
           parentEdit.onclick = function () {
             dispatchEvent({
               targetType: TARGETTYPE_MOD,
@@ -273,7 +288,7 @@
 
     }
 
-    function scanElements() {
+    function scanElements(objLabels) {
       let data = document.querySelectorAll("*[data-alpdeskfee]");
       for (let i = 0; i < data.length; i++) {
         let jsonData = data[i].getAttribute('data-alpdeskfee');
@@ -283,7 +298,7 @@
             if (obj.type === TARGETTYPE_ARTICLE) {
               let parentNode = data[i].parentElement;
               parentNode.classList.add('alpdeskfee-article-container');
-              appendUtilsContainer(obj, data[i], false);
+              appendUtilsContainer(obj, data[i], false, objLabels);
               parentNode.onmouseover = function () {
                 data[i].classList.add("alpdeskfee-parent-active");
               };
@@ -291,7 +306,7 @@
                 data[i].classList.remove("alpdeskfee-parent-active");
               };
             } else {
-              appendUtilsContainer(obj, data[i], true);
+              appendUtilsContainer(obj, data[i], true, objLabels);
               data[i].onmouseover = function () {
                 data[i].classList.add("alpdeskfee-active");
               };
@@ -311,7 +326,12 @@
     // Maybe problem at MultiDomain-Webpage
     if (checkInIframe() === true) {
 
-      scanElements();
+      let objLabels = null;
+      if (alpdeskfeeLabels !== null && alpdeskfeeLabels !== undefined && alpdeskfeeLabels !== '') {
+        objLabels = JSON.parse(alpdeskfeeLabels);
+      }
+
+      scanElements(objLabels);
 
       if (showPageEdit === true && globalTargetPageId !== null && globalTargetPageId !== '' && globalTargetPageId !== undefined && globalTargetPageId !== 0) {
         const bodyElement = document.body;
@@ -319,7 +339,7 @@
           const jsonData = '{"type":"' + TARGETTYPE_PAGE + '","desc":"Page","do":"' + TARGETTYPE_PAGE + '","id":"' + globalTargetPageId + '","pageid":"' + globalTargetPageId + '"}';
           const obj = JSON.parse(jsonData);
           if (obj !== null && obj !== undefined) {
-            appendUtilsContainer(obj, bodyElement, true);
+            appendUtilsContainer(obj, bodyElement, true, objLabels);
           }
         }
       }
