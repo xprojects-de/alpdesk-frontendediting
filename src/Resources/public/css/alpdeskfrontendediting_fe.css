@@ -80,6 +80,10 @@ div.alpdeskfee-utilscontainer-page {
   background-image: url('../../../system/themes/flexible/icons/edit.svg');
 }
 
+.alpdeskfee-utilscontainer-delete {
+  background-image: url('../../../system/themes/flexible/icons/delete.svg');
+}
+
 .alpdeskfee-utilscontainer-visible {
   background-image: url('../../../system/themes/flexible/icons/visible.svg');
 }

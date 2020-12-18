@@ -27,6 +27,7 @@
     const ACTION_PARENT_EDIT = 'parent_edit';
     const ACTION_ELEMENT_EDIT = 'element_edit';
     const ACTION_ELEMENT_VISIBILITY = 'element_visibility';
+    const ACTION_ELEMENT_DELETE = 'element_delete';
     const ACTION_ELEMENT_SHOW = 'element_show';
 
     let globalTargetPageId = null;
@@ -58,8 +59,8 @@
           }
         }
 
-        if (showPageEdit === false && obj.chmodpageedit !== undefined && obj.chmodpageedit !== null) {
-          showPageEdit = obj.chmodpageedit;
+        if (showPageEdit === false && obj.canPageEdit !== undefined && obj.canPageEdit !== null) {
+          showPageEdit = obj.canPageEdit;
         }
 
         let c = parent;
@@ -111,7 +112,7 @@
             });
           };
         } else if (obj.type === TARGETTYPE_ARTICLE) {
-          if (obj.articleChmodEdit === true) {
+          if (obj.canEdit === true) {
             const parentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-articles');
             parentEdit.onclick = function () {
               dispatchEvent({
@@ -144,9 +145,21 @@
                 });
               };
             }
+            if (obj.canDelete === true) {
+              const elementDelete = createContainerElement(c, 'alpdeskfee-utilscontainer-delete');
+              elementDelete.onclick = function () {
+                if (confirm(obj.labels.delete_confirm_article)) {
+                  dispatchEvent({
+                    action: ACTION_ELEMENT_DELETE,
+                    targetType: TARGETTYPE_ARTICLE,
+                    id: obj.id
+                  });
+                }
+              };
+            }
           }
         } else if (obj.type === TARGETTYPE_CE) {
-          if (obj.articleChmodEdit === true && obj.do !== null && obj.do !== '') {
+          if (obj.canEdit === true && obj.do !== null && obj.do !== '') {
             const parentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-pedit');
             parentEdit.onclick = function () {
               dispatchEvent({
@@ -178,6 +191,16 @@
                 });
               };
             }
+            const elementDelete = createContainerElement(c, 'alpdeskfee-utilscontainer-delete');
+            elementDelete.onclick = function () {
+              if (confirm(obj.labels.delete_confirm_element)) {
+                dispatchEvent({
+                  action: ACTION_ELEMENT_DELETE,
+                  targetType: TARGETTYPE_CE,
+                  id: obj.id
+                });
+              }
+            };
           }
           if (obj.act !== null && obj.act !== '') {
             const modEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-module');
