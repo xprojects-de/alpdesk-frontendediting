@@ -170,7 +170,7 @@ class HooksListener {
       // @TODO Check whene Module has inserttag content then two bars will be shown because getContent and Module is triggered
       $canEdit = true;
       if ($element->ptable == 'tl_article') {
-        $parentArticleModel = ArticleModel::findBy(['id = ?'], $element->pid);
+        $parentArticleModel = ArticleModel::findById($element->pid);
         if ($parentArticleModel !== null) {
           $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $parentArticleModel->row());
         }
