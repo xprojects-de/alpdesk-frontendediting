@@ -207,6 +207,7 @@
                   dispatchEvent({
                     action: ACTION_ELEMENT_VISIBILITY,
                     targetType: TARGETTYPE_CE,
+                    targetDo: obj.do,
                     id: obj.id,
                     pid: obj.pid,
                     state: (obj.invisible === true ? 1 : 0)
@@ -220,6 +221,7 @@
                   dispatchEvent({
                     action: ACTION_ELEMENT_DELETE,
                     targetType: TARGETTYPE_CE,
+                    targetDo: obj.do,
                     id: obj.id
                   });
                 }
