@@ -49,23 +49,24 @@ Die Erweiterung sollte voll funktionsfähig sein, bis auf die Bugs die ich selbe
 ## Was ist noch zu tun?
 
 - Module optimieren (z.B. möglich machen die Teaser der Newsliste auch einzeln bearbeitbar zu machen)
+- Weitere Module untersützen
+- Bugfixing
 - ...
 
 Für diese Erweiterung übernehme ich keinerlei Haftung!
 
 ## Bilder
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b_1.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b_2.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b3.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b4.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b5.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b6.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b7.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b8.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b9.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b10.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b11.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b12.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b13.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/b14.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild1.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild2.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild3.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild4.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild5.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild6.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild7.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild8.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild9.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild10.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild11.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild12.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild13.png" alt=""></p>   
 
