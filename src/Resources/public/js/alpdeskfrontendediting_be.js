@@ -22,6 +22,7 @@ class AlpdeskBackend {
     AlpdeskBackend.ACTION_ELEMENT_VISIBILITY = 'element_visibility';
     AlpdeskBackend.ACTION_ELEMENT_DELETE = 'element_delete';
     AlpdeskBackend.ACTION_ELEMENT_SHOW = 'element_show';
+    AlpdeskBackend.ACTION_ELEMENT_NEW = 'element_new';
 
     AlpdeskBackend.MODAL_TITLE = 'Frontend-View';
 
@@ -138,6 +139,8 @@ class AlpdeskBackend {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.id});
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_SHOW) {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&pn=' + data.targetPageId + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
+      } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_NEW) {
+        AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&id=' + data.id + '&act=create&mode=2&pid=' + data.id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_VISIBILITY) {
         AlpdeskBackend.callVisibilityArticle(data.id, data.state);
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_DELETE) {
@@ -148,6 +151,8 @@ class AlpdeskBackend {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&alpdesk_hideheader=1&alpdeskfocus_listitem=' + data.id + '&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.pid});
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_EDIT) {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&act=edit&id=' + data.id});
+      } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_NEW) {
+        AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&id=' + data.pid + '&act=create&mode=1&pid=' + data.id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_VISIBILITY) {
         AlpdeskBackend.callVisibilityElement(data.pid, data.id, data.state);
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_DELETE) {

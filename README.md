@@ -48,7 +48,6 @@ Die Erweiterung sollte voll funktionsfähig sein, bis auf die Bugs die ich selbe
 
 ## Was ist noch zu tun?
 
-- Derzeit werden (eigentlich bewusst) die Add,Delete,Visible Symbole nicht in der Bar angezeigt. Technisch wäre das kein Problem. Persönlich finde ich es übersichtlicher über das "Einstellungen-Symbol" die ganzen Elemente zu sehen (das ausgewählte wird ja hervorgehoben). Mal sehen ...
 - Module optimieren (z.B. möglich machen die Teaser der Newsliste auch einzeln bearbeitbar zu machen)
 - ...
 
