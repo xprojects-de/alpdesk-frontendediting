@@ -149,12 +149,18 @@ class HooksListener {
         $hasParentAccess = false;
       }
 
+      // Check custom type-Access e.g. news
+      $hasCustomTypeAccess = true;
+      if (!Utils::checkCustomTypeAccess(str_replace('tl_', '', $element->ptable), $element->pid)) {
+        $hasCustomTypeAccess = false;
+      }
+
       // We have a normale ContentElement
       // If it is not mapped in Backend we have to check the rights
       // If it´s mapped we show to enable Backendmodule edit
 
       if ($modDoType->getValid() == false) {
-        if (!$hasElementAccess || !$hasParentAccess) {
+        if (!$hasElementAccess || !$hasParentAccess || !$hasCustomTypeAccess) {
           return $buffer;
         }
       }
