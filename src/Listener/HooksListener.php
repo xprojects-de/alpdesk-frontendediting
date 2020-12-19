@@ -143,23 +143,17 @@ class HooksListener {
       }
 
       // Check if access to parent element
+      // @TODO Myybe this is a problem if pTable is no BackendModule itself
+      // For News and Article it´s working but maybe there is a problem with custom extentions
       $hasParentAccess = true;
       if (!$this->backendUser->hasAccess(str_replace('tl_', '', $element->ptable), 'modules')) {
         $hasParentAccess = false;
       }
 
-      // Check custom type-Access e.g. news
-      $hasCustomTypeAccess = true;
-      if (!Utils::checkCustomTypeAccess(str_replace('tl_', '', $element->ptable), $element->pid)) {
-        $hasCustomTypeAccess = false;
-      }
-
-      // We have a normale ContentElement
-      // If it is not mapped in Backend we have to check the rights
-      // If it´s mapped we show to enable Backendmodule edit
+      // Check also if element has Access to ptabel e.g. news
 
       if ($modDoType->getValid() == false) {
-        if (!$hasElementAccess || !$hasParentAccess || !$hasCustomTypeAccess) {
+        if (!$hasElementAccess || !$hasParentAccess || !$modDoType->getHasParentAccess()) {
           return $buffer;
         }
       }
