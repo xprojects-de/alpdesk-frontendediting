@@ -228,6 +228,8 @@
             }
           }
           if (obj.act !== null && obj.act !== '') {
+            // if Element has a special Module-Item, display left because otherwise first ce_element will be under this item
+            c.classList.add('alpdeskfee-utilscontainer-custommodule');
             const modEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-module');
             modEdit.setAttribute('title', objLabels.element_mod);
             modEdit.onclick = function () {
@@ -238,6 +240,7 @@
             };
           }
         } else if (obj.type === TARGETTYPE_MOD) {
+          c.classList.add('alpdeskfee-utilscontainer-custommodule');
           const parentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-module');
           parentEdit.setAttribute('title', objLabels.element_mod);
           parentEdit.onclick = function () {
@@ -314,6 +317,7 @@
     }
 
     // Maybe problem at MultiDomain-Webpage
+    // Otherwise in future the complete Code can be in Backendjs and the access iframecontent from parent backend directly!
     if (checkInIframe() === true) {
 
       // Get from global

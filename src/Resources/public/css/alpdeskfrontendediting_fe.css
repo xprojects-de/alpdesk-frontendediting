@@ -38,12 +38,20 @@ div.alpdeskfee-utilscontainer-page {
 }
 
 div.alpdeskfee-utilscontainer-page {
-  left: 0%;
+  left: auto;
+  right: 0%;
+  margin-right: 40px;
   margin-left: 0px;
   display: block;
   width: 165px;
   transform:translateX(0%);
 }
+
+div.alpdeskfee-utilscontainer-custommodule {
+  left: 0%;
+  margin-left: 0px;
+  transform:translateX(0%);
+} 
 
 .alpdeskfee-article-container div.alpdeskfee-parent-active {
   width: auto;
