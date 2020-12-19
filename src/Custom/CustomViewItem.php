@@ -14,6 +14,7 @@ class CustomViewItem {
   private $sublevelpath = '';
   private $label = '';
   private $subviewitems = [];
+  private $hasParentAccess = true;
 
   public function getType(): int {
     return $this->type;
@@ -61,6 +62,14 @@ class CustomViewItem {
 
   public function addSubviewitems(CustomSubviewItem $subviewitem): void {
     \array_push($this->subviewitems, $subviewitem);
+  }
+
+  public function getHasParentAccess(): bool {
+    return $this->hasParentAccess;
+  }
+
+  public function setHasParentAccess(bool $hasParentAccess): void {
+    $this->hasParentAccess = $hasParentAccess;
   }
 
   public function getDecodesSubviewItems() {

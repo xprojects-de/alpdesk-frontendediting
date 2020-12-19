@@ -25,9 +25,9 @@ class HooksListener {
   private $tokenChecker = null;
   private $alpdeskfeeEventDispatcher = null;
   private $backendUser = null;
-  private $currentPageId = null;
+  private $currentPageId = 0;
   private $pagemountAccess = false;
-  private $pageChmodEdit = false;
+  private $pageChmodEdit = 0;
 
   public function __construct(TokenChecker $tokenChecker, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher) {
     $this->tokenChecker = $tokenChecker;
@@ -45,14 +45,13 @@ class HooksListener {
 
   private function addLabelsToHeader() {
     $labels = \json_encode($GLOBALS['TL_LANG']['alpdeskfee_lables']);
-    $GLOBALS['TL_HEAD'][] = "<script>const alpdeskfeeLabels='" . $labels . "';</script>";
+    $GLOBALS['TL_HEAD'][] = "<script>const alpdeskfeePageid=" . $this->currentPageId . "; const alpdeskfeeCanPageEdit=" . $this->pageChmodEdit . "; const alpdeskfeeLabels='" . $labels . "';</script>";
   }
 
   public function onGetPageLayout(PageModel $objPage, LayoutModel $objLayout, PageRegular $objPageRegular): void {
 
     if ($this->backendUser !== null) {
 
-      $this->addLabelsToHeader();
       $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_fe.js|async';
       $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_fe.css';
 
@@ -60,7 +59,8 @@ class HooksListener {
         $this->currentPageId = $objPage->id;
       }
       $this->pagemountAccess = Utils::hasPagemountAccess($objPage);
-      $this->pageChmodEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_PAGE, $objPage->row());
+      $this->pageChmodEdit = ($this->backendUser->isAllowed(BackendUser::CAN_EDIT_PAGE, $objPage->row()) == true ? 1 : 0);
+      $this->addLabelsToHeader();
     }
   }
 
@@ -112,7 +112,6 @@ class HooksListener {
             'canEdit' => $canEdit,
             'canDelete' => $canDelete,
             'canPublish' => $canPublish,
-            'canPageEdit' => $this->pageChmodEdit,
             'pageid' => $this->currentPageId,
             'desc' => $GLOBALS['TL_LANG']['alpdeskfee_lables']['article']
         ];
@@ -144,23 +143,17 @@ class HooksListener {
       }
 
       // Check if access to parent element
+      // @TODO Myybe this is a problem if pTable is no BackendModule itself
+      // For News and Article it´s working but maybe there is a problem with custom extentions
       $hasParentAccess = true;
       if (!$this->backendUser->hasAccess(str_replace('tl_', '', $element->ptable), 'modules')) {
         $hasParentAccess = false;
       }
 
-      // Check custom type-Access e.g. news
-      $hasCustomTypeAccess = true;
-      if (!Utils::checkCustomTypeAccess(str_replace('tl_', '', $element->ptable), $element->pid)) {
-        $hasCustomTypeAccess = false;
-      }
-
-      // We have a normale ContentElement
-      // If it is not mapped in Backend we have to check the rights
-      // If it´s mapped we show to enable Backendmodule edit
+      // Check also if element has Access to ptabel e.g. news
 
       if ($modDoType->getValid() == false) {
-        if (!$hasElementAccess || !$hasParentAccess || !$hasCustomTypeAccess) {
+        if (!$hasElementAccess || !$hasParentAccess || !$modDoType->getHasParentAccess()) {
           return $buffer;
         }
       }
@@ -206,7 +199,6 @@ class HooksListener {
           'invisible' => ($element->invisible == 1 ? true : false),
           'canEdit' => $canEdit,
           'canPublish' => $canPublish,
-          'canPageEdit' => $this->pageChmodEdit,
           'pageid' => $this->currentPageId,
           'act' => ($modDoType->getValid() == true ? $modDoType->getPath() : ''),
           'desc' => $label
@@ -226,7 +218,6 @@ class HooksListener {
           'type' => 'mod',
           'do' => $modDoType->getPath(),
           'act' => $modDoType->getSublevelpath(),
-          'canPageEdit' => $this->pageChmodEdit,
           'pageid' => $this->currentPageId,
           'subviewitems' => $modDoType->getDecodesSubviewItems(),
           'desc' => $modDoType->getLabel()

@@ -61,24 +61,4 @@ class Utils {
     }
   }
 
-  public static function checkCustomTypeAccess($type, $pid): bool {
-
-    $valid = true;
-
-    if ($type === 'news') {
-      $valid = false;
-      if (class_exists('\Contao\NewsModel')) {
-        $objNews = \Contao\NewsModel::findById($pid);
-        if ($objNews !== null) {
-          $objArchive = $objNews->getRelated('pid');
-          if (BackendUser::getInstance()->hasAccess($objArchive->id, 'news')) {
-            $valid = true;
-          }
-        }
-      }
-    }
-
-    return $valid;
-  }
-
 }

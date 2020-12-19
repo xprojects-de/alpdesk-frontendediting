@@ -44,6 +44,59 @@ Die Erweiterung sollte voll funktionsfähig sein, bis auf die Bugs die ich selbe
 
 - Die Erweiterung stellt zwei Events bereit (alpdeskfrontendediting.element und alpdeskfrontendediting.module) auf welche man sich per EventListener registieren kann.
 -  Das Event wird bei bei jedem Rendern eines FrontendModules und Inhaltselement getriggert und liefert jeweils das Model und das spezifische FrontendEditing-Object (Hooks getContentElement und getFrontendModule). Auf diesem Wege können vorhandene Frontend-Bar-Items angepasst werden oder sogar neue, eigene Frontend-Bar-Items hinzugefügt werden und mit passender Logik zum BackendModul versehen werden.
+
+Beispiel um einen eigenen Icon für ein Inhaltselement einzufügen:
+
+```
+# service.yml oder listener.yml
+
+services:
+
+  projects.listener.alpdeskfrontendediting.element:
+    class: XProjects\Projects\Events\ProjectsAlpdeskFrontendViewListener
+    tags:
+      - { name: kernel.event_listener, event: alpdeskfrontendediting.element}
+```
+
+```
+
+// Passende Eventklasse dazu
+// Modul funktioniert analog
+
+declare(strict_types=1);
+
+namespace XProjects\Projects\Events;
+
+use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventElement;
+use Contao\Input;
+use Contao\Database;
+
+class ProjectsAlpdeskFrontendViewListener {
+
+  public function __invoke(AlpdeskFrontendeditingEventElement $event): void {
+
+    if ($event->getElement()->type === 'xprojects_overview') {
+      $event->getItem()->setValid(true);
+      $event->getItem()->setPath('do=xprojects');
+      $event->getItem()->setLabel($GLOBALS['TL_LANG']['projects_label']);
+    } else if ($event->getElement()->type === 'xprojects_detail') {
+      $alias = Input::get('projekte');
+      if ($alias !== null && $alias !== '') {
+        // Better use Model but Extention does not have a model
+        $projectObj = Database::getInstance()->prepare("SELECT id FROM tl_xprojects WHERE alias=?")->execute($alias);
+        if ($projectObj->numRows > 0) {
+          $event->getItem()->setValid(true);
+          $event->getItem()->setPath('do=xprojects&table=tl_content&id=' . $projectObj->id);
+          $event->getItem()->setLabel($GLOBALS['TL_LANG']['projects_label']);
+        }
+      }
+    }
+  }
+
+}
+```
+
+
 - Ist kein Backend-User eingelogged wird der ganze "zusätzliche" Code NICHT ausgeführt und die Hooks werden sofort wieder verlassen. Somit gibt es hier keine Performanceprobleme im normalen Betrieb.
 
 ## Was ist noch zu tun?
