@@ -31,9 +31,6 @@
     const ACTION_ELEMENT_SHOW = 'element_show';
     const ACTION_ELEMENT_NEW = 'element_new';
 
-    let globalTargetPageId = null;
-    let showPageEdit = false;
-
     function dispatchEvent(params) {
       window.parent.document.dispatchEvent(new CustomEvent(ALPDESK_EVENTNAME, {
         detail: params
@@ -53,16 +50,6 @@
     function appendUtilsContainer(obj, parent, notUseParent, objLabels) {
 
       if (obj !== null && obj !== undefined) {
-
-        if (globalTargetPageId === null || globalTargetPageId === '' || globalTargetPageId === undefined) {
-          if (obj.pageid !== null && obj.pageid !== undefined) {
-            globalTargetPageId = obj.pageid;
-          }
-        }
-
-        if (showPageEdit === false && obj.canPageEdit !== undefined && obj.canPageEdit !== null) {
-          showPageEdit = obj.canPageEdit;
-        }
 
         let c = parent;
         if (notUseParent === true) {
@@ -105,6 +92,7 @@
               targetPageId: obj.pageid
             });
           };
+          // Mabye check if Articles enabled!!!
           const cEditArticles = createContainerElement(c, 'alpdeskfee-utilscontainer-rootarticle');
           cEditArticles.setAttribute('title', objLabels.article_edit_top);
           cEditArticles.onclick = function () {
@@ -328,6 +316,7 @@
     // Maybe problem at MultiDomain-Webpage
     if (checkInIframe() === true) {
 
+      // Get from global
       let objLabels = null;
       if (alpdeskfeeLabels !== null && alpdeskfeeLabels !== undefined && alpdeskfeeLabels !== '') {
         objLabels = JSON.parse(alpdeskfeeLabels);
@@ -335,10 +324,16 @@
 
       scanElements(objLabels);
 
-      if (showPageEdit === true && globalTargetPageId !== null && globalTargetPageId !== '' && globalTargetPageId !== undefined && globalTargetPageId !== 0) {
+      // Get from global
+      let showPageEdit = false;
+      if (alpdeskfeeCanPageEdit !== undefined && alpdeskfeeCanPageEdit !== null && alpdeskfeeCanPageEdit === 1) {
+        showPageEdit = true;
+      }
+
+      if (showPageEdit === true && alpdeskfeePageid !== null && alpdeskfeePageid !== '' && alpdeskfeePageid !== undefined && alpdeskfeePageid !== 0) {
         const bodyElement = document.body;
         if (bodyElement !== null && bodyElement !== undefined) {
-          const jsonData = '{"type":"' + TARGETTYPE_PAGE + '","desc":"Page","do":"' + TARGETTYPE_PAGE + '","id":"' + globalTargetPageId + '","pageid":"' + globalTargetPageId + '"}';
+          const jsonData = '{"type":"' + TARGETTYPE_PAGE + '","desc":"Page","do":"' + TARGETTYPE_PAGE + '","id":"' + alpdeskfeePageid + '","pageid":"' + alpdeskfeePageid + '"}';
           const obj = JSON.parse(jsonData);
           if (obj !== null && obj !== undefined) {
             appendUtilsContainer(obj, bodyElement, true, objLabels);
