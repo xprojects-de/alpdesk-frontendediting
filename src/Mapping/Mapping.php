@@ -30,7 +30,9 @@ class Mapping {
       return $eventElement->getItem();
     }
 
-    return $item;
+    $eventElement = new AlpdeskFrontendeditingEventElement($item, $element);
+    $this->alpdeskfeeEventDispatcher->getDispatcher()->dispatch($eventElement, AlpdeskFrontendeditingEventElement::NAME);
+    return $eventElement->getItem();
   }
 
   public function mapModule(CustomViewItem $item, Module $module): CustomViewItem {
@@ -43,7 +45,9 @@ class Mapping {
       return $eventModule->getItem();
     }
 
-    return $item;
+    $eventModule = new AlpdeskFrontendeditingEventModule($item, $module);
+    $this->alpdeskfeeEventDispatcher->getDispatcher()->dispatch($eventModule, AlpdeskFrontendeditingEventModule::NAME);
+    return $eventModule->getItem();
   }
 
 }
