@@ -126,6 +126,10 @@ div.alpdeskfee-utilscontainer-custommodule {
   background-image: url('../../../system/themes/flexible/icons/new.svg');
 }
 
+.alpdeskfee-utilscontainer-copy {
+  background-image: url('../../../system/themes/flexible/icons/copy.svg');
+}
+
 .alpdeskfee-utilscontainer-clearcontainer {
   clear: both;
 }
