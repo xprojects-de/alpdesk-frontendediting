@@ -23,6 +23,7 @@ class AlpdeskBackend {
     AlpdeskBackend.ACTION_ELEMENT_DELETE = 'element_delete';
     AlpdeskBackend.ACTION_ELEMENT_SHOW = 'element_show';
     AlpdeskBackend.ACTION_ELEMENT_NEW = 'element_new';
+    AlpdeskBackend.ACTION_ELEMENT_COPY = 'element_copy';
 
     AlpdeskBackend.MODAL_TITLE = 'Frontend-View';
 
@@ -67,76 +68,103 @@ class AlpdeskBackend {
     }
   }
 
-  static callVisibilityArticle(id, state) {
-
-    new Request.Contao({
-      'url': '/contao?do=article&tid=' + id + '&state=' + state + '&rt=' + AlpdeskBackend.REQUEST_TOKEN,
-      followRedirects: false,
-      onSuccess: function (txt, json) {
-        // Callback not working!!!!
-      }
-    }).get();
-
-    // No fine but onSuccess-Callback not working
-    setTimeout(function () {
-      document.getElementById(AlpdeskBackend.LOADING).style.display = 'block';
-      document.getElementById(AlpdeskBackend.FRAME).contentWindow.location.reload();
-    }, 400);
+  static reloadFrame() {
+    document.getElementById(AlpdeskBackend.LOADING).style.display = 'block';
+    document.getElementById(AlpdeskBackend.FRAME).contentWindow.location.reload();
   }
 
-  static callVisibilityElement(dotype, pid, id, state) {
+  static callVisibilityArticle(data) {
 
     new Request.Contao({
-      'url': '/contao?do=' + dotype + '&table=tl_content&id=' + pid + '&cid=' + id + '&state=' + state + '&rt=' + AlpdeskBackend.REQUEST_TOKEN,
+      'url': '/contao',
       followRedirects: false,
-      onSuccess: function (txt, json) {
-        // Callback not working!!!!
+      onSuccess: function (responseJSON, responseText) {
+        AlpdeskBackend.reloadFrame();
+      },
+      onError: function (text, error) {
+        AlpdeskBackend.reloadFrame();
+      },
+      onFailure: function (f) {
+        AlpdeskBackend.reloadFrame();
       }
-    }).get();
+    }).get({'do': data.targetType, 'tid': data.id, 'state': data.state, 'rt': AlpdeskBackend.REQUEST_TOKEN});
 
-    // No fine but onSuccess-Callback not working
-    setTimeout(function () {
-      document.getElementById(AlpdeskBackend.LOADING).style.display = 'block';
-      document.getElementById(AlpdeskBackend.FRAME).contentWindow.location.reload();
-    }, 400);
   }
 
-  static callDeleteArticle(id) {
+  static callVisibilityElement(data) {
 
     new Request.Contao({
-      'url': '/contao?do=article&act=delete&id=' + id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN,
+      'url': '/contao',
       followRedirects: false,
-      onSuccess: function (txt, json) {
-        // Callback not working!!!!
+      onSuccess: function (responseJSON, responseText) {
+        AlpdeskBackend.reloadFrame();
+      },
+      onError: function (text, error) {
+        AlpdeskBackend.reloadFrame();
+      },
+      onFailure: function (f) {
+        AlpdeskBackend.reloadFrame();
       }
-    }).get();
+    }).get({'do': data.targetDo, 'table': 'tl_content', 'id': data.pid, 'cid': data.id, 'state': data.state, 'rt': AlpdeskBackend.REQUEST_TOKEN});
 
-    // No fine but onSuccess-Callback not working
-    setTimeout(function () {
-      document.getElementById(AlpdeskBackend.LOADING).style.display = 'block';
-      document.getElementById(AlpdeskBackend.FRAME).contentWindow.location.reload();
-    }, 400);
   }
 
-  static callDeleteElement(dotype, id) {
+  static callDeleteArticle(data) {
 
     new Request.Contao({
-      'url': '/contao?do=' + dotype + '&table=tl_content&act=delete&id=' + id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN,
+      'url': '/contao',
+      followRedirects: false,
+      onSuccess: function (responseJSON, responseText) {
+        AlpdeskBackend.reloadFrame();
+      },
+      onError: function (text, error) {
+        AlpdeskBackend.reloadFrame();
+      },
+      onFailure: function (f) {
+        AlpdeskBackend.reloadFrame();
+      }
+    }).get({'do': data.targetType, 'act': 'delete', 'id': data.id, 'rt': AlpdeskBackend.REQUEST_TOKEN});
+
+  }
+
+  static callDeleteElement(data) {
+
+    new Request.Contao({
+      'url': '/contao',
+      followRedirects: false,
+      onSuccess: function (responseJSON, responseText) {
+        AlpdeskBackend.reloadFrame();
+      },
+      onError: function (text, error) {
+        AlpdeskBackend.reloadFrame();
+      },
+      onFailure: function (f) {
+        AlpdeskBackend.reloadFrame();
+      }
+    }).get({'do': data.targetDo, 'table': 'tl_content', 'act': 'delete', 'id': data.id, 'rt': AlpdeskBackend.REQUEST_TOKEN});
+
+  }
+
+  static copyElement(data) {
+
+    new Request.Contao({
+      'url': '/contao',
       followRedirects: false,
       onSuccess: function (txt, json) {
-        // Callback not working!!!!
+        AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&alpdeskfocus_listitem=' + data.id + '&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.pid});
+      },
+      onError: function (text, error) {
+        AlpdeskBackend.reloadFrame();
+      },
+      onFailure: function (f) {
+        AlpdeskBackend.reloadFrame();
       }
-    }).get();
-
-    // No fine but onSuccess-Callback not working
-    setTimeout(function () {
-      document.getElementById(AlpdeskBackend.LOADING).style.display = 'block';
-      document.getElementById(AlpdeskBackend.FRAME).contentWindow.location.reload();
-    }, 400);
+    }).get({'do': data.targetDo, 'table': 'tl_content', 'id': data.id, 'act': 'paste', 'mode': 'copy', 'rt': AlpdeskBackend.REQUEST_TOKEN});
   }
 
   static handleEvent(e) {
 
+    // Mabye use Contao.request_token instead of AlpdeskBackend.REQUEST_TOKEN in future
     const data = e.detail;
     if (data.targetType === AlpdeskBackend.TARGETTYPE_PAGE) {
       if (data.action === AlpdeskBackend.ACTION_ELEMENT_EDIT) {
@@ -154,21 +182,23 @@ class AlpdeskBackend {
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_NEW) {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&id=' + data.id + '&act=create&mode=2&pid=' + data.id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_VISIBILITY) {
-        AlpdeskBackend.callVisibilityArticle(data.id, data.state);
+        AlpdeskBackend.callVisibilityArticle(data);
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_DELETE) {
-        AlpdeskBackend.callDeleteArticle(data.id);
+        AlpdeskBackend.callDeleteArticle(data);
       }
     } else if (data.targetType === AlpdeskBackend.TARGETTYPE_CE) {
       if (data.action === AlpdeskBackend.ACTION_PARENT_EDIT) {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&alpdesk_hideheader=1&alpdeskfocus_listitem=' + data.id + '&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.pid});
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_EDIT) {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&act=edit&id=' + data.id});
+      } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_COPY) {
+        AlpdeskBackend.copyElement(data);
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_NEW) {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&id=' + data.pid + '&act=create&mode=1&pid=' + data.id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_VISIBILITY) {
-        AlpdeskBackend.callVisibilityElement(data.targetDo, data.pid, data.id, data.state);
+        AlpdeskBackend.callVisibilityElement(data);
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_DELETE) {
-        AlpdeskBackend.callDeleteElement(data.targetDo, data.id);
+        AlpdeskBackend.callDeleteElement(data);
       }
     } else if (data.targetType === AlpdeskBackend.TARGETTYPE_MOD) {
       AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&' + data.targetDo + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});

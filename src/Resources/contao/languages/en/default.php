@@ -26,6 +26,7 @@ $GLOBALS['TL_LANG']['alpdeskfee_lables'] = [
     'new_element_top' => 'Add new element',
     'new_element' => 'Add new alement after this',
     'edit_element' => 'Edit element',
+    'copy_element' => 'Copy element',
     'delete_element' => 'Delete element',
     'element_visible' => 'Hide/show element',
     'element_mod' => 'Edit module'

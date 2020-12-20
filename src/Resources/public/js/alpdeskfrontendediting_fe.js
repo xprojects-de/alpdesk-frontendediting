@@ -30,6 +30,7 @@
     const ACTION_ELEMENT_DELETE = 'element_delete';
     const ACTION_ELEMENT_SHOW = 'element_show';
     const ACTION_ELEMENT_NEW = 'element_new';
+    const ACTION_ELEMENT_COPY = 'element_copy';
 
     function dispatchEvent(params) {
       window.parent.document.dispatchEvent(new CustomEvent(ALPDESK_EVENTNAME, {
@@ -186,6 +187,17 @@
                   targetType: TARGETTYPE_CE,
                   targetDo: obj.do,
                   id: obj.id
+                });
+              };
+              const elementCopy = createContainerElement(c, 'alpdeskfee-utilscontainer-copy');
+              elementCopy.setAttribute('title', objLabels.copy_element);
+              elementCopy.onclick = function () {
+                dispatchEvent({
+                  action: ACTION_ELEMENT_COPY,
+                  targetType: TARGETTYPE_CE,
+                  targetDo: obj.do,
+                  id: obj.id,
+                  pid: obj.pid
                 });
               };
               if (obj.canPublish === true) {
