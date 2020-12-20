@@ -1,5 +1,13 @@
 <?php
 
+$GLOBALS['TL_LANG']['alpdeskfee_backend_lables'] = [
+    'device_select' => 'Ansicht anzeigen',
+    'refresh_frame' => 'aktualisieren',
+    'page_select' => 'Seite auswählen',
+    'fullscreen' => 'Fullscreen',
+    'live_mode' => 'Live-Modus aktivieren/deaktivieren',
+];
+
 $GLOBALS['TL_LANG']['alpdeskfee_lables'] = [
     'ce' => 'Element',
     'mod' => 'Modul',

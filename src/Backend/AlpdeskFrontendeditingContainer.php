@@ -24,6 +24,16 @@ class AlpdeskFrontendeditingContainer {
     Controller::reload();
   }
 
+  private function toggleLiveModus() {
+    $liveModus = System::getContainer()->get('session')->get('alpdeskfee_livemodus');
+    if ($liveModus === true) {
+      System::getContainer()->get('session')->set('alpdeskfee_livemodus', false);
+    } else {
+      System::getContainer()->get('session')->set('alpdeskfee_livemodus', true);
+    }
+    Controller::reload();
+  }
+
   private function getPageAlias($id) {
     $pageModel = PageModel::findById($id);
     if ($pageModel !== null) {
@@ -38,6 +48,8 @@ class AlpdeskFrontendeditingContainer {
 
     if (Input::post('toggleFullsize')) {
       $this->toggleFullesize();
+    } else if (Input::post('toggleLivemodus')) {
+      $this->toggleLiveModus();
     } else if (Input::get('pageselect')) {
       $this->getPageAlias(Input::get('pageselect'));
     }
@@ -48,6 +60,7 @@ class AlpdeskFrontendeditingContainer {
     $containerTemplate = new BackendTemplate('be_alpdeskfrontendediting_container');
     $containerTemplate->token = REQUEST_TOKEN;
     $containerTemplate->base = Environment::get('base');
+    $containerTemplate->livemodus = System::getContainer()->get('session')->get('alpdeskfee_livemodus');
     $alias = System::getContainer()->get('session')->get('alpdeskfee_pageselect');
     if ($alias !== null && $alias !== '') {
       $objUrlGenerator = System::getContainer()->get('contao.routing.url_generator');

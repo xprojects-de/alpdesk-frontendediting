@@ -28,6 +28,7 @@ class HooksListener {
   private $currentPageId = 0;
   private $pagemountAccess = false;
   private $pageChmodEdit = 0;
+  private $alpdeskfee_livemodus = false;
 
   public function __construct(TokenChecker $tokenChecker, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher) {
     $this->tokenChecker = $tokenChecker;
@@ -40,6 +41,10 @@ class HooksListener {
       Utils::mergeUserGroupPersmissions();
       $this->backendUser = BackendUser::getInstance();
       System::loadLanguageFile('default');
+      $liveModus = System::getContainer()->get('session')->get('alpdeskfee_livemodus');
+      if ($liveModus !== null && $liveModus === true) {
+        $this->alpdeskfee_livemodus = true;
+      }
     }
   }
 
@@ -50,7 +55,7 @@ class HooksListener {
 
   public function onGetPageLayout(PageModel $objPage, LayoutModel $objLayout, PageRegular $objPageRegular): void {
 
-    if ($this->backendUser !== null) {
+    if ($this->backendUser !== null && !$this->alpdeskfee_livemodus) {
 
       $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_fe.js|async';
       $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_fe.css';
@@ -65,7 +70,7 @@ class HooksListener {
   }
 
   private function checkAccess(): bool {
-    if (TL_MODE == 'FE' && $this->backendUser !== null && $this->pagemountAccess == true) {
+    if (TL_MODE == 'FE' && $this->backendUser !== null && $this->pagemountAccess == true && !$this->alpdeskfee_livemodus) {
       return true;
     }
     return false;

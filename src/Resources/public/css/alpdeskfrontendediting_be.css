@@ -86,3 +86,11 @@
   background-color: #eaeaec;
   border: none;
 }
+
+#livemode {
+  background-color: #ddd;
+}
+
+#livemodeactive {
+  background-color: rgba(244, 124, 0, 1);
+}
