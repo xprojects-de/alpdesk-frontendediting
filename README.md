@@ -9,7 +9,7 @@ Die Erweiterung ist ein normales Backendmodul und läuft somit direkt im Backend
 Auf Basis des Javascript-Eventhandlings werden lediglich lokale Events (Same-Origin-Policy) der Frontendansicht ins Backend geschickt und dort verarbeitet.
 Das Backend bedient sich dann dem mächtigen Backend-Editing von Contao indem einfach die passenden URLs in einem Overlay-Dialog angezeigt werden. Somit steht das komplette Backend-Editing wie gewohnt zur Verfügung, nur halt ein bisschen visueller dargestellt.
 
-Augrund der "Same-Origin-Policy" ist es nur möglich und auch gewollt das Frontend-Editing direkt übers Backend zu bedienen.
+Aufgrund der "Same-Origin-Policy" ist es nur möglich und auch gewollt das Frontend-Editing direkt übers Backend zu bedienen.
 Wird die Frontend-Vorschau aufgerufen, sind die Elemente nicht verfügbar! Aus Sicherheitsgründen ist das auch so gewollt, da das Backend nur einen EventListener auf Events des "Same-Origin" bereitstellt und diese verarbeitet. Es wird KEIN "postMessage-Cross-Domain"-Eventlistenerer bereitgestellt, was auch gut so ist :-)
 
 ## Verwendung
@@ -95,6 +95,14 @@ class ProjectsAlpdeskFrontendViewListener {
 
 }
 ```
+
+- Die Item-Bars und die Rollover-Markierung des Frontend-Views arbeiten mit einem z-index: 1000. Manchmal kann es hier Probleme mit einem z.B. fixed header geben wo prinzipiell der Content hinter den Header läuft. Hat das fixe Element einen z-index < 1000 dann überlagert der Overlay diesen. Wenn nicht dann kann das in eurem Frontend-CSS angepasst werden. Hier müsst ihr dann einfach folgende CSS-Klassen überschreiben.
+
+```
+.alpdeskfee-active {z-index: XXXX;}
+div.alpdeskfee-utilscontainer {z-index: XXXX;}
+```
+
 
 
 - Ist kein Backend-User eingelogged wird der ganze "zusätzliche" Code NICHT ausgeführt und die Hooks werden sofort wieder verlassen. Somit gibt es hier keine Performanceprobleme im normalen Betrieb.
