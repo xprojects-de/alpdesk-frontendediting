@@ -8,7 +8,7 @@
         <option value="phone">Phone</option>
         <option value="phone_landscape">Phone landscape</option>
       </select>
-      <button id="setdevice" class="tl_submit">
+      <button title="<?= $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['device_select'] ?>" id="setdevice" class="tl_submit">
         <img src="system/themes/flexible/icons/published.svg">
       </button>
     </div>
@@ -16,14 +16,21 @@
       <form method="post">
         <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->token ?>">
         <input type="hidden" name="toggleFullsize" value="1">
-        <button  id="fullsize" class="tl_submit">
+        <button title="<?= $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['fullscreen'] ?>" id="fullsize" class="tl_submit">
           <img width="15" src="bundles/alpdeskfrontendediting/images/fullsize.png">
         </button>
       </form>
-      <button id="pageselect" class="tl_submit">
+      <form method="post" class="livemodus_form">
+        <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->token ?>">
+        <input type="hidden" name="toggleLivemodus" value="1">
+        <button title="<?= $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['live_mode'] ?>" id="<?= ($this->livemodus === true ? 'livemodeactive' : 'livemode') ?>" class="tl_submit">
+          <img src="system/themes/flexible/icons/preview.svg">
+        </button>
+      </form>
+      <button title="<?= $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['page_select'] ?>" id="pageselect" class="tl_submit">
         <img src="system/themes/flexible/icons/root.svg">
       </button>
-      <button id="seturl" class="tl_submit">
+      <button title="<?= $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['refresh_frame'] ?>" id="seturl" class="tl_submit">
         <img src="system/themes/flexible/icons/published.svg">
       </button>
       <input id="urlparam" value="" class="tl_text">

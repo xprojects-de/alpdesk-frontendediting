@@ -10,6 +10,8 @@ div.alpdeskfee-article-container {
 
 .alpdeskfee-active {
   background-color: rgba(244, 124, 0, 0.1);
+  /* Problems fixex headers*/
+  z-index: 1000;
 }
 
 .alpdeskfee-ce {
