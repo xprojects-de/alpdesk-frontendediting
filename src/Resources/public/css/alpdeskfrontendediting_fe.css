@@ -6,13 +6,14 @@ div.alpdeskfee-article-container {
 }
 
 .alpdeskfee-article-container:hover {
-  border-right: 3px solid rgb(244, 124, 0);
+  border-right: 2px solid rgb(244, 124, 0);
 }
 
 .alpdeskfee-active {
-  background-color: rgba(244, 124, 0, 0.1);
   /* Problems fixex headers*/
   z-index: 1000;
+  outline: 1px dashed rgb(244, 124, 0);
+  background-color: rgba(244, 124, 0, 0.1);
 }
 
 .alpdeskfee-ce {
