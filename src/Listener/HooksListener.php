@@ -147,25 +147,29 @@ class HooksListener {
         $hasElementAccess = false;
       }
 
-      // Check if access to parent element
-      // @TODO Myybe this is a problem if pTable is no BackendModule itself
-      // For News and Article it´s working but maybe there is a problem with custom extentions
-      $hasParentAccess = true;
-      if (!$this->backendUser->hasAccess(str_replace('tl_', '', $element->ptable), 'modules')) {
-        $hasParentAccess = false;
+      // Check if user has access to BackendModule
+      $hasBackendModuleAccess = true;
+      // e.g. Article
+      $modulesCheck = str_replace('tl_', '', $element->ptable);
+      // e.g. events where ptable= calendar_events and Backendmodule is calendar! Mapped in Custom::class
+      if ($modDoType->getCustomBackendModule() !== '') {
+        $modulesCheck = $modDoType->getCustomBackendModule();
+      }
+      if (!$this->backendUser->hasAccess($modulesCheck, 'modules')) {
+        $hasBackendModuleAccess = false;
       }
 
-      // Check also if element has Access to ptabel e.g. news
-
+      // Check access if Module wasn´´ specially mappend in Custom::class and is invalid there
+      // getHasParentAccess() means e.g. if user has no access to special News-Feed where the contentelement is stored
       if ($modDoType->getValid() == false) {
-        if (!$hasElementAccess || !$hasParentAccess || !$modDoType->getHasParentAccess()) {
+        if (!$hasElementAccess || !$hasBackendModuleAccess || !$modDoType->getHasParentAccess()) {
           return $buffer;
         }
       }
 
       // Check when Artikel if the element can be edited
       // Maybe the element can be inserted by inserttags in other Module without Article
-      // @TODO Check whene Module has inserttag content then two bars will be shown because getContent and Module is triggered
+      // @TODO im not sure if it´s possible that a user can edit article::text but not tl_news::text!?
       $canEdit = true;
       if ($element->ptable == 'tl_article') {
         $parentArticleModel = ArticleModel::findById($element->pid);
@@ -189,10 +193,13 @@ class HooksListener {
         }
       }
 
-      // Maybe the User should not edit ContentElements but edit mapped Module
-      // So only mapped path show be shown
+      // e.g. Article
       $do = str_replace('tl_', '', $element->ptable);
-      if (!$hasElementAccess || !$hasParentAccess) {
+      // In same cases e.g. Calendar the do type is different from the ptable. So map this manually
+      if ($modDoType->getCustomBackendModule() !== '') {
+        $do = $modDoType->getCustomBackendModule();
+      }
+      if (!$hasElementAccess || !$hasBackendModuleAccess || !$modDoType->getHasParentAccess()) {
         $do = '';
       }
 
@@ -206,6 +213,8 @@ class HooksListener {
           'canPublish' => $canPublish,
           'pageid' => $this->currentPageId,
           'act' => ($modDoType->getValid() == true ? $modDoType->getPath() : ''),
+          'icon' => ($modDoType->getValid() == true ? $modDoType->getIcon() : ''),
+          'iconclass' => ($modDoType->getValid() == true ? $modDoType->getIconclass() : ''),
           'desc' => $label
       ];
       $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
@@ -223,6 +232,8 @@ class HooksListener {
           'type' => 'mod',
           'do' => $modDoType->getPath(),
           'act' => $modDoType->getSublevelpath(),
+          'icon' => $modDoType->getIcon(),
+          'iconclass' => $modDoType->getIconclass(),
           'pageid' => $this->currentPageId,
           'subviewitems' => $modDoType->getDecodesSubviewItems(),
           'desc' => $modDoType->getLabel()

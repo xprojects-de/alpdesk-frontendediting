@@ -36,6 +36,7 @@ $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'] = [
     'news' => 'News',
     'navigation' => 'Navigation',
     'rocksolidslider' => 'RockSolidSlider',
+    'events' => 'Events',
 ];
 
 

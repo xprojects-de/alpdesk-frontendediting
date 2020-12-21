@@ -14,7 +14,11 @@ class CustomViewItem {
   private $sublevelpath = '';
   private $label = '';
   private $subviewitems = [];
+  // Access to BackendModule
   private $hasParentAccess = true;
+  private $icon = '';
+  private $iconclass = '';
+  private $customBackendModule = '';
 
   public function getType(): int {
     return $this->type;
@@ -70,6 +74,30 @@ class CustomViewItem {
 
   public function setHasParentAccess(bool $hasParentAccess): void {
     $this->hasParentAccess = $hasParentAccess;
+  }
+
+  public function setIcon(string $icon): void {
+    $this->icon = $icon;
+  }
+
+  public function setIconclass(string $iconclass): void {
+    $this->iconclass = $iconclass;
+  }
+
+  public function getIcon(): string {
+    return $this->icon;
+  }
+
+  public function getIconclass(): string {
+    return $this->iconclass;
+  }
+
+  public function getCustomBackendModule(): string {
+    return $this->customBackendModule;
+  }
+
+  public function setCustomBackendModule(string $customBackendModule): void {
+    $this->customBackendModule = $customBackendModule;
   }
 
   public function getDecodesSubviewItems() {
