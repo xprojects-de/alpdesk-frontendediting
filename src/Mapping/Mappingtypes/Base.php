@@ -56,6 +56,18 @@ abstract class Base {
         $class->module = $module;
         return $class;
       }
+    } else if (class_exists('\Contao\ModuleEventList') && $module instanceof \Contao\ModuleEventList) {
+      if (self::checkModuleAccess('calendar')) {
+        $class = new TypeEventlist();
+        $class->module = $module;
+        return $class;
+      }
+    } else if (class_exists('\Contao\ModuleEventReader') && $module instanceof \Contao\ModuleEventReader) {
+      if (self::checkModuleAccess('calendar')) {
+        $class = new TypeEventreader();
+        $class->module = $module;
+        return $class;
+      }
     }
 
     return null;

@@ -23,7 +23,7 @@ class Mapping {
 
   public function checkCustomTypeElementAccess(ContentModel $element, CustomViewItem $item) {
 
-    // If a contentelement comse e.g. "text" and ptable is news we have to check if News are enabled at BackendUser
+    // If a contentelement is e.g. "text" and ptable is news we have to check if News are enabled as BackendModule
     if (str_replace('tl_', '', $element->ptable) === 'news') {
       $item->setHasParentAccess(false);
       if (class_exists('\Contao\NewsModel')) {
@@ -35,12 +35,34 @@ class Mapping {
           }
         }
       }
+    } else if (str_replace('tl_', '', $element->ptable) === 'calendar_events') {
+      $item->setHasParentAccess(false);
+      if (class_exists('\Contao\CalendarEventsModel')) {
+        $objEvent = \Contao\CalendarEventsModel::findById($element->pid);
+        if ($objEvent !== null) {
+          $objCalendar = $objEvent->getRelated('pid');
+          if (BackendUser::getInstance()->hasAccess($objCalendar->id, 'calendars')) {
+            $item->setHasParentAccess(true);
+          }
+        }
+      }
+    }
+  }
+
+  public function checkCustomBackendModule(ContentModel $element, CustomViewItem $item) {
+
+    // Maybe a tl_content element hast a custom BackendModule not equal to ptable
+    if (str_replace('tl_', '', $element->ptable) === 'news') {
+      $item->setCustomBackendModule('news');
+    } else if (str_replace('tl_', '', $element->ptable) === 'calendar_events') {
+      $item->setCustomBackendModule('calendar');
     }
   }
 
   public function mapContentElement(CustomViewItem $item, ContentModel $element): CustomViewItem {
 
     $this->checkCustomTypeElementAccess($element, $item);
+    $this->checkCustomBackendModule($element, $item);
 
     $instance = Base::findClassByElement($element);
     if ($instance !== null) {
