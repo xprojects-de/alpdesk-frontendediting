@@ -272,9 +272,13 @@
           }
           if (obj.subviewitems.length > 0) {
             for (let si = 0; si < obj.subviewitems.length; si++) {
-              const subMod = createContainerElement(c, 'alpdeskfee-utilscontainer-' + obj.subviewitems[si].icon);
-              subMod.classList.add(obj.subviewitems[si].iconclass);
-              subMod.style.backgroundImage = "url('../../../system/themes/flexible/icons/" + obj.subviewitems[si].icon + ".svg')";
+              const subMod = createContainerElement(c, 'alpdeskfee-utilscontainer-module');
+              if (obj.subviewitems[si].icon !== '') {
+                subMod.classList.add(obj.subviewitems[si].iconclass);
+              }
+              if (obj.subviewitems[si].icon !== '') {
+                subMod.style.backgroundImage = "url('" + obj.subviewitems[si].icon + "')";
+              }
               subMod.onclick = function () {
                 dispatchEvent({
                   targetType: TARGETTYPE_MOD,
