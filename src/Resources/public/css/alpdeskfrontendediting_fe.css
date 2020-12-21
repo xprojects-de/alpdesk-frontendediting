@@ -2,6 +2,7 @@
 *[data-alpdeskfee-type],
 div.alpdeskfee-article-container {
   position: relative;
+  min-height: 50px;
 }
 
 .alpdeskfee-article-container:hover {
