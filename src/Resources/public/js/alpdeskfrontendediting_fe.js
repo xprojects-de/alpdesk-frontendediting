@@ -243,6 +243,12 @@
             // if Element has a special Module-Item, display left because otherwise first ce_element will be under this item
             c.classList.add('alpdeskfee-utilscontainer-custommodule');
             const modEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-module');
+            if (obj.iconclass !== null && obj.iconclass !== undefined && obj.iconclass !== '') {
+              modEdit.classList.add(obj.iconclass);
+            }
+            if (obj.icon !== null && obj.icon !== undefined && obj.icon !== '') {
+              modEdit.style.backgroundImage = "url('" + obj.icon + "')";
+            }
             modEdit.setAttribute('title', objLabels.element_mod);
             modEdit.onclick = function () {
               dispatchEvent({
@@ -254,6 +260,12 @@
         } else if (obj.type === TARGETTYPE_MOD) {
           c.classList.add('alpdeskfee-utilscontainer-custommodule');
           const parentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-module');
+          if (obj.iconclass !== null && obj.iconclass !== undefined && obj.iconclass !== '') {
+            parentEdit.classList.add(obj.iconclass);
+          }
+          if (obj.icon !== null && obj.icon !== undefined && obj.icon !== '') {
+            parentEdit.style.backgroundImage = "url('" + obj.icon + "')";
+          }
           parentEdit.setAttribute('title', objLabels.element_mod);
           parentEdit.onclick = function () {
             dispatchEvent({
@@ -273,10 +285,10 @@
           if (obj.subviewitems.length > 0) {
             for (let si = 0; si < obj.subviewitems.length; si++) {
               const subMod = createContainerElement(c, 'alpdeskfee-utilscontainer-module');
-              if (obj.subviewitems[si].icon !== '') {
+              if (obj.subviewitems[si].iconclass !== null && obj.subviewitems[si].iconclass !== undefined && obj.subviewitems[si].iconclass !== '') {
                 subMod.classList.add(obj.subviewitems[si].iconclass);
               }
-              if (obj.subviewitems[si].icon !== '') {
+              if (obj.subviewitems[si].icon !== null && obj.subviewitems[si].icon !== undefined && obj.subviewitems[si].icon !== '') {
                 subMod.style.backgroundImage = "url('" + obj.subviewitems[si].icon + "')";
               }
               subMod.onclick = function () {

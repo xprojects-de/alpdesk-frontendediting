@@ -206,6 +206,8 @@ class HooksListener {
           'canPublish' => $canPublish,
           'pageid' => $this->currentPageId,
           'act' => ($modDoType->getValid() == true ? $modDoType->getPath() : ''),
+          'icon' => ($modDoType->getValid() == true ? $modDoType->getIcon() : ''),
+          'iconclass' => ($modDoType->getValid() == true ? $modDoType->getIconclass() : ''),
           'desc' => $label
       ];
       $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
@@ -223,6 +225,8 @@ class HooksListener {
           'type' => 'mod',
           'do' => $modDoType->getPath(),
           'act' => $modDoType->getSublevelpath(),
+          'icon' => $modDoType->getIcon(),
+          'iconclass' => $modDoType->getIconclass(),
           'pageid' => $this->currentPageId,
           'subviewitems' => $modDoType->getDecodesSubviewItems(),
           'desc' => $modDoType->getLabel()

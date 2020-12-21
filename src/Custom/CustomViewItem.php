@@ -15,6 +15,8 @@ class CustomViewItem {
   private $label = '';
   private $subviewitems = [];
   private $hasParentAccess = true;
+  private $icon = '';
+  private $iconclass = '';
 
   public function getType(): int {
     return $this->type;
@@ -70,6 +72,22 @@ class CustomViewItem {
 
   public function setHasParentAccess(bool $hasParentAccess): void {
     $this->hasParentAccess = $hasParentAccess;
+  }
+
+  public function setIcon(string $icon): void {
+    $this->icon = $icon;
+  }
+
+  public function setIconclass(string $iconclass): void {
+    $this->iconclass = $iconclass;
+  }
+
+  public function getIcon(): string {
+    return $this->icon;
+  }
+
+  public function getIconclass(): string {
+    return $this->iconclass;
   }
 
   public function getDecodesSubviewItems() {
