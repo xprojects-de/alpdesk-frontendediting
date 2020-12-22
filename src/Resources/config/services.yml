@@ -19,3 +19,10 @@ services:
           - { name: contao.hook, hook: compileArticle, method: onCompileArticle, priority: 0 }
           - { name: contao.hook, hook: getContentElement, method: onGetContentElement, priority: 0 }
           - { name: contao.hook, hook: getFrontendModule, method: onGetFrontendModule, priority: 0 }
+          
+  Alpdesk\AlpdeskFrontendediting\Controller\BackendController:
+      arguments:
+          - '@contao.framework'
+          - '@contao.security.token_checker'
+      tags:
+          - controller.service_arguments
