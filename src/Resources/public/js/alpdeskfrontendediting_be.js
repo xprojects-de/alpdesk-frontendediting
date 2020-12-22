@@ -74,6 +74,9 @@ class AlpdeskBackend {
 
   static callVisibilityArticle(data) {
 
+    // Always get Status 303 and failure but working!
+    // i think because Contao does a reload on the page to come back to overview e.g. Controller::reload();
+    // So i think it´s ok
     new Request.Contao({
       'url': '/contao',
       followRedirects: false,
@@ -92,6 +95,9 @@ class AlpdeskBackend {
 
   static callVisibilityElement(data) {
 
+    // Always get Status 303 and failure but working!
+    // i think because Contao does a reload on the page to come back to overview e.g. Controller::reload();
+    // So i think it´s ok
     new Request.Contao({
       'url': '/contao',
       followRedirects: false,
@@ -110,6 +116,9 @@ class AlpdeskBackend {
 
   static callDeleteArticle(data) {
 
+    // Always get Status 303 and failure but working!
+    // i think because Contao does a reload on the page to come back to overview e.g. Controller::reload();
+    // So i think it´s ok
     new Request.Contao({
       'url': '/contao',
       followRedirects: false,
@@ -128,6 +137,9 @@ class AlpdeskBackend {
 
   static callDeleteElement(data) {
 
+    // Always get Status 303 and failure but working!
+    // i think because Contao does a reload on the page to come back to overview e.g. Controller::reload();
+    // So i think it´s ok
     new Request.Contao({
       'url': '/contao',
       followRedirects: false,

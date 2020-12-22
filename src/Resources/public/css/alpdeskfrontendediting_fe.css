@@ -51,7 +51,7 @@ div.alpdeskfee-utilscontainer-page {
   padding-right: 10px;
   position: fixed;
   transform:translateX(0%);
-  background-color: #222;
+  border-bottom: 2px solid #222;
 }
 
 div.alpdeskfee-utilscontainer-custommodule {

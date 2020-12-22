@@ -1,0 +1,8 @@
+   
+alpdesk_frontendediting:
+    path: /contao/alpdeskfee
+    defaults:
+        _controller: Alpdesk\AlpdeskFrontendediting\Controller\BackendController:endpoint
+        _scope: backend
+        _token_check: true
+    methods: [POST]
