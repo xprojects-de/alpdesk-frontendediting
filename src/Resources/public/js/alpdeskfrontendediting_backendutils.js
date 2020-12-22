@@ -24,7 +24,7 @@
       });
       return k ? p[k] : p;
     }
-
+    
     let displayHeader = true;
     let hideHeader = getUrlParams('alpdesk_hideheader');
     if (hideHeader !== null && hideHeader !== undefined && hideHeader === '1') {

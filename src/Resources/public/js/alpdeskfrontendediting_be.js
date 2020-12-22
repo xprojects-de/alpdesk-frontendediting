@@ -157,27 +157,7 @@ class AlpdeskBackend {
   }
 
   static copyElement(data) {
-
-    // Currently redirect to overview because i don´t know hoe to get the referrerID
-    AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&alpdeskfocus_listitem=' + data.id + '&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.pid});
-
-    /*new Request.Contao({
-     'url': '/contao',
-     followRedirects: false,
-     onSuccess: function (txt, json) {
-     AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&alpdeskfocus_listitem=' + data.id + '&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.pid});
-     },
-     onError: function (text, error) {
-     // Sometimes (most time the first time call) there is a forbidden message
-     // In this case also show the Dialog
-     AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&alpdeskfocus_listitem=' + data.id + '&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.pid});
-     },
-     onFailure: function (f) {
-     // Sometimes (most time the first time call) there is a forbidden message
-     // In this case also show the Dialog
-     AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&alpdeskfocus_listitem=' + data.id + '&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.pid});
-     }
-     }).get({'do': data.targetDo, 'table': 'tl_content', 'id': data.id, 'act': 'paste', 'mode': 'copy', 'rt': AlpdeskBackend.REQUEST_TOKEN});*/
+    AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&alpdeskfocus_listitem=' + data.id + '&alpdeskredirectcopy=1&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.pid});
   }
 
   static handleEvent(e) {
