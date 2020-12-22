@@ -39,16 +39,19 @@ div.alpdeskfee-utilscontainer-page {
   color:#444;
   border-bottom: 2px solid rgb(244, 124, 0);
   z-index: 1000;
+  border-radius: 4px;
 }
 
 div.alpdeskfee-utilscontainer-page {
   left: auto;
   right: 0%;
-  margin-right: 40px;
+  top: 38px;
   margin-left: 0px;
   display: block;
-  width: 165px;
+  padding-right: 10px;
+  position: fixed;
   transform:translateX(0%);
+  background-color: #222;
 }
 
 div.alpdeskfee-utilscontainer-custommodule {
@@ -61,6 +64,7 @@ div.alpdeskfee-utilscontainer-custommodule {
   width: auto;
   left: auto;
   right:0;
+  padding-right: 30px;
   margin-left: 0px;
   z-index: 1001; 
   transform:translateX(0%);

@@ -365,7 +365,7 @@
       if (showPageEdit === true && alpdeskfeePageid !== null && alpdeskfeePageid !== '' && alpdeskfeePageid !== undefined && alpdeskfeePageid !== 0) {
         const bodyElement = document.body;
         if (bodyElement !== null && bodyElement !== undefined) {
-          const jsonData = '{"type":"' + TARGETTYPE_PAGE + '","desc":"Page","do":"' + TARGETTYPE_PAGE + '","id":"' + alpdeskfeePageid + '","pageid":"' + alpdeskfeePageid + '"}';
+          const jsonData = '{"type":"' + TARGETTYPE_PAGE + '","do":"' + TARGETTYPE_PAGE + '","id":"' + alpdeskfeePageid + '","pageid":"' + alpdeskfeePageid + '"}';
           const obj = JSON.parse(jsonData);
           if (obj !== null && obj !== undefined) {
             appendUtilsContainer(obj, bodyElement, true, objLabels);
