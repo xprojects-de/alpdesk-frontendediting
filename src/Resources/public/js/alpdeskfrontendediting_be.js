@@ -249,7 +249,15 @@ class AlpdeskBackend {
     const tablet_1 = 760;
     const tablet_2 = 1024;
 
+    document.getElementById('devicedimensoninfo').innerHTML = document.getElementById('alpdesk-fee-frame-container').offsetWidth + ' x ' + initHeight;
+
     document.getElementById('alpdesk-fee-frame-container').style.height = initHeight + 'px';
+    document.getElementById('alpdesk-fee-frame-container').onmouseover = function () {
+      document.getElementById('devicedimensoninfo').innerHTML = document.getElementById('alpdesk-fee-frame-container').offsetWidth + ' x ' + document.getElementById('alpdesk-fee-frame-container').offsetHeight;
+    };
+    document.getElementById('alpdesk-fee-frame-container').onmouseout = function () {
+      document.getElementById('devicedimensoninfo').innerHTML = document.getElementById('alpdesk-fee-frame-container').offsetWidth + ' x ' + document.getElementById('alpdesk-fee-frame-container').offsetHeight;
+    };
 
     document.getElementById('setdevice').onclick = function () {
       let device = document.getElementById('getdevice').value;
@@ -269,6 +277,8 @@ class AlpdeskBackend {
         document.getElementById('alpdesk-fee-frame-container').style.width = '100%';
         document.getElementById('alpdesk-fee-frame-container').style.height = initHeight + 'px';
       }
+
+      document.getElementById('devicedimensoninfo').innerHTML = document.getElementById('alpdesk-fee-frame-container').offsetWidth + ' x ' + document.getElementById('alpdesk-fee-frame-container').offsetHeight;
     };
 
     function handleUrlParam() {
