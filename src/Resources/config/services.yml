@@ -22,7 +22,7 @@ services:
           
   Alpdesk\AlpdeskFrontendediting\Controller\BackendController:
       arguments:
-          - '@contao.framework'
           - '@contao.security.token_checker'
+          - '@security.helper'
       tags:
           - controller.service_arguments

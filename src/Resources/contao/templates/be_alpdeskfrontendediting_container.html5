@@ -11,6 +11,10 @@
       <button title="<?= $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['device_select'] ?>" id="setdevice" class="tl_submit">
         <img src="system/themes/flexible/icons/published.svg">
       </button>
+      <div class="clear"></div>
+      <div id="devicedimensoninfocontainer">
+        <span id="devicedimensoninfo">-</span>
+      </div>
     </div>
     <div class="wx60 widget">
       <form method="post">
@@ -31,7 +35,7 @@
         <img src="system/themes/flexible/icons/root.svg">
       </button>
       <button title="<?= $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['refresh_frame'] ?>" id="seturl" class="tl_submit">
-        <img src="system/themes/flexible/icons/published.svg">
+        <img width="18" src="bundles/alpdeskfrontendediting/images/refresh.png">
       </button>
       <input id="urlparam" value="" class="tl_text">
       <strong>/preview.php/</strong>

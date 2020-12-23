@@ -106,7 +106,7 @@
           };
         } else if (obj.type === TARGETTYPE_ARTICLE) {
           if (obj.canEdit === true) {
-            const parentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-articles');
+            const parentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
             parentEdit.setAttribute('title', objLabels.article_all);
             parentEdit.onclick = function () {
               dispatchEvent({
@@ -117,7 +117,7 @@
                 targetPageId: obj.pageid
               });
             };
-            const articleEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
+            const articleEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-pedit');
             articleEdit.setAttribute('title', objLabels.edit_article);
             articleEdit.onclick = function () {
               dispatchEvent({
@@ -168,7 +168,7 @@
         } else if (obj.type === TARGETTYPE_CE) {
           if (obj.do !== null && obj.do !== '') {
             if (obj.canEdit === true) {
-              const parentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-pedit');
+              const parentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-articles');
               parentEdit.setAttribute('title', objLabels.element_all);
               parentEdit.onclick = function () {
                 dispatchEvent({
@@ -189,17 +189,17 @@
                   id: obj.id
                 });
               };
-              /*const elementCopy = createContainerElement(c, 'alpdeskfee-utilscontainer-copy');
-               elementCopy.setAttribute('title', objLabels.copy_element);
-               elementCopy.onclick = function () {
-               dispatchEvent({
-               action: ACTION_ELEMENT_COPY,
-               targetType: TARGETTYPE_CE,
-               targetDo: obj.do,
-               id: obj.id,
-               pid: obj.pid
-               });
-               };*/
+              const elementCopy = createContainerElement(c, 'alpdeskfee-utilscontainer-copy');
+              elementCopy.setAttribute('title', objLabels.copy_element);
+              elementCopy.onclick = function () {
+                dispatchEvent({
+                  action: ACTION_ELEMENT_COPY,
+                  targetType: TARGETTYPE_CE,
+                  targetDo: obj.do,
+                  id: obj.id,
+                  pid: obj.pid
+                });
+              };
               if (obj.canPublish === true) {
                 const elementVisibility = createContainerElement(c, (obj.invisible === true ? 'alpdeskfee-utilscontainer-invisible' : 'alpdeskfee-utilscontainer-visible'));
                 elementVisibility.setAttribute('title', objLabels.element_visible);
