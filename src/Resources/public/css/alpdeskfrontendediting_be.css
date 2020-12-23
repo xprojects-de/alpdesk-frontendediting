@@ -8,6 +8,7 @@
   padding: 10px;
   padding-left: 0px;
   padding-right: 0px;
+  padding-bottom: 0px;
 }
 
 #alpdesk-fee-frame-container {
@@ -93,4 +94,13 @@
 
 #livemodeactive {
   background-color: rgba(244, 124, 0, 1);
+}
+
+#devicedimensoninfocontainer {
+  padding-left: 8px;
+  margin-top: 3px;
+  padding-top:3px;
+  padding-bottom: 3px;
+  background-color: #fff;
+  max-width: 125px;
 }

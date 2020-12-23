@@ -76,7 +76,7 @@ class AlpdeskBackend {
 
     // Always get Status 303 and failure but working!
     // i think because Contao does a reload on the page to come back to overview e.g. Controller::reload();
-    // So i think it´s ok
+    // So i think it´s ok. BUT in future use custom route /contao/alpdeskfee for doing the job!
     new Request.Contao({
       'url': '/contao',
       followRedirects: false,
@@ -97,7 +97,7 @@ class AlpdeskBackend {
 
     // Always get Status 303 and failure but working!
     // i think because Contao does a reload on the page to come back to overview e.g. Controller::reload();
-    // So i think it´s ok
+    // So i think it´s ok. BUT in future use custom route /contao/alpdeskfee for doing the job!
     new Request.Contao({
       'url': '/contao',
       followRedirects: false,
@@ -118,7 +118,7 @@ class AlpdeskBackend {
 
     // Always get Status 303 and failure but working!
     // i think because Contao does a reload on the page to come back to overview e.g. Controller::reload();
-    // So i think it´s ok
+    // So i think it´s ok. BUT in future use custom route /contao/alpdeskfee for doing the job!
     new Request.Contao({
       'url': '/contao',
       followRedirects: false,
@@ -139,7 +139,7 @@ class AlpdeskBackend {
 
     // Always get Status 303 and failure but working!
     // i think because Contao does a reload on the page to come back to overview e.g. Controller::reload();
-    // So i think it´s ok
+    // So i think it´s ok. BUT in future use custom route /contao/alpdeskfee for doing the job!
     new Request.Contao({
       'url': '/contao',
       followRedirects: false,
@@ -157,7 +157,21 @@ class AlpdeskBackend {
   }
 
   static copyElement(data) {
-    AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&alpdeskfocus_listitem=' + data.id + '&alpdeskredirectcopy=1&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.pid});
+
+    new Request.JSON({
+      'url': '/contao/alpdeskfee',
+      followRedirects: false,
+      onSuccess: function (responseJSON, responseText) {
+        AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&alpdeskfocus_listitem=' + data.id + '&alpdeskredirectcopy=1&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.pid});
+      },
+      onError: function (text, error) {
+        AlpdeskBackend.reloadFrame();
+      },
+      onFailure: function (f) {
+        AlpdeskBackend.reloadFrame();
+      }
+    }).post({'data': data, 'rt': AlpdeskBackend.REQUEST_TOKEN});
+
   }
 
   static handleEvent(e) {
@@ -235,7 +249,15 @@ class AlpdeskBackend {
     const tablet_1 = 760;
     const tablet_2 = 1024;
 
+    document.getElementById('devicedimensoninfo').innerHTML = document.getElementById('alpdesk-fee-frame-container').offsetWidth + ' x ' + initHeight;
+
     document.getElementById('alpdesk-fee-frame-container').style.height = initHeight + 'px';
+    document.getElementById('alpdesk-fee-frame-container').onmouseover = function () {
+      document.getElementById('devicedimensoninfo').innerHTML = document.getElementById('alpdesk-fee-frame-container').offsetWidth + ' x ' + document.getElementById('alpdesk-fee-frame-container').offsetHeight;
+    };
+    document.getElementById('alpdesk-fee-frame-container').onmouseout = function () {
+      document.getElementById('devicedimensoninfo').innerHTML = document.getElementById('alpdesk-fee-frame-container').offsetWidth + ' x ' + document.getElementById('alpdesk-fee-frame-container').offsetHeight;
+    };
 
     document.getElementById('setdevice').onclick = function () {
       let device = document.getElementById('getdevice').value;
@@ -255,6 +277,8 @@ class AlpdeskBackend {
         document.getElementById('alpdesk-fee-frame-container').style.width = '100%';
         document.getElementById('alpdesk-fee-frame-container').style.height = initHeight + 'px';
       }
+
+      document.getElementById('devicedimensoninfo').innerHTML = document.getElementById('alpdesk-fee-frame-container').offsetWidth + ' x ' + document.getElementById('alpdesk-fee-frame-container').offsetHeight;
     };
 
     function handleUrlParam() {
