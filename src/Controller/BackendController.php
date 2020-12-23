@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Contao\BackendUser;
+use Contao\System;
 
 // CHeck Route: sudo /Applications/MAMP/bin/php/php7.4.9/bin/php vendor/bin/contao-console debug:router
 
@@ -79,8 +80,25 @@ class BackendController extends AbstractController {
   }
 
   private function procceedType_CE($data): JsonResponse {
-    $response = new JsonResponse($data);
-    return $response;
+
+    if ($data['action'] == self::$ACTION_ELEMENT_COPY) {
+
+      $clipboard = [
+          'tl_content' => [
+              'childs' => null,
+              'id' => $data['id'],
+              'mode' => 'copy'
+          ]
+      ];
+
+      System::getContainer()->get('session')->set('CLIPBOARD', $clipboard);
+
+      $data['clipboard'] = $clipboard;
+
+      return (new JsonResponse($data));
+    }
+
+    throw new Exception('invalid action');
   }
 
 }
