@@ -189,17 +189,17 @@
                   id: obj.id
                 });
               };
-              /*const elementCopy = createContainerElement(c, 'alpdeskfee-utilscontainer-copy');
-               elementCopy.setAttribute('title', objLabels.copy_element);
-               elementCopy.onclick = function () {
-               dispatchEvent({
-               action: ACTION_ELEMENT_COPY,
-               targetType: TARGETTYPE_CE,
-               targetDo: obj.do,
-               id: obj.id,
-               pid: obj.pid
-               });
-               };*/
+              const elementCopy = createContainerElement(c, 'alpdeskfee-utilscontainer-copy');
+              elementCopy.setAttribute('title', objLabels.copy_element);
+              elementCopy.onclick = function () {
+                dispatchEvent({
+                  action: ACTION_ELEMENT_COPY,
+                  targetType: TARGETTYPE_CE,
+                  targetDo: obj.do,
+                  id: obj.id,
+                  pid: obj.pid
+                });
+              };
               if (obj.canPublish === true) {
                 const elementVisibility = createContainerElement(c, (obj.invisible === true ? 'alpdeskfee-utilscontainer-invisible' : 'alpdeskfee-utilscontainer-visible'));
                 elementVisibility.setAttribute('title', objLabels.element_visible);

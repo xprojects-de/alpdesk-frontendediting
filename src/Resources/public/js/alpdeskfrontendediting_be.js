@@ -157,7 +157,30 @@ class AlpdeskBackend {
   }
 
   static copyElement(data) {
-    AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&alpdeskfocus_listitem=' + data.id + '&alpdeskredirectcopy=1&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.pid});
+    AlpdeskBackend.callAlpdeskEndpoint(data);
+    //AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&alpdeskfocus_listitem=' + data.id + '&alpdeskredirectcopy=1&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.pid});
+  }
+
+  static callAlpdeskEndpoint(data) {
+
+    // Always get Status 303 and failure but working!
+    // i think because Contao does a reload on the page to come back to overview e.g. Controller::reload();
+    // So i think it´s ok
+    new Request.JSON({
+      'url': '/contao/alpdeskfee',
+      followRedirects: false,
+      onSuccess: function (responseJSON, responseText) {
+        console.log(responseJSON);
+      },
+      onError: function (text, error) {
+        console.log(text);
+        console.log(error);
+      },
+      onFailure: function (f) {
+        console.log(f);
+      }
+    }).post({'data': data, 'rt': AlpdeskBackend.REQUEST_TOKEN});
+
   }
 
   static handleEvent(e) {
