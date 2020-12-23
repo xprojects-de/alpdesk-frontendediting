@@ -76,7 +76,7 @@ class AlpdeskBackend {
 
     // Always get Status 303 and failure but working!
     // i think because Contao does a reload on the page to come back to overview e.g. Controller::reload();
-    // So i think it´s ok
+    // So i think it´s ok. BUT in future use custom route /contao/alpdeskfee for doing the job!
     new Request.Contao({
       'url': '/contao',
       followRedirects: false,
@@ -97,7 +97,7 @@ class AlpdeskBackend {
 
     // Always get Status 303 and failure but working!
     // i think because Contao does a reload on the page to come back to overview e.g. Controller::reload();
-    // So i think it´s ok
+    // So i think it´s ok. BUT in future use custom route /contao/alpdeskfee for doing the job!
     new Request.Contao({
       'url': '/contao',
       followRedirects: false,
@@ -118,7 +118,7 @@ class AlpdeskBackend {
 
     // Always get Status 303 and failure but working!
     // i think because Contao does a reload on the page to come back to overview e.g. Controller::reload();
-    // So i think it´s ok
+    // So i think it´s ok. BUT in future use custom route /contao/alpdeskfee for doing the job!
     new Request.Contao({
       'url': '/contao',
       followRedirects: false,
@@ -139,7 +139,7 @@ class AlpdeskBackend {
 
     // Always get Status 303 and failure but working!
     // i think because Contao does a reload on the page to come back to overview e.g. Controller::reload();
-    // So i think it´s ok
+    // So i think it´s ok. BUT in future use custom route /contao/alpdeskfee for doing the job!
     new Request.Contao({
       'url': '/contao',
       followRedirects: false,
@@ -162,7 +162,6 @@ class AlpdeskBackend {
       'url': '/contao/alpdeskfee',
       followRedirects: false,
       onSuccess: function (responseJSON, responseText) {
-        console.log(responseJSON);
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&alpdeskfocus_listitem=' + data.id + '&alpdeskredirectcopy=1&do=' + data.targetDo + '&table=tl_content&rt=' + AlpdeskBackend.REQUEST_TOKEN + '&id=' + data.pid});
       },
       onError: function (text, error) {

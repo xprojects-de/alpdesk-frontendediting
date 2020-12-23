@@ -81,14 +81,21 @@ class BackendController extends AbstractController {
 
   private function procceedType_CE($data): JsonResponse {
 
+    // currently we do not need any Access-Check because only the clipboard is modified and no record of Database is affected
+    // In future be careful!
+
     if ($data['action'] == self::$ACTION_ELEMENT_COPY) {
 
-      $clipboard = [
-          'tl_content' => [
-              'childs' => null,
-              'id' => $data['id'],
-              'mode' => 'copy'
-          ]
+      $clipboard = System::getContainer()->get('session')->get('CLIPBOARD');
+
+      if (!\is_array($clipboard) || $clipboard === null) {
+        $clipboard = [];
+      }
+
+      $clipboard['tl_content'] = [
+          'childs' => null,
+          'id' => \intval($data['id']),
+          'mode' => 'copy'
       ];
 
       System::getContainer()->get('session')->set('CLIPBOARD', $clipboard);
@@ -98,7 +105,7 @@ class BackendController extends AbstractController {
       return (new JsonResponse($data));
     }
 
-    throw new Exception('invalid action');
+    throw new \Exception('invalid action');
   }
 
 }
