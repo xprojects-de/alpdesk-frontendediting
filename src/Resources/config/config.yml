@@ -32,6 +32,7 @@ alpdesk_frontendediting_mapping:
       element: rocksolid_slider
       module: \MadeYourDay\RockSolidSlider\Module\Slider
       backend_module: rocksolid_slider
+      table: tl_rocksolid_slide
       additional_static_params: []
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeRockSolidSlider
       icon: bundles/rocksolidslider/img/icon.png
@@ -42,6 +43,7 @@ alpdesk_frontendediting_mapping:
       element: null
       module: \Contao\ModuleNavigation
       backend_module: page
+      table: null
       additional_static_params: [pn=0]
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeSimple
       icon: ../../../system/themes/flexible/icons/root.svg
@@ -52,6 +54,7 @@ alpdesk_frontendediting_mapping:
       element: null
       module: \Contao\ModuleNewsList
       backend_module: news
+      table: tl_news
       additional_static_params: []
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeNewslist
       icon: ../../../system/themes/flexible/icons/news.svg
@@ -62,6 +65,7 @@ alpdesk_frontendediting_mapping:
       element: null
       module: \Contao\ModuleNewsReader
       backend_module: news
+      table: tl_content
       additional_static_params: []
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeNewsReader
       icon: ../../../system/themes/flexible/icons/news.svg
@@ -72,6 +76,7 @@ alpdesk_frontendediting_mapping:
       element: null
       module: \Contao\ModuleEventList
       backend_module: calendar
+      table: tl_calendar_events
       additional_static_params: []
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeEventlist
       icon: ../../../system/themes/flexible/icons/group.svg
@@ -82,6 +87,7 @@ alpdesk_frontendediting_mapping:
       element: null
       module: \Contao\ModuleEventReader
       backend_module: calendar
+      table: tl_content
       additional_static_params: []
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeEventreader
       icon: ../../../system/themes/flexible/icons/group.svg

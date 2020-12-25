@@ -28,7 +28,7 @@ class TypeRockSolidSlider extends Base {
       $sliderModel = \MadeYourDay\RockSolidSlider\Model\SliderModel::findById($rsts_id);
       if ($sliderModel !== null) {
         if ($sliderModel->type == 'content') {
-          $do = 'do=' . $this->backendmodule . '&table=tl_rocksolid_slide&id=' . $rsts_id;
+          $do = 'do=' . $this->backendmodule . '&table=' . $this->table . '&id=' . $rsts_id;
         }
       }
     }

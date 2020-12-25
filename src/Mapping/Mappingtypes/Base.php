@@ -20,6 +20,7 @@ abstract class Base {
   public $label;
   public $backendmodule;
   public $additional_static_params = [];
+  public $table;
 
   private static function checkModuleAccess($moduletype): bool {
     if (!BackendUser::getInstance()->hasAccess($moduletype, 'modules')) {
@@ -40,6 +41,7 @@ abstract class Base {
             $iconclass = $value['iconclass'];
             $labelkey = $value['labelkey'];
             $additional_static_params = $value['additional_static_params'];
+            $table = $value['table'];
             if (self::checkModuleAccess($backendmodule)) {
               $class = new $mappingObject();
               $class->element = $element;
@@ -48,6 +50,7 @@ abstract class Base {
               $class->label = $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'][$labelkey];
               $class->backendmodule = $backendmodule;
               $class->additional_static_params = $additional_static_params;
+              $class->table = $table;
               return $class;
             }
             break;
@@ -71,6 +74,7 @@ abstract class Base {
           $iconclass = $value['iconclass'];
           $labelkey = $value['labelkey'];
           $additional_static_params = $value['additional_static_params'];
+          $table = $value['table'];
           if (class_exists($moduleobject) && $module instanceof $moduleobject) {
             if (self::checkModuleAccess($backendmodule)) {
               $class = new $mappingObject();
@@ -80,6 +84,7 @@ abstract class Base {
               $class->label = $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'][$labelkey];
               $class->backendmodule = $backendmodule;
               $class->additional_static_params = $additional_static_params;
+              $class->table = $table;
               return $class;
             }
             break;

@@ -22,7 +22,7 @@ class TypeNewslist extends Base {
         if ($objNews !== null) {
           if (BackendUser::getInstance()->hasAccess($objNews->id, 'news')) {
             $item->setValid(true);
-            $item->setPath('do=' . $this->backendmodule . '&table=tl_news&id=' . $objNews->id);
+            $item->setPath('do=' . $this->backendmodule . '&table=' . $this->table . '&id=' . $objNews->id);
           }
         }
       } else {

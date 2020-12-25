@@ -21,7 +21,7 @@ class TypeNewsReader extends Base {
         $objArchive = $objNews->getRelated('pid');
         if (BackendUser::getInstance()->hasAccess($objArchive->id, 'news')) {
           $item->setValid(true);
-          $item->setPath('do=' . $this->backendmodule . '&table=tl_content&id=' . $objNews->id);
+          $item->setPath('do=' . $this->backendmodule . '&table=' . $this->table . '&id=' . $objNews->id);
         }
       }
     }

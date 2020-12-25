@@ -20,7 +20,7 @@ class TypeEventlist extends Base {
         if ($objCalendar !== null) {
           if (BackendUser::getInstance()->hasAccess($objCalendar->id, 'calendars')) {
             $item->setValid(true);
-            $item->setPath('do=' . $this->backendmodule . '&table=tl_calendar_events&id=' . $objCalendar->id);
+            $item->setPath('do=' . $this->backendmodule . '&table=' . $this->table . '&id=' . $objCalendar->id);
           }
         }
       } else {

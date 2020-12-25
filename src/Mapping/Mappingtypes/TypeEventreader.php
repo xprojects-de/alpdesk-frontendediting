@@ -21,7 +21,7 @@ class TypeEventreader extends Base {
         $objCalendar = $objEvent->getRelated('pid');
         if (BackendUser::getInstance()->hasAccess($objCalendar->id, 'calendars')) {
           $item->setValid(true);
-          $item->setPath('do=' . $this->backendmodule . '&table=tl_content&id=' . $objEvent->id);
+          $item->setPath('do=' . $this->backendmodule . '&table=' . $this->table . '&id=' . $objEvent->id);
         }
       }
     }
