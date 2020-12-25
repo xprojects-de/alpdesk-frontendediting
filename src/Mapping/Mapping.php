@@ -25,6 +25,7 @@ class Mapping {
 
   public function checkCustomTypeElementAccess(ContentModel $element, CustomViewItem $item) {
 
+    //e.g. if user has access to special news item or event item defined in user settings
     if ($this->mappingconfig !== null && \is_array($this->mappingconfig)) {
       $pTable = str_replace('tl_', '', $element->ptable);
       if (\array_key_exists($pTable, $this->mappingconfig['alpdesk_frontendediting_mapping']['element_access_check'])) {
@@ -58,6 +59,7 @@ class Mapping {
 
   public function mapContentElement(CustomViewItem $item, ContentModel $element): CustomViewItem {
 
+    // If a tl_content item of any other parent than article is rendered (e.g. News) check rights an map backendmodule
     $this->checkCustomTypeElementAccess($element, $item);
     $this->checkCustomBackendModule($element, $item);
 
