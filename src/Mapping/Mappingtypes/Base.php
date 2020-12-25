@@ -63,10 +63,10 @@ abstract class Base {
 
     if ($mappingconfig !== null && \is_array($mappingconfig)) {
       foreach ($mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'] as $value) {
-        if ($value['module'] == true) {
+        if ($value['module'] !== null) {
           $mappingObject = $value['mapping_object'];
           $backendmodule = $value['backend_module'];
-          $moduleobject = $value['module_object'];
+          $moduleobject = $value['module'];
           $icon = $value['icon'];
           $iconclass = $value['iconclass'];
           $labelkey = $value['labelkey'];
