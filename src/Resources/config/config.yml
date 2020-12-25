@@ -29,9 +29,8 @@ alpdesk_frontendediting_mapping:
   type_mapping:
     
     rocksolid_slider:
-      is_element: true
-      type: rocksolid_slider
-      is_module: true
+      element: rocksolid_slider
+      module: true
       backend_module: rocksolid_slider
       additional_static_params: []
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeRockSolidSlider
@@ -41,8 +40,8 @@ alpdesk_frontendediting_mapping:
       labelkey: rocksolidslider
       
     navigation:
-      is_element: false
-      is_module: true
+      element: null
+      module: true
       backend_module: page
       additional_static_params: [pn=0]
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeSimple
@@ -52,9 +51,8 @@ alpdesk_frontendediting_mapping:
       labelkey: navigation      
       
     newslist:
-      is_element: false
-      type: null
-      is_module: true
+      element: null
+      module: true
       backend_module: news
       additional_static_params: []
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeNewslist
@@ -64,9 +62,8 @@ alpdesk_frontendediting_mapping:
       labelkey: news
       
     newsreader:
-      is_element: false
-      type: null
-      is_module: true
+      element: null
+      module: true
       backend_module: news
       additional_static_params: []
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeNewsReader
@@ -76,9 +73,8 @@ alpdesk_frontendediting_mapping:
       labelkey: news
       
     eventlist:
-      is_element: false
-      type: null
-      is_module: true
+      element: null
+      module: true
       backend_module: calendar
       additional_static_params: []
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeEventlist
@@ -88,9 +84,8 @@ alpdesk_frontendediting_mapping:
       labelkey: events
       
     eventreader:
-      is_element: false
-      type: null
-      is_module: true
+      element: null
+      module: true
       backend_module: calendar
       additional_static_params: []
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeEventreader
