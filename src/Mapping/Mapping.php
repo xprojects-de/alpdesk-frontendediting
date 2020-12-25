@@ -56,6 +56,8 @@ class Mapping {
       $item->setCustomBackendModule('news');
     } else if (str_replace('tl_', '', $element->ptable) === 'calendar_events') {
       $item->setCustomBackendModule('calendar');
+    } else if (str_replace('tl_', '', $element->ptable) === 'rocksolid_slide') {
+      $item->setCustomBackendModule('rocksolid_slider');
     }
   }
 

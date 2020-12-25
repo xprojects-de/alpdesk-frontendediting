@@ -68,6 +68,12 @@ abstract class Base {
         $class->module = $module;
         return $class;
       }
+    } else if (class_exists('\MadeYourDay\RockSolidSlider\Module\Slider') && $module instanceof \MadeYourDay\RockSolidSlider\Module\Slider) {
+      if (self::checkModuleAccess('rocksolid_slider')) {
+        $class = new TypeRockSolidSlider();
+        $class->module = $module;
+        return $class;
+      }
     }
 
     return null;
