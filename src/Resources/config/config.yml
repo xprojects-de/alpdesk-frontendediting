@@ -29,6 +29,7 @@ alpdesk_frontendediting_mapping:
       module_object: \MadeYourDay\RockSolidSlider\Module\Slider
       icon: bundles/rocksolidslider/img/icon.png
       iconclass: tl_rocksolid_slider_baritem
+      labelkey: rocksolidslider
       
     navigation:
       is_element: false
@@ -38,6 +39,7 @@ alpdesk_frontendediting_mapping:
       module_object: \Contao\ModuleNavigation
       icon: ../../../system/themes/flexible/icons/root.svg
       iconclass: tl_navigation_baritem
+      labelkey: navigation
       
     newslist:
       is_element: false
@@ -48,6 +50,7 @@ alpdesk_frontendediting_mapping:
       module_object: \Contao\ModuleNewsList
       icon: ../../../system/themes/flexible/icons/news.svg
       iconclass: tl_news_baritem
+      labelkey: news
       
     newsreader:
       is_element: false
@@ -58,6 +61,7 @@ alpdesk_frontendediting_mapping:
       module_object: \Contao\ModuleNewsReader
       icon: ../../../system/themes/flexible/icons/news.svg
       iconclass: tl_news_baritem
+      labelkey: news
       
     eventlist:
       is_element: false
@@ -68,6 +72,7 @@ alpdesk_frontendediting_mapping:
       module_object: \Contao\ModuleEventList
       icon: ../../../system/themes/flexible/icons/group.svg
       iconclass: tl_event_baritem
+      labelkey: events
       
     eventreader:
       is_element: false
@@ -78,3 +83,4 @@ alpdesk_frontendediting_mapping:
       module_object: \Contao\ModuleEventReader
       icon: ../../../system/themes/flexible/icons/group.svg
       iconclass: tl_event_baritem
+      labelkey: events

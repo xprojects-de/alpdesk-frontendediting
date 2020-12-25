@@ -17,6 +17,7 @@ abstract class Base {
   public $element;
   public $icon;
   public $iconclass;
+  public $label;
 
   private static function checkModuleAccess($moduletype): bool {
     if (!BackendUser::getInstance()->hasAccess($moduletype, 'modules')) {
@@ -33,11 +34,13 @@ abstract class Base {
         $mappingObject = $mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'][$element->type]['mapping_object'];
         $icon = $mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'][$element->type]['icon'];
         $iconclass = $mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'][$element->type]['iconclass'];
+        $labelkey = $mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'][$element->type]['labelkey'];
         if (self::checkModuleAccess($backendmodule)) {
           $class = new $mappingObject();
           $class->element = $element;
           $class->icon = $icon;
           $class->iconclass = $iconclass;
+          $class->label = $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'][$labelkey];
           return $class;
         }
       }
@@ -56,12 +59,14 @@ abstract class Base {
           $moduleobject = $value['module_object'];
           $icon = $value['icon'];
           $iconclass = $value['iconclass'];
+          $labelkey = $value['labelkey'];
           if (class_exists($moduleobject) && $module instanceof $moduleobject) {
             if (self::checkModuleAccess($backendmodule)) {
               $class = new $mappingObject();
               $class->module = $module;
               $class->icon = $icon;
               $class->iconclass = $iconclass;
+              $class->label = $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'][$labelkey];
               return $class;
             }
             break;

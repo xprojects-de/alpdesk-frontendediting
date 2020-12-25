@@ -68,6 +68,7 @@ class Mapping {
     if ($instance !== null) {
       $item->setIcon($instance->icon);
       $item->setIconclass($instance->iconclass);
+      $item->setLabel($instance->label);
       $modifiedItem = $instance->run($item);
       $eventElement = new AlpdeskFrontendeditingEventElement($modifiedItem, $element);
       $this->alpdeskfeeEventDispatcher->getDispatcher()->dispatch($eventElement, AlpdeskFrontendeditingEventElement::NAME);
@@ -85,6 +86,7 @@ class Mapping {
     if ($instance !== null) {
       $item->setIcon($instance->icon);
       $item->setIconclass($instance->iconclass);
+      $item->setLabel($instance->label);
       $modifiedItem = $instance->run($item);
       $eventModule = new AlpdeskFrontendeditingEventModule($modifiedItem, $module);
       $this->alpdeskfeeEventDispatcher->getDispatcher()->dispatch($eventModule, AlpdeskFrontendeditingEventModule::NAME);

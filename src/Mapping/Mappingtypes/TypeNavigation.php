@@ -15,7 +15,6 @@ class TypeNavigation extends Base {
 
     $item->setValid(true);
     $item->setPath(self::$DO);
-    $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['navigation']);
 
     return $item;
   }

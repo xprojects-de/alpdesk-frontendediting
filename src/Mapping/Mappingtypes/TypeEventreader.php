@@ -24,7 +24,6 @@ class TypeEventreader extends Base {
         if (BackendUser::getInstance()->hasAccess($objCalendar->id, 'calendars')) {
           $item->setValid(true);
           $item->setPath(self::$DO . '&id=' . $objEvent->id);
-          $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['events']);
         }
       }
     }
