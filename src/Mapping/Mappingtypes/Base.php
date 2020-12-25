@@ -19,6 +19,7 @@ abstract class Base {
   public $iconclass;
   public $label;
   public $backendmodule;
+  public $additional_static_params = [];
 
   private static function checkModuleAccess($moduletype): bool {
     if (!BackendUser::getInstance()->hasAccess($moduletype, 'modules')) {
@@ -36,6 +37,7 @@ abstract class Base {
         $icon = $mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'][$element->type]['icon'];
         $iconclass = $mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'][$element->type]['iconclass'];
         $labelkey = $mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'][$element->type]['labelkey'];
+        $additional_static_params = $mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'][$element->type]['additional_static_params'];
         if (self::checkModuleAccess($backendmodule)) {
           $class = new $mappingObject();
           $class->element = $element;
@@ -43,6 +45,7 @@ abstract class Base {
           $class->iconclass = $iconclass;
           $class->label = $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'][$labelkey];
           $class->backendmodule = $backendmodule;
+          $class->additional_static_params = $additional_static_params;
           return $class;
         }
       }
@@ -62,6 +65,7 @@ abstract class Base {
           $icon = $value['icon'];
           $iconclass = $value['iconclass'];
           $labelkey = $value['labelkey'];
+          $additional_static_params = $value['additional_static_params'];
           if (class_exists($moduleobject) && $module instanceof $moduleobject) {
             if (self::checkModuleAccess($backendmodule)) {
               $class = new $mappingObject();
@@ -70,6 +74,7 @@ abstract class Base {
               $class->iconclass = $iconclass;
               $class->label = $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'][$labelkey];
               $class->backendmodule = $backendmodule;
+              $class->additional_static_params = $additional_static_params;
               return $class;
             }
             break;
