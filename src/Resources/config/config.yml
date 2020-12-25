@@ -1,23 +1,30 @@
    
 alpdesk_frontendediting_mapping:
   
-  element_backendmodule_mapping:
+  # e.g. if user has access to special news item or event item defined in user settings
+  element_access_check:
     
     news:
       model: \Contao\NewsModel
-      backend_module: news
-      checkAccess: true
+      accesskey: news
       
     calendar_events:
       model: \Contao\CalendarEventsModel
+      accesskey: calendars
+  
+  # map special ptable from tl_content to right backend_module e.g. calender_events to calendar
+  element_backendmodule_mapping:
+    
+    news:
+      backend_module: news
+      
+    calendar_events:
       backend_module: calendar
-      checkAccess: true
       
     rocksolid_slide:
-      model: null
       backend_module: rocksolid_slider
-      checkAccess: false
       
+  # special mappint for different Modules and types    
   type_mapping:
     
     rocksolid_slider:
