@@ -9,8 +9,6 @@ use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 
 class TypeRockSolidSlider extends Base {
 
-  private static $DO = 'do=rocksolid_slider';
-
   public function run(CustomViewItem $item): CustomViewItem {
 
     if ($this->element !== null) {
@@ -24,13 +22,13 @@ class TypeRockSolidSlider extends Base {
 
   private function parse(CustomViewItem $item, $rsts_id): void {
 
-    $do = self::$DO . '&act=edit&id=' . $rsts_id;
+    $do = 'do=' . $this->backendmodule . '&act=edit&id=' . $rsts_id;
 
     if (class_exists('\MadeYourDay\RockSolidSlider\Model\SliderModel')) {
       $sliderModel = \MadeYourDay\RockSolidSlider\Model\SliderModel::findById($rsts_id);
       if ($sliderModel !== null) {
         if ($sliderModel->type == 'content') {
-          $do = self::$DO . '&table=tl_rocksolid_slide&id=' . $rsts_id;
+          $do = 'do=' . $this->backendmodule . '&table=tl_rocksolid_slide&id=' . $rsts_id;
         }
       }
     }

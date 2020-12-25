@@ -12,8 +12,6 @@ use Contao\StringUtil;
 
 class TypeNewsReader extends Base {
 
-  private static $DO = 'do=news&table=tl_content';
-
   public function run(CustomViewItem $item): CustomViewItem {
 
     if (class_exists('\Contao\NewsModel')) {
@@ -23,7 +21,7 @@ class TypeNewsReader extends Base {
         $objArchive = $objNews->getRelated('pid');
         if (BackendUser::getInstance()->hasAccess($objArchive->id, 'news')) {
           $item->setValid(true);
-          $item->setPath(self::$DO . '&id=' . $objNews->id);
+          $item->setPath('do=' . $this->backendmodule . '&table=tl_content&id=' . $objNews->id);
         }
       }
     }

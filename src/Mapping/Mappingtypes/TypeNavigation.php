@@ -9,12 +9,10 @@ use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 
 class TypeNavigation extends Base {
 
-  private static $DO = 'do=page&pn=0';
-
   public function run(CustomViewItem $item): CustomViewItem {
 
     $item->setValid(true);
-    $item->setPath(self::$DO);
+    $item->setPath('do=' . $this->backendmodule . '&pn=0');
 
     return $item;
   }

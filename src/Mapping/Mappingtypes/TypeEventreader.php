@@ -12,8 +12,6 @@ use Contao\StringUtil;
 
 class TypeEventreader extends Base {
 
-  private static $DO = 'do=calendar&table=tl_content';
-
   public function run(CustomViewItem $item): CustomViewItem {
 
     if (class_exists('\Contao\CalendarEventsModel')) {
@@ -23,7 +21,7 @@ class TypeEventreader extends Base {
         $objCalendar = $objEvent->getRelated('pid');
         if (BackendUser::getInstance()->hasAccess($objCalendar->id, 'calendars')) {
           $item->setValid(true);
-          $item->setPath(self::$DO . '&id=' . $objEvent->id);
+          $item->setPath('do=' . $this->backendmodule . '&table=tl_content&id=' . $objEvent->id);
         }
       }
     }

@@ -18,6 +18,7 @@ abstract class Base {
   public $icon;
   public $iconclass;
   public $label;
+  public $backendmodule;
 
   private static function checkModuleAccess($moduletype): bool {
     if (!BackendUser::getInstance()->hasAccess($moduletype, 'modules')) {
@@ -41,6 +42,7 @@ abstract class Base {
           $class->icon = $icon;
           $class->iconclass = $iconclass;
           $class->label = $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'][$labelkey];
+          $class->backendmodule = $backendmodule;
           return $class;
         }
       }
@@ -67,6 +69,7 @@ abstract class Base {
               $class->icon = $icon;
               $class->iconclass = $iconclass;
               $class->label = $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'][$labelkey];
+              $class->backendmodule = $backendmodule;
               return $class;
             }
             break;
