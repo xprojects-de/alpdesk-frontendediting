@@ -20,16 +20,12 @@ class TypeEventlist extends Base {
         if ($objCalendar !== null) {
           if (BackendUser::getInstance()->hasAccess($objCalendar->id, 'calendars')) {
             $item->setValid(true);
-            $item->setIcon($this->icon);
-            $item->setIconclass($this->iconclass);
             $item->setPath('do=calendar&table=tl_calendar_events&id=' . $objCalendar->id);
             $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['events']);
           }
         }
       } else {
         $item->setValid(true);
-        $item->setIcon($this->icon);
-        $item->setIconclass($this->iconclass);
         $item->setPath('do=calendar');
         $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['events']);
       }

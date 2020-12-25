@@ -23,8 +23,6 @@ class TypeNewsReader extends Base {
         $objArchive = $objNews->getRelated('pid');
         if (BackendUser::getInstance()->hasAccess($objArchive->id, 'news')) {
           $item->setValid(true);
-          $item->setIcon($this->icon);
-          $item->setIconclass($this->iconclass);
           $item->setPath(self::$DO . '&id=' . $objNews->id);
           $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['news']);
         }

@@ -14,8 +14,6 @@ class TypeNavigation extends Base {
   public function run(CustomViewItem $item): CustomViewItem {
 
     $item->setValid(true);
-    $item->setIcon($this->icon);
-    $item->setIconclass($this->iconclass);
     $item->setPath(self::$DO);
     $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['navigation']);
 

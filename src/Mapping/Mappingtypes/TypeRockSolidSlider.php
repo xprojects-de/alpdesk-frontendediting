@@ -36,8 +36,6 @@ class TypeRockSolidSlider extends Base {
     }
 
     $item->setValid(true);
-    $item->setIcon($this->icon);
-    $item->setIconclass($this->iconclass);
     $item->setPath($do);
     $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['rocksolidslider']);
   }

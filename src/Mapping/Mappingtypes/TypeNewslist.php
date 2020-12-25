@@ -22,16 +22,12 @@ class TypeNewslist extends Base {
         if ($objNews !== null) {
           if (BackendUser::getInstance()->hasAccess($objNews->id, 'news')) {
             $item->setValid(true);
-            $item->setIcon($this->icon);
-            $item->setIconclass($this->iconclass);
             $item->setPath('do=news&table=tl_news&id=' . $objNews->id);
             $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['news']);
           }
         }
       } else {
         $item->setValid(true);
-        $item->setIcon($this->icon);
-        $item->setIconclass($this->iconclass);
         $item->setPath('do=news');
         $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['news']);
       }
