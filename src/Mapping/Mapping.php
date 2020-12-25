@@ -27,16 +27,18 @@ class Mapping {
 
     if ($this->mappingconfig !== null && \is_array($this->mappingconfig)) {
       $pTable = str_replace('tl_', '', $element->ptable);
-      if (\array_key_exists($pTable, $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_accesscheck'])) {
+      if (\array_key_exists($pTable, $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_mapping'])) {
         $item->setHasParentAccess(false);
-        $model = $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_accesscheck'][$pTable]['model'];
-        $backendmodule = $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_accesscheck'][$pTable]['backend_module'];
-        if (class_exists($model)) {
-          $objModel = $model::findById($element->pid);
-          if ($objModel !== null) {
-            $objModelParent = $objModel->getRelated('pid');
-            if (BackendUser::getInstance()->hasAccess($objModelParent->id, $backendmodule)) {
-              $item->setHasParentAccess(true);
+        $model = $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_mapping'][$pTable]['model'];
+        $backendmodule = $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_mapping'][$pTable]['backend_module'];
+        if ($model !== null && $model !== 'null') {
+          if (class_exists($model)) {
+            $objModel = $model::findById($element->pid);
+            if ($objModel !== null) {
+              $objModelParent = $objModel->getRelated('pid');
+              if (BackendUser::getInstance()->hasAccess($objModelParent->id, $backendmodule)) {
+                $item->setHasParentAccess(true);
+              }
             }
           }
         }
@@ -47,12 +49,12 @@ class Mapping {
   public function checkCustomBackendModule(ContentModel $element, CustomViewItem $item) {
 
     // Maybe a tl_content element hast a custom BackendModule not equal to ptable
-    if (str_replace('tl_', '', $element->ptable) === 'news') {
-      $item->setCustomBackendModule('news');
-    } else if (str_replace('tl_', '', $element->ptable) === 'calendar_events') {
-      $item->setCustomBackendModule('calendar');
-    } else if (str_replace('tl_', '', $element->ptable) === 'rocksolid_slide') {
-      $item->setCustomBackendModule('rocksolid_slider');
+    if ($this->mappingconfig !== null && \is_array($this->mappingconfig)) {
+      $pTable = str_replace('tl_', '', $element->ptable);
+      if (\array_key_exists($pTable, $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_mapping'])) {
+        $backendmodule = $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_mapping'][$pTable]['backend_module'];
+        $item->setCustomBackendModule($backendmodule);
+      }
     }
   }
 

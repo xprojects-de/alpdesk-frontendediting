@@ -1,7 +1,7 @@
    
 alpdesk_frontendediting_mapping:
   
-  element_backendmodule_accesscheck:
+  element_backendmodule_mapping:
     
     news:
       model: \Contao\NewsModel
@@ -10,5 +10,9 @@ alpdesk_frontendediting_mapping:
     calendar_events:
       model: \Contao\CalendarEventsModel
       backend_module: calendars
+      
+    rocksolid_slide:
+      model: null
+      backend_module: rocksolid_slider
       
       
