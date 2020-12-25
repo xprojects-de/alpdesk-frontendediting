@@ -1,4 +1,5 @@
-   
+
+# do not set the params global using Plugin.php of DI because the parameters should not be overridden
 alpdesk_frontendediting_mapping:
   
   # e.g. if user has access to special news item or event item defined in user settings
