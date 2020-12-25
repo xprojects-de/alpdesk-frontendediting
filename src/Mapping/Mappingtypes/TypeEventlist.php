@@ -11,9 +11,6 @@ use Contao\StringUtil;
 
 class TypeEventlist extends Base {
 
-  private static $icon = '../../../system/themes/flexible/icons/group.svg';
-  private static $iconclass = 'tl_event_baritem';
-
   public function run(CustomViewItem $item): CustomViewItem {
 
     if (class_exists('\Contao\CalendarModel')) {
@@ -23,16 +20,16 @@ class TypeEventlist extends Base {
         if ($objCalendar !== null) {
           if (BackendUser::getInstance()->hasAccess($objCalendar->id, 'calendars')) {
             $item->setValid(true);
-            $item->setIcon(self::$icon);
-            $item->setIconclass(self::$iconclass);
+            $item->setIcon($this->icon);
+            $item->setIconclass($this->iconclass);
             $item->setPath('do=calendar&table=tl_calendar_events&id=' . $objCalendar->id);
             $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['events']);
           }
         }
       } else {
         $item->setValid(true);
-        $item->setIcon(self::$icon);
-        $item->setIconclass(self::$iconclass);
+        $item->setIcon($this->icon);
+        $item->setIconclass($this->iconclass);
         $item->setPath('do=calendar');
         $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['events']);
       }

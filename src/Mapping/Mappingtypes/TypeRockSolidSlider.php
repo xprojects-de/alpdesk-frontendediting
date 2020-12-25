@@ -10,8 +10,6 @@ use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 class TypeRockSolidSlider extends Base {
 
   private static $DO = 'do=rocksolid_slider';
-  private static $icon = 'bundles/rocksolidslider/img/icon.png';
-  private static $iconclass = 'tl_rocksolid_slider_baritem';
 
   public function run(CustomViewItem $item): CustomViewItem {
 
@@ -38,8 +36,8 @@ class TypeRockSolidSlider extends Base {
     }
 
     $item->setValid(true);
-    $item->setIcon(self::$icon);
-    $item->setIconclass(self::$iconclass);
+    $item->setIcon($this->icon);
+    $item->setIconclass($this->iconclass);
     $item->setPath($do);
     $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['rocksolidslider']);
   }

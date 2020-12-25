@@ -27,6 +27,8 @@ alpdesk_frontendediting_mapping:
       backend_module: rocksolid_slider
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeRockSolidSlider
       module_object: \MadeYourDay\RockSolidSlider\Module\Slider
+      icon: bundles/rocksolidslider/img/icon.png
+      iconclass: tl_rocksolid_slider_baritem
       
     navigation:
       is_element: false
@@ -34,6 +36,8 @@ alpdesk_frontendediting_mapping:
       backend_module: page
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeNavigation
       module_object: \Contao\ModuleNavigation
+      icon: ../../../system/themes/flexible/icons/root.svg
+      iconclass: tl_navigation_baritem
       
     newslist:
       is_element: false
@@ -42,6 +46,8 @@ alpdesk_frontendediting_mapping:
       backend_module: news
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeNewslist
       module_object: \Contao\ModuleNewsList
+      icon: ../../../system/themes/flexible/icons/news.svg
+      iconclass: tl_news_baritem
       
     newsreader:
       is_element: false
@@ -50,6 +56,8 @@ alpdesk_frontendediting_mapping:
       backend_module: news
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeNewsReader
       module_object: \Contao\ModuleNewsReader
+      icon: ../../../system/themes/flexible/icons/news.svg
+      iconclass: tl_news_baritem
       
     eventlist:
       is_element: false
@@ -58,6 +66,8 @@ alpdesk_frontendediting_mapping:
       backend_module: calendar
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeEventlist
       module_object: \Contao\ModuleEventList
+      icon: ../../../system/themes/flexible/icons/group.svg
+      iconclass: tl_event_baritem
       
     eventreader:
       is_element: false
@@ -65,4 +75,6 @@ alpdesk_frontendediting_mapping:
       is_module: true
       backend_module: calendar
       mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeEventreader
-      module_object: \Contao\ModuleEventReader 
+      module_object: \Contao\ModuleEventReader
+      icon: ../../../system/themes/flexible/icons/group.svg
+      iconclass: tl_event_baritem
