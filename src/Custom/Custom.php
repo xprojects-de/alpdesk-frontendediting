@@ -32,15 +32,15 @@ class Custom {
     }
   }
 
-  public static function processModule(Module $module, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher): CustomViewItem {
+  public static function processModule(Module $module, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, array $mappingconfig): CustomViewItem {
 
     $response = new CustomViewItem();
     $response->setType(CustomViewItem::$TYPE_MODULE);
 
-    return (new Mapping($alpdeskfeeEventDispatcher))->mapModule($response, $module);
+    return (new Mapping($alpdeskfeeEventDispatcher, $mappingconfig))->mapModule($response, $module);
   }
 
-  public static function processElement(ContentModel $element, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher): CustomViewItem {
+  public static function processElement(ContentModel $element, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, array $mappingconfig): CustomViewItem {
 
     $response = new CustomViewItem();
     $response->setType(CustomViewItem::$TYPE_CE);
@@ -48,12 +48,12 @@ class Custom {
     if ($element->type === 'module') {
       $objModule = self::getModuleTypeInstanceById($element->module);
       if ($objModule !== null) {
-        return self::processModule($objModule, $alpdeskfeeEventDispatcher);
+        return self::processModule($objModule, $alpdeskfeeEventDispatcher, $mappingconfig);
       }
       return $response;
     }
 
-    return (new Mapping($alpdeskfeeEventDispatcher))->mapContentElement($response, $element);
+    return (new Mapping($alpdeskfeeEventDispatcher, $mappingconfig))->mapContentElement($response, $element);
   }
 
 }

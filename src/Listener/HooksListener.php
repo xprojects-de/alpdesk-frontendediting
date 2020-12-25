@@ -19,6 +19,7 @@ use Alpdesk\AlpdeskFrontendediting\Utils\Utils;
 use Alpdesk\AlpdeskFrontendediting\Custom\Custom;
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventService;
+use Symfony\Component\Yaml\Yaml;
 
 class HooksListener {
 
@@ -29,6 +30,7 @@ class HooksListener {
   private $pagemountAccess = false;
   private $pageChmodEdit = 0;
   private $alpdeskfee_livemodus = false;
+  private $mappingconfig = null;
 
   public function __construct(TokenChecker $tokenChecker, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher) {
     $this->tokenChecker = $tokenChecker;
@@ -45,6 +47,7 @@ class HooksListener {
       if ($liveModus !== null && $liveModus === true) {
         $this->alpdeskfee_livemodus = true;
       }
+      $this->mappingconfig = Yaml::parse(\file_get_contents(__DIR__ . '/../Resources/config/config.yml'), Yaml::PARSE_CONSTANT);
     }
   }
 
@@ -134,7 +137,7 @@ class HooksListener {
 
     if ($this->checkAccess()) {
 
-      $modDoType = Custom::processElement($element, $this->alpdeskfeeEventDispatcher);
+      $modDoType = Custom::processElement($element, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
 
       // We have a module as content element
       if ($modDoType->getType() == CustomViewItem::$TYPE_MODULE) {
@@ -250,7 +253,7 @@ class HooksListener {
 
     if ($this->checkAccess()) {
 
-      $modDoType = Custom::processModule($module, $this->alpdeskfeeEventDispatcher);
+      $modDoType = Custom::processModule($module, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
       return $this->renderModuleOutput($modDoType, $buffer);
     }
 

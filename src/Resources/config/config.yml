@@ -1,0 +1,14 @@
+   
+alpdesk_frontendediting_mapping:
+  
+  element_backendmodule_accesscheck:
+    
+    news:
+      model: \Contao\NewsModel
+      backend_module: news
+      
+    calendar_events:
+      model: \Contao\CalendarEventsModel
+      backend_module: calendars
+      
+      
