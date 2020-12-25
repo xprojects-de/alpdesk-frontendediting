@@ -23,56 +23,40 @@ abstract class Base {
     return true;
   }
 
-  public static function findClassByElement(ContentModel $element) {
+  public static function findClassByElement(ContentModel $element, array $mappingconfig) {
 
-    if ($element->type === 'rocksolid_slider') {
-      if (self::checkModuleAccess('rocksolid_slider')) {
-        $class = new TypeRockSolidSlider();
-        $class->element = $element;
-        return $class;
+    if ($mappingconfig !== null && \is_array($mappingconfig)) {
+      if (\array_key_exists($element->type, $mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'])) {
+        $backendmodule = $mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'][$element->type]['backend_module'];
+        $mappingObject = $mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'][$element->type]['mapping_object'];
+        if (self::checkModuleAccess($backendmodule)) {
+          $class = new $mappingObject();
+          $class->element = $element;
+          return $class;
+        }
       }
     }
 
     return null;
   }
 
-  public static function findClassByModule(Module $module) {
+  public static function findClassByModule(Module $module, array $mappingconfig) {
 
-    if (class_exists('\Contao\ModuleNavigation') && $module instanceof \Contao\ModuleNavigation) {
-      if (self::checkModuleAccess('page')) {
-        $class = new TypeNavigation();
-        $class->module = $module;
-        return $class;
-      }
-    } else if (class_exists('\Contao\ModuleNewsList') && $module instanceof \Contao\ModuleNewsList) {
-      if (self::checkModuleAccess('news')) {
-        $class = new TypeNewslist();
-        $class->module = $module;
-        return $class;
-      }
-    } else if (class_exists('\Contao\ModuleNewsReader') && $module instanceof \Contao\ModuleNewsReader) {
-      if (self::checkModuleAccess('news')) {
-        $class = new TypeNewsReader();
-        $class->module = $module;
-        return $class;
-      }
-    } else if (class_exists('\Contao\ModuleEventList') && $module instanceof \Contao\ModuleEventList) {
-      if (self::checkModuleAccess('calendar')) {
-        $class = new TypeEventlist();
-        $class->module = $module;
-        return $class;
-      }
-    } else if (class_exists('\Contao\ModuleEventReader') && $module instanceof \Contao\ModuleEventReader) {
-      if (self::checkModuleAccess('calendar')) {
-        $class = new TypeEventreader();
-        $class->module = $module;
-        return $class;
-      }
-    } else if (class_exists('\MadeYourDay\RockSolidSlider\Module\Slider') && $module instanceof \MadeYourDay\RockSolidSlider\Module\Slider) {
-      if (self::checkModuleAccess('rocksolid_slider')) {
-        $class = new TypeRockSolidSlider();
-        $class->module = $module;
-        return $class;
+    if ($mappingconfig !== null && \is_array($mappingconfig)) {
+      foreach ($mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'] as $key => $value) {
+        if ($value['is_module'] == true) {
+          $mappingObject = $value['mapping_object'];
+          $backendmodule = $value['backend_module'];
+          $moduleobject = $value['module_object'];
+          if (class_exists($moduleobject) && $module instanceof $moduleobject) {
+            if (self::checkModuleAccess($backendmodule)) {
+              $class = new $mappingObject();
+              $class->module = $module;
+              return $class;
+            }
+            break;
+          }
+        }
       }
     }
 

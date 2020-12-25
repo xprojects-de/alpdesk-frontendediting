@@ -10,7 +10,7 @@ alpdesk_frontendediting_mapping:
       
     calendar_events:
       model: \Contao\CalendarEventsModel
-      backend_module: calendars
+      backend_module: calendar
       checkAccess: true
       
     rocksolid_slide:
@@ -18,4 +18,51 @@ alpdesk_frontendediting_mapping:
       backend_module: rocksolid_slider
       checkAccess: false
       
+  type_mapping:
+    
+    rocksolid_slider:
+      is_element: true
+      type: rocksolid_slider
+      is_module: true
+      backend_module: rocksolid_slider
+      mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeRockSolidSlider
+      module_object: \MadeYourDay\RockSolidSlider\Module\Slider
       
+    navigation:
+      is_element: false
+      is_module: true
+      backend_module: page
+      mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeNavigation
+      module_object: \Contao\ModuleNavigation
+      
+    newslist:
+      is_element: false
+      type: null
+      is_module: true
+      backend_module: news
+      mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeNewslist
+      module_object: \Contao\ModuleNewsList
+      
+    newsreader:
+      is_element: false
+      type: null
+      is_module: true
+      backend_module: news
+      mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeNewsReader
+      module_object: \Contao\ModuleNewsReader
+      
+    eventlist:
+      is_element: false
+      type: null
+      is_module: true
+      backend_module: calendar
+      mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeEventlist
+      module_object: \Contao\ModuleEventList
+      
+    eventreader:
+      is_element: false
+      type: null
+      is_module: true
+      backend_module: calendar
+      mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeEventreader
+      module_object: \Contao\ModuleEventReader 

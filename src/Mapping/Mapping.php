@@ -64,7 +64,7 @@ class Mapping {
     $this->checkCustomTypeElementAccess($element, $item);
     $this->checkCustomBackendModule($element, $item);
 
-    $instance = Base::findClassByElement($element);
+    $instance = Base::findClassByElement($element, $this->mappingconfig);
     if ($instance !== null) {
       $modifiedItem = $instance->run($item);
       $eventElement = new AlpdeskFrontendeditingEventElement($modifiedItem, $element);
@@ -79,7 +79,7 @@ class Mapping {
 
   public function mapModule(CustomViewItem $item, Module $module): CustomViewItem {
 
-    $instance = Base::findClassByModule($module);
+    $instance = Base::findClassByModule($module, $this->mappingconfig);
     if ($instance !== null) {
       $modifiedItem = $instance->run($item);
       $eventModule = new AlpdeskFrontendeditingEventModule($modifiedItem, $module);
