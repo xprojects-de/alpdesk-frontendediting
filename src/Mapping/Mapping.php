@@ -28,10 +28,11 @@ class Mapping {
     if ($this->mappingconfig !== null && \is_array($this->mappingconfig)) {
       $pTable = str_replace('tl_', '', $element->ptable);
       if (\array_key_exists($pTable, $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_mapping'])) {
-        $item->setHasParentAccess(false);
         $model = $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_mapping'][$pTable]['model'];
-        $backendmodule = $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_mapping'][$pTable]['backend_module'];
-        if ($model !== null && $model !== 'null') {
+        $accessCheck = $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_mapping'][$pTable]['checkAccess'];
+        if ($model !== null && $model !== 'null' && $accessCheck == true) {
+          $item->setHasParentAccess(false);
+          $backendmodule = $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_mapping'][$pTable]['backend_module'];
           if (class_exists($model)) {
             $objModel = $model::findById($element->pid);
             if ($objModel !== null) {

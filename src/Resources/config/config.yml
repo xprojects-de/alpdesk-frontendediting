@@ -6,13 +6,16 @@ alpdesk_frontendediting_mapping:
     news:
       model: \Contao\NewsModel
       backend_module: news
+      checkAccess: true
       
     calendar_events:
       model: \Contao\CalendarEventsModel
       backend_module: calendars
+      checkAccess: true
       
     rocksolid_slide:
       model: null
       backend_module: rocksolid_slider
+      checkAccess: false
       
       
