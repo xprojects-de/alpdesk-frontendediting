@@ -5,7 +5,7 @@ Mit Hilfe dieser Erweiterung lässt sich deine Webseite visuell direkt im Backen
 
 ## Konzept
 
-Die Erweiterung ist ein normales Backendmodul und läuft somit direkt im Backend-Scope ohne dass irgendwelche anderen Routen bereitgestellt werden.
+Die Erweiterung ist ein normales Backendmodul und läuft somit direkt im Backend-Scope.
 Auf Basis des Javascript-Eventhandlings werden lediglich lokale Events (Same-Origin-Policy) der Frontendansicht ins Backend geschickt und dort verarbeitet.
 Das Backend bedient sich dann dem mächtigen Backend-Editing von Contao indem einfach die passenden URLs in einem Overlay-Dialog angezeigt werden. Somit steht das komplette Backend-Editing wie gewohnt zur Verfügung, nur halt ein bisschen visueller dargestellt.
 

@@ -16,33 +16,29 @@ use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventModule;
 class Mapping {
 
   private $alpdeskfeeEventDispatcher = null;
+  private $mappingconfig = null;
 
-  public function __construct(AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher) {
+  public function __construct(AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, array $mappingconfig) {
     $this->alpdeskfeeEventDispatcher = $alpdeskfeeEventDispatcher;
+    $this->mappingconfig = $mappingconfig;
   }
 
   public function checkCustomTypeElementAccess(ContentModel $element, CustomViewItem $item) {
 
-    // If a contentelement is e.g. "text" and ptable is news we have to check if News are enabled as BackendModule
-    if (str_replace('tl_', '', $element->ptable) === 'news') {
-      $item->setHasParentAccess(false);
-      if (class_exists('\Contao\NewsModel')) {
-        $objNews = \Contao\NewsModel::findById($element->pid);
-        if ($objNews !== null) {
-          $objArchive = $objNews->getRelated('pid');
-          if (BackendUser::getInstance()->hasAccess($objArchive->id, 'news')) {
-            $item->setHasParentAccess(true);
-          }
-        }
-      }
-    } else if (str_replace('tl_', '', $element->ptable) === 'calendar_events') {
-      $item->setHasParentAccess(false);
-      if (class_exists('\Contao\CalendarEventsModel')) {
-        $objEvent = \Contao\CalendarEventsModel::findById($element->pid);
-        if ($objEvent !== null) {
-          $objCalendar = $objEvent->getRelated('pid');
-          if (BackendUser::getInstance()->hasAccess($objCalendar->id, 'calendars')) {
-            $item->setHasParentAccess(true);
+    //e.g. if user has access to special news item or event item defined in user settings
+    if ($this->mappingconfig !== null && \is_array($this->mappingconfig)) {
+      $pTable = str_replace('tl_', '', $element->ptable);
+      if (\array_key_exists($pTable, $this->mappingconfig['alpdesk_frontendediting_mapping']['element_access_check'])) {
+        $model = $this->mappingconfig['alpdesk_frontendediting_mapping']['element_access_check'][$pTable]['model'];
+        $item->setHasParentAccess(false);
+        $accesskey = $this->mappingconfig['alpdesk_frontendediting_mapping']['element_access_check'][$pTable]['accesskey'];
+        if (class_exists($model)) {
+          $objModel = $model::findById($element->pid);
+          if ($objModel !== null) {
+            $objModelParent = $objModel->getRelated('pid');
+            if (BackendUser::getInstance()->hasAccess($objModelParent->id, $accesskey)) {
+              $item->setHasParentAccess(true);
+            }
           }
         }
       }
@@ -52,22 +48,26 @@ class Mapping {
   public function checkCustomBackendModule(ContentModel $element, CustomViewItem $item) {
 
     // Maybe a tl_content element hast a custom BackendModule not equal to ptable
-    if (str_replace('tl_', '', $element->ptable) === 'news') {
-      $item->setCustomBackendModule('news');
-    } else if (str_replace('tl_', '', $element->ptable) === 'calendar_events') {
-      $item->setCustomBackendModule('calendar');
-    } else if (str_replace('tl_', '', $element->ptable) === 'rocksolid_slide') {
-      $item->setCustomBackendModule('rocksolid_slider');
+    if ($this->mappingconfig !== null && \is_array($this->mappingconfig)) {
+      $pTable = str_replace('tl_', '', $element->ptable);
+      if (\array_key_exists($pTable, $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_mapping'])) {
+        $backendmodule = $this->mappingconfig['alpdesk_frontendediting_mapping']['element_backendmodule_mapping'][$pTable]['backend_module'];
+        $item->setCustomBackendModule($backendmodule);
+      }
     }
   }
 
   public function mapContentElement(CustomViewItem $item, ContentModel $element): CustomViewItem {
 
+    // If a tl_content item of any other parent than article is rendered (e.g. News) check rights an map backendmodule
     $this->checkCustomTypeElementAccess($element, $item);
     $this->checkCustomBackendModule($element, $item);
 
-    $instance = Base::findClassByElement($element);
+    $instance = Base::findClassByElement($element, $this->mappingconfig);
     if ($instance !== null) {
+      $item->setIcon($instance->icon);
+      $item->setIconclass($instance->iconclass);
+      $item->setLabel($instance->label);
       $modifiedItem = $instance->run($item);
       $eventElement = new AlpdeskFrontendeditingEventElement($modifiedItem, $element);
       $this->alpdeskfeeEventDispatcher->getDispatcher()->dispatch($eventElement, AlpdeskFrontendeditingEventElement::NAME);
@@ -81,8 +81,11 @@ class Mapping {
 
   public function mapModule(CustomViewItem $item, Module $module): CustomViewItem {
 
-    $instance = Base::findClassByModule($module);
+    $instance = Base::findClassByModule($module, $this->mappingconfig);
     if ($instance !== null) {
+      $item->setIcon($instance->icon);
+      $item->setIconclass($instance->iconclass);
+      $item->setLabel($instance->label);
       $modifiedItem = $instance->run($item);
       $eventModule = new AlpdeskFrontendeditingEventModule($modifiedItem, $module);
       $this->alpdeskfeeEventDispatcher->getDispatcher()->dispatch($eventModule, AlpdeskFrontendeditingEventModule::NAME);

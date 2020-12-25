@@ -11,9 +11,6 @@ use Contao\StringUtil;
 
 class TypeNewslist extends Base {
 
-  private static $icon = '../../../system/themes/flexible/icons/news.svg';
-  private static $iconclass = 'tl_news_baritem';
-
   public function run(CustomViewItem $item): CustomViewItem {
 
     // @TODO very hard because there could be more news_teasers!! No Idea at the Moment when more news are selected
@@ -25,18 +22,12 @@ class TypeNewslist extends Base {
         if ($objNews !== null) {
           if (BackendUser::getInstance()->hasAccess($objNews->id, 'news')) {
             $item->setValid(true);
-            $item->setIcon(self::$icon);
-            $item->setIconclass(self::$iconclass);
-            $item->setPath('do=news&table=tl_news&id=' . $objNews->id);
-            $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['news']);
+            $item->setPath('do=' . $this->backendmodule . '&table=' . $this->table . '&id=' . $objNews->id);
           }
         }
       } else {
         $item->setValid(true);
-        $item->setIcon(self::$icon);
-        $item->setIconclass(self::$iconclass);
-        $item->setPath('do=news');
-        $item->setLabel($GLOBALS['TL_LANG']['alpdeskfee_mapping_lables']['news']);
+        $item->setPath('do=' . $this->backendmodule);
       }
     }
 

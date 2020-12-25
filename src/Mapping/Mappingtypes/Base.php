@@ -15,6 +15,12 @@ abstract class Base {
 
   public $module;
   public $element;
+  public $icon;
+  public $iconclass;
+  public $label;
+  public $backendmodule;
+  public $additional_static_params = [];
+  public $table;
 
   private static function checkModuleAccess($moduletype): bool {
     if (!BackendUser::getInstance()->hasAccess($moduletype, 'modules')) {
@@ -23,56 +29,67 @@ abstract class Base {
     return true;
   }
 
-  public static function findClassByElement(ContentModel $element) {
+  public static function findClassByElement(ContentModel $element, array $mappingconfig) {
 
-    if ($element->type === 'rocksolid_slider') {
-      if (self::checkModuleAccess('rocksolid_slider')) {
-        $class = new TypeRockSolidSlider();
-        $class->element = $element;
-        return $class;
+    if ($mappingconfig !== null && \is_array($mappingconfig)) {
+      foreach ($mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'] as $value) {
+        if ($value['element'] !== null) {
+          if ($element->type == $value['element']) {
+            $backendmodule = $value['backend_module'];
+            $mappingObject = $value['mapping_object'];
+            $icon = $value['icon'];
+            $iconclass = $value['iconclass'];
+            $labelkey = $value['labelkey'];
+            $additional_static_params = $value['additional_static_params'];
+            $table = $value['table'];
+            if (self::checkModuleAccess($backendmodule)) {
+              $class = new $mappingObject();
+              $class->element = $element;
+              $class->icon = $icon;
+              $class->iconclass = $iconclass;
+              $class->label = $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'][$labelkey];
+              $class->backendmodule = $backendmodule;
+              $class->additional_static_params = $additional_static_params;
+              $class->table = $table;
+              return $class;
+            }
+            break;
+          }
+        }
       }
     }
 
     return null;
   }
 
-  public static function findClassByModule(Module $module) {
+  public static function findClassByModule(Module $module, array $mappingconfig) {
 
-    if (class_exists('\Contao\ModuleNavigation') && $module instanceof \Contao\ModuleNavigation) {
-      if (self::checkModuleAccess('page')) {
-        $class = new TypeNavigation();
-        $class->module = $module;
-        return $class;
-      }
-    } else if (class_exists('\Contao\ModuleNewsList') && $module instanceof \Contao\ModuleNewsList) {
-      if (self::checkModuleAccess('news')) {
-        $class = new TypeNewslist();
-        $class->module = $module;
-        return $class;
-      }
-    } else if (class_exists('\Contao\ModuleNewsReader') && $module instanceof \Contao\ModuleNewsReader) {
-      if (self::checkModuleAccess('news')) {
-        $class = new TypeNewsReader();
-        $class->module = $module;
-        return $class;
-      }
-    } else if (class_exists('\Contao\ModuleEventList') && $module instanceof \Contao\ModuleEventList) {
-      if (self::checkModuleAccess('calendar')) {
-        $class = new TypeEventlist();
-        $class->module = $module;
-        return $class;
-      }
-    } else if (class_exists('\Contao\ModuleEventReader') && $module instanceof \Contao\ModuleEventReader) {
-      if (self::checkModuleAccess('calendar')) {
-        $class = new TypeEventreader();
-        $class->module = $module;
-        return $class;
-      }
-    } else if (class_exists('\MadeYourDay\RockSolidSlider\Module\Slider') && $module instanceof \MadeYourDay\RockSolidSlider\Module\Slider) {
-      if (self::checkModuleAccess('rocksolid_slider')) {
-        $class = new TypeRockSolidSlider();
-        $class->module = $module;
-        return $class;
+    if ($mappingconfig !== null && \is_array($mappingconfig)) {
+      foreach ($mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'] as $value) {
+        if ($value['module'] !== null) {
+          $mappingObject = $value['mapping_object'];
+          $backendmodule = $value['backend_module'];
+          $moduleobject = $value['module'];
+          $icon = $value['icon'];
+          $iconclass = $value['iconclass'];
+          $labelkey = $value['labelkey'];
+          $additional_static_params = $value['additional_static_params'];
+          $table = $value['table'];
+          if (class_exists($moduleobject) && $module instanceof $moduleobject) {
+            if (self::checkModuleAccess($backendmodule)) {
+              $class = new $mappingObject();
+              $class->module = $module;
+              $class->icon = $icon;
+              $class->iconclass = $iconclass;
+              $class->label = $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'][$labelkey];
+              $class->backendmodule = $backendmodule;
+              $class->additional_static_params = $additional_static_params;
+              $class->table = $table;
+              return $class;
+            }
+            break;
+          }
+        }
       }
     }
 
