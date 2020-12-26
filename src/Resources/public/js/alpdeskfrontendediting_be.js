@@ -174,6 +174,28 @@ class AlpdeskBackend {
 
   }
 
+  static newElement(data, top) {
+
+    new Request.JSON({
+      'url': '/contao/alpdeskfee',
+      followRedirects: false,
+      onSuccess: function (responseJSON, responseText) {
+        if (top === true) {
+          AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&id=' + data.id + '&act=create&mode=2&pid=' + data.id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
+        } else {
+          AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&id=' + data.pid + '&act=create&mode=1&pid=' + data.id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
+        }
+      },
+      onError: function (text, error) {
+        AlpdeskBackend.reloadFrame();
+      },
+      onFailure: function (f) {
+        AlpdeskBackend.reloadFrame();
+      }
+    }).post({'data': data, 'rt': AlpdeskBackend.REQUEST_TOKEN});
+
+  }
+
   static handleEvent(e) {
 
     // Mabye use Contao.request_token instead of AlpdeskBackend.REQUEST_TOKEN in future
@@ -192,7 +214,7 @@ class AlpdeskBackend {
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_SHOW) {
         AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&pn=' + data.targetPageId + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_NEW) {
-        AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&id=' + data.id + '&act=create&mode=2&pid=' + data.id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
+        AlpdeskBackend.newElement(data, true);
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_VISIBILITY) {
         AlpdeskBackend.callVisibilityArticle(data);
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_DELETE) {
@@ -206,7 +228,7 @@ class AlpdeskBackend {
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_COPY) {
         AlpdeskBackend.copyElement(data);
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_NEW) {
-        AlpdeskBackend.callModal({'title': AlpdeskBackend.MODAL_TITLE, 'url': '/contao?alpdeskmodal=1&popup=1&do=' + data.targetDo + '&table=tl_content&id=' + data.pid + '&act=create&mode=1&pid=' + data.id + '&rt=' + AlpdeskBackend.REQUEST_TOKEN});
+        AlpdeskBackend.newElement(data, false);
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_VISIBILITY) {
         AlpdeskBackend.callVisibilityElement(data);
       } else if (data.action === AlpdeskBackend.ACTION_ELEMENT_DELETE) {

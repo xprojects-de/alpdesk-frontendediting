@@ -1,0 +1,95 @@
+
+# do not set the params global using Plugin.php of DI because the parameters should not be overridden
+alpdesk_frontendediting_mapping:
+  
+  # e.g. if user has access to special news item or event item defined in user settings
+  element_access_check:
+    
+    news:
+      model: \Contao\NewsModel
+      accesskey: news
+      
+    calendar_events:
+      model: \Contao\CalendarEventsModel
+      accesskey: calendars
+  
+  # map special ptable from tl_content to right backend_module e.g. calender_events to calendar
+  element_backendmodule_mapping:
+    
+    news:
+      backend_module: news
+      
+    calendar_events:
+      backend_module: calendar
+      
+    rocksolid_slide:
+      backend_module: rocksolid_slider
+      
+  # special mappint for different Modules and types    
+  type_mapping:
+    
+    rocksolid_slider:
+      element: rocksolid_slider
+      module: \MadeYourDay\RockSolidSlider\Module\Slider
+      backend_module: rocksolid_slider
+      table: tl_rocksolid_slide
+      additional_static_params: []
+      mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeRockSolidSlider
+      icon: bundles/rocksolidslider/img/icon.png
+      iconclass: tl_rocksolid_slider_baritem
+      labelkey: rocksolidslider
+      
+    navigation:
+      element: null
+      module: \Contao\ModuleNavigation
+      backend_module: page
+      table: null
+      additional_static_params: [pn=0]
+      mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeSimple
+      icon: ../../../system/themes/flexible/icons/root.svg
+      iconclass: tl_navigation_baritem
+      labelkey: navigation
+      
+    newslist:
+      element: null
+      module: \Contao\ModuleNewsList
+      backend_module: news
+      table: tl_news
+      additional_static_params: []
+      mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeNewslist
+      icon: ../../../system/themes/flexible/icons/news.svg
+      iconclass: tl_news_baritem
+      labelkey: news
+      
+    newsreader:
+      element: null
+      module: \Contao\ModuleNewsReader
+      backend_module: news
+      table: tl_content
+      additional_static_params: []
+      mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeNewsReader
+      icon: ../../../system/themes/flexible/icons/news.svg
+      iconclass: tl_news_baritem
+      labelkey: news
+      
+    eventlist:
+      element: null
+      module: \Contao\ModuleEventList
+      backend_module: calendar
+      table: tl_calendar_events
+      additional_static_params: []
+      mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeEventlist
+      icon: ../../../system/themes/flexible/icons/group.svg
+      iconclass: tl_event_baritem
+      labelkey: events
+      
+    eventreader:
+      element: null
+      module: \Contao\ModuleEventReader
+      backend_module: calendar
+      table: tl_content
+      additional_static_params: []
+      mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeEventreader
+      icon: ../../../system/themes/flexible/icons/group.svg
+      iconclass: tl_event_baritem
+      labelkey: events
