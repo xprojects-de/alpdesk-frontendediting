@@ -69,6 +69,10 @@ class BackendController extends AbstractController {
             $response = $this->procceedType_CE($data);
             break;
           }
+        case self::$TARGETTYPE_ARTICLE: {
+            $response = $this->procceedType_Article($data);
+            break;
+          }
         default:
           break;
       }
@@ -101,6 +105,30 @@ class BackendController extends AbstractController {
       System::getContainer()->get('session')->set('CLIPBOARD', $clipboard);
 
       $data['clipboard'] = $clipboard;
+
+      return (new JsonResponse($data));
+    } else if ($data['action'] == self::$ACTION_ELEMENT_NEW) {
+
+      System::getContainer()->get('session')->set('CURRENT_ID', \intval($data['pid']));
+      $currentid = System::getContainer()->get('session')->get('CURRENT_ID');
+      $data['CURRENT_ID'] = $currentid;
+
+      return (new JsonResponse($data));
+    }
+
+    throw new \Exception('invalid action');
+  }
+
+  private function procceedType_Article($data): JsonResponse {
+
+    // currently we do not need any Access-Check because only the clipboard is modified and no record of Database is affected
+    // In future be careful!
+
+    if ($data['action'] == self::$ACTION_ELEMENT_NEW) {
+
+      System::getContainer()->get('session')->set('CURRENT_ID', \intval($data['id']));
+      $currentid = System::getContainer()->get('session')->get('CURRENT_ID');
+      $data['CURRENT_ID'] = $currentid;
 
       return (new JsonResponse($data));
     }
