@@ -32,6 +32,77 @@
     const ACTION_ELEMENT_NEW = 'element_new';
     const ACTION_ELEMENT_COPY = 'element_copy';
 
+    function draggableElement(el) {
+
+      let initialX;
+      let initialY;
+
+      let contentElementContainer = el.parentElement.parentElement;
+
+      let barContainer = null;
+      let currentElement = null;
+
+      // This element is unique and there is no check needed
+      el.onmousedown = function (e) {
+        e = e || window.event;
+        initialX = e.clientX;
+        initialY = e.clientY;
+        if (e.target === el) {
+          currentElement = el;
+          barContainer = el.parentElement;
+        }
+      };
+
+      // Check if contentElementContainer still has a listener 
+      if (contentElementContainer.getAttribute('data-movelistener') !== 'true') {
+
+        contentElementContainer.onmouseup = function (e) {
+          e = e || window.event;
+          currentElement = null;
+          barContainer = null;
+        };
+
+        contentElementContainer.onmousemove = function (e) {
+          if (currentElement !== null && barContainer !== null) {
+            e = e || window.event;
+            e.preventDefault();
+            let currentX = initialX - e.clientX;
+            let currentY = initialY - e.clientY;
+            initialX = e.clientX;
+            initialY = e.clientY;
+
+            let limit_bottom = contentElementContainer.offsetHeight - currentY - barContainer.offsetHeight;
+            let top = (barContainer.offsetTop - currentY);
+            if (barContainer.offsetTop >= limit_bottom) {
+              top = limit_bottom;
+            } else if (top <= 0) {
+              top = 0;
+            }
+
+            let limit_left = contentElementContainer.offsetWidth - currentX - barContainer.offsetWidth;
+            let left = (barContainer.offsetLeft - currentX);
+            if (barContainer.offsetLeft >= limit_left) {
+              left = limit_left;
+            }
+            // Bar is left not in the middle
+            if (barContainer.classList.contains('alpdeskfee-utilscontainer-custommodule')) {
+              if (left <= 0) {
+                left = 0;
+              }
+            } else {
+              if (left <= (barContainer.offsetWidth / 2)) {
+                left = (barContainer.offsetWidth / 2);
+              }
+            }
+
+            barContainer.style.top = top + "px";
+            barContainer.style.left = left + "px";
+          }
+        };
+        contentElementContainer.setAttribute('data-movelistener', 'true');
+      }
+    }
+
     function dispatchEvent(params) {
       window.parent.document.dispatchEvent(new CustomEvent(ALPDESK_EVENTNAME, {
         detail: params
@@ -48,7 +119,7 @@
       return element;
     }
 
-    function appendUtilsContainer(obj, parent, notUseParent, objLabels) {
+    function appendUtilsContainer(obj, parent, notUseParent, objLabels, moveenabled) {
 
       if (obj !== null && obj !== undefined) {
 
@@ -62,6 +133,13 @@
           c.classList.add('alpdeskfee-utilscontainer-page');
         } else {
           c.classList.add('alpdeskfee-utilscontainer');
+        }
+
+        if (moveenabled === true) {
+          const cMove = document.createElement('div');
+          cMove.classList.add('alpdeskfee-utilscontainer-move');
+          c.appendChild(cMove);
+          draggableElement(cMove);
         }
 
         if (obj.desc !== null && obj.desc !== undefined && obj.desc !== '') {
@@ -319,7 +397,7 @@
             if (obj.type === TARGETTYPE_ARTICLE) {
               let parentNode = data[i].parentElement;
               parentNode.classList.add('alpdeskfee-article-container');
-              appendUtilsContainer(obj, data[i], false, objLabels);
+              appendUtilsContainer(obj, data[i], false, objLabels, false);
               parentNode.onmouseover = function () {
                 data[i].classList.add("alpdeskfee-parent-active");
               };
@@ -327,7 +405,7 @@
                 data[i].classList.remove("alpdeskfee-parent-active");
               };
             } else {
-              appendUtilsContainer(obj, data[i], true, objLabels);
+              appendUtilsContainer(obj, data[i], true, objLabels, true);
               data[i].onmouseover = function () {
                 data[i].classList.add("alpdeskfee-active");
               };
@@ -368,7 +446,7 @@
           const jsonData = '{"type":"' + TARGETTYPE_PAGE + '","do":"' + TARGETTYPE_PAGE + '","id":"' + alpdeskfeePageid + '","pageid":"' + alpdeskfeePageid + '"}';
           const obj = JSON.parse(jsonData);
           if (obj !== null && obj !== undefined) {
-            appendUtilsContainer(obj, bodyElement, true, objLabels);
+            appendUtilsContainer(obj, bodyElement, true, objLabels, false);
           }
         }
       }
