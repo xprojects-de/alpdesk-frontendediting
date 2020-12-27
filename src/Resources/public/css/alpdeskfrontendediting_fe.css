@@ -18,6 +18,7 @@ div.alpdeskfee-article-container {
 
 .alpdeskfee-ce {
   position: relative;
+  min-height: 37px;
 }
 
 div.alpdeskfee-utilscontainer,
@@ -66,7 +67,7 @@ div.alpdeskfee-utilscontainer-move {
   background-size: 12px 12px;
   background-image: url('../images/move.png');
   cursor: move;
-  background-color: #f0f0f0;
+  background-color: #eaeaea;
 }
 
 div.alpdeskfee-utilscontainer-custommodule {

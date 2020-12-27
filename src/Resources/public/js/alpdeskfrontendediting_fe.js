@@ -100,7 +100,7 @@
           }
         };
         contentElementContainer.setAttribute('data-movelistener', 'true');
-      }
+      } 
     }
 
     function dispatchEvent(params) {
@@ -397,7 +397,7 @@
             if (obj.type === TARGETTYPE_ARTICLE) {
               let parentNode = data[i].parentElement;
               parentNode.classList.add('alpdeskfee-article-container');
-              appendUtilsContainer(obj, data[i], false, objLabels, false);
+              appendUtilsContainer(obj, data[i], false, objLabels, true);
               parentNode.onmouseover = function () {
                 data[i].classList.add("alpdeskfee-parent-active");
               };
