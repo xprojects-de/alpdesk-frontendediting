@@ -397,11 +397,17 @@
               let parentNode = data[i].parentElement;
               parentNode.classList.add('alpdeskfee-article-container');
               appendUtilsContainer(obj, data[i], false, objLabels, true);
-              parentNode.onmouseover = function () {
+              parentNode.onmouseover = function (e) {
                 data[i].classList.add('alpdeskfee-parent-active');
+                if (data[i].getBoundingClientRect().y < 0) {
+                 data[i].style.top = '110px';
+                 data[i].style.position = 'fixed';
+                 }
               };
               parentNode.onmouseout = function () {
                 data[i].classList.remove('alpdeskfee-parent-active');
+                data[i].style.top = '0px';
+                data[i].style.position = 'absolute';
               };
             } else {
               appendUtilsContainer(obj, data[i], true, objLabels, true);
@@ -409,7 +415,7 @@
                 this.classList.add('alpdeskfee-active');
                 if (this.getBoundingClientRect().y < (this.offsetHeight / 4)) {
                   for (let i = 0; i < this.childNodes.length; i++) {
-                    if (this.childNodes[i].className === 'alpdeskfee-utilscontainer') {
+                    if (this.childNodes[i].classList !== null && this.childNodes[i].classList !== undefined && this.childNodes[i].classList.contains('alpdeskfee-utilscontainer')) {
                       this.childNodes[i].style.top = (this.offsetHeight - this.childNodes[i].offsetHeight) + 'px';
                     }
                   }
@@ -418,7 +424,7 @@
               data[i].onmouseout = function () {
                 this.classList.remove('alpdeskfee-active');
                 for (let i = 0; i < this.childNodes.length; i++) {
-                  if (this.childNodes[i].className === 'alpdeskfee-utilscontainer') {
+                  if (this.childNodes[i].classList !== null && this.childNodes[i].classList !== undefined && this.childNodes[i].classList.contains('alpdeskfee-utilscontainer')) {
                     this.childNodes[i].style.top = '0px';
                   }
                 }
