@@ -11,7 +11,7 @@ div.alpdeskfee-article-container {
 
 .alpdeskfee-active {
   /* Problems fixex headers*/
-  z-index: 1000;
+  /*z-index: 1000;*/
   outline: 1px dashed rgb(244, 124, 0);
   background-color: rgba(244, 124, 0, 0.1);
 }
@@ -38,7 +38,7 @@ div.alpdeskfee-utilscontainer-page {
   line-height:1;
   color:#444;
   border-bottom: 2px solid rgb(244, 124, 0);
-  z-index: 1000;
+  /*z-index: 1000;*/
   border-radius: 4px;
 }
 

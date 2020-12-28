@@ -47,17 +47,16 @@
         e = e || window.event;
         initialX = e.clientX;
         initialY = e.clientY;
-        if (e.target === el) {
-          currentElement = el;
-          barContainer = el.parentElement;
+        if (e.target === this) {
+          currentElement = this;
+          barContainer = this.parentElement;
         }
       };
 
       // Check if contentElementContainer still has a listener 
       if (contentElementContainer.getAttribute('data-movelistener') !== 'true') {
 
-        contentElementContainer.onmouseup = function (e) {
-          e = e || window.event;
+        contentElementContainer.onmouseup = function () {
           currentElement = null;
           barContainer = null;
         };
@@ -71,7 +70,7 @@
             initialX = e.clientX;
             initialY = e.clientY;
 
-            let limit_bottom = contentElementContainer.offsetHeight - currentY - barContainer.offsetHeight;
+            let limit_bottom = this.offsetHeight - currentY - barContainer.offsetHeight;
             let top = (barContainer.offsetTop - currentY);
             if (barContainer.offsetTop >= limit_bottom) {
               top = limit_bottom;
@@ -79,7 +78,7 @@
               top = 0;
             }
 
-            let limit_left = contentElementContainer.offsetWidth - currentX - barContainer.offsetWidth;
+            let limit_left = this.offsetWidth - currentX - barContainer.offsetWidth;
             let left = (barContainer.offsetLeft - currentX);
             if (barContainer.offsetLeft >= limit_left) {
               left = limit_left;
@@ -100,7 +99,7 @@
           }
         };
         contentElementContainer.setAttribute('data-movelistener', 'true');
-      } 
+      }
     }
 
     function dispatchEvent(params) {
@@ -388,7 +387,7 @@
     }
 
     function scanElements(objLabels) {
-      let data = document.querySelectorAll("*[data-alpdeskfee]");
+      let data = document.querySelectorAll('*[data-alpdeskfee]');
       for (let i = 0; i < data.length; i++) {
         let jsonData = data[i].getAttribute('data-alpdeskfee');
         if (jsonData !== null && jsonData !== undefined && jsonData !== '') {
@@ -399,18 +398,30 @@
               parentNode.classList.add('alpdeskfee-article-container');
               appendUtilsContainer(obj, data[i], false, objLabels, true);
               parentNode.onmouseover = function () {
-                data[i].classList.add("alpdeskfee-parent-active");
+                data[i].classList.add('alpdeskfee-parent-active');
               };
               parentNode.onmouseout = function () {
-                data[i].classList.remove("alpdeskfee-parent-active");
+                data[i].classList.remove('alpdeskfee-parent-active');
               };
             } else {
               appendUtilsContainer(obj, data[i], true, objLabels, true);
               data[i].onmouseover = function () {
-                data[i].classList.add("alpdeskfee-active");
+                this.classList.add('alpdeskfee-active');
+                if (this.getBoundingClientRect().y < (this.offsetHeight / 4)) {
+                  for (let i = 0; i < this.childNodes.length; i++) {
+                    if (this.childNodes[i].className === 'alpdeskfee-utilscontainer') {
+                      this.childNodes[i].style.top = (this.offsetHeight - this.childNodes[i].offsetHeight) + 'px';
+                    }
+                  }
+                }
               };
               data[i].onmouseout = function () {
-                data[i].classList.remove("alpdeskfee-active");
+                this.classList.remove('alpdeskfee-active');
+                for (let i = 0; i < this.childNodes.length; i++) {
+                  if (this.childNodes[i].className === 'alpdeskfee-utilscontainer') {
+                    this.childNodes[i].style.top = '0px';
+                  }
+                }
               };
             }
           }
