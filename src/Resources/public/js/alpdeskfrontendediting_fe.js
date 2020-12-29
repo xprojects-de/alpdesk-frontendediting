@@ -96,6 +96,9 @@
 
             barContainer.style.top = top + "px";
             barContainer.style.left = left + "px";
+
+            barContainer.setAttribute('data-movedevent', 'true');
+
           }
         };
         contentElementContainer.setAttribute('data-movelistener', 'true');
@@ -400,9 +403,9 @@
               parentNode.onmouseover = function (e) {
                 data[i].classList.add('alpdeskfee-parent-active');
                 if (data[i].getBoundingClientRect().y < 0) {
-                 data[i].style.top = '110px';
-                 data[i].style.position = 'fixed';
-                 }
+                  data[i].style.top = '110px';
+                  data[i].style.position = 'fixed';
+                }
               };
               parentNode.onmouseout = function () {
                 data[i].classList.remove('alpdeskfee-parent-active');
@@ -416,7 +419,9 @@
                 if (this.getBoundingClientRect().y < (this.offsetHeight / 4)) {
                   for (let i = 0; i < this.childNodes.length; i++) {
                     if (this.childNodes[i].classList !== null && this.childNodes[i].classList !== undefined && this.childNodes[i].classList.contains('alpdeskfee-utilscontainer')) {
-                      this.childNodes[i].style.top = (this.offsetHeight - this.childNodes[i].offsetHeight) + 'px';
+                      if (this.childNodes[i].getAttribute('data-movedevent') !== 'true') {
+                        this.childNodes[i].style.top = (this.offsetHeight - this.childNodes[i].offsetHeight) + 'px';
+                      }
                     }
                   }
                 }
@@ -425,7 +430,9 @@
                 this.classList.remove('alpdeskfee-active');
                 for (let i = 0; i < this.childNodes.length; i++) {
                   if (this.childNodes[i].classList !== null && this.childNodes[i].classList !== undefined && this.childNodes[i].classList.contains('alpdeskfee-utilscontainer')) {
-                    this.childNodes[i].style.top = '0px';
+                    if (this.childNodes[i].getAttribute('data-movedevent') !== 'true') {
+                      this.childNodes[i].style.top = '0px';
+                    }
                   }
                 }
               };
