@@ -104,7 +104,7 @@ class ProjectsAlpdeskFrontendViewListener {
 }
 ```
 
-- Lösung für z.B. fixed-Headers oder überlagerte Elemente: Manchmal kann es Probleme mit einem z.B. fixed header geben wo prinzipiell der Content hinter den Header läuft. Über einen "Rechts-Klick" auf das Element kann Dieses in den Fordergrund (z-index: 200000) "geholt" werden und somit dann bearbeitet werden.
+- Lösung für z.B. fixed-Headers oder überlagerte Elemente: Manchmal kann es Probleme mit einem z.B. fixed header geben wo prinzipiell der Content hinter den Header läuft. Über einen "Rechts-Klick" auf das Element kann Dieses in den Vordergrund (z-index: 200000) "geholt" werden und dann bearbeitet werden.
 - Ist kein Backend-User eingelogged wird der ganze "zusätzliche" Code NICHT ausgeführt und die Hooks werden sofort wieder verlassen. Somit gibt es hier keine Performanceprobleme im normalen Betrieb.
 
 ## Was ist noch zu tun?
