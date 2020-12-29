@@ -47,17 +47,16 @@
         e = e || window.event;
         initialX = e.clientX;
         initialY = e.clientY;
-        if (e.target === el) {
-          currentElement = el;
-          barContainer = el.parentElement;
+        if (e.target === this) {
+          currentElement = this;
+          barContainer = this.parentElement;
         }
       };
 
       // Check if contentElementContainer still has a listener 
       if (contentElementContainer.getAttribute('data-movelistener') !== 'true') {
 
-        contentElementContainer.onmouseup = function (e) {
-          e = e || window.event;
+        contentElementContainer.onmouseup = function () {
           currentElement = null;
           barContainer = null;
         };
@@ -422,10 +421,10 @@
             } else {
               appendUtilsContainer(obj, data[i], true, objLabels, true);
               data[i].onmouseover = function () {
-                data[i].classList.add("alpdeskfee-active");
+                data[i].classList.add('alpdeskfee-active');
               };
               data[i].onmouseout = function () {
-                data[i].classList.remove("alpdeskfee-active");
+                data[i].classList.remove('alpdeskfee-active');
               };
               setContextMenu(data[i], 'alpdeskfee-active-force', '*[data-alpdeskfee]');
             }
