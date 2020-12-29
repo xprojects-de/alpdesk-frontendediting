@@ -100,7 +100,7 @@
           }
         };
         contentElementContainer.setAttribute('data-movelistener', 'true');
-      } 
+      }
     }
 
     function dispatchEvent(params) {
@@ -383,8 +383,23 @@
         cClear.classList.add('alpdeskfee-utilscontainer-clearcontainer');
         c.appendChild(cClear);
       }
+    }
 
-
+    function setContextMenu(element, classname, selector) {
+      element.oncontextmenu = function (e) {
+        e.preventDefault();
+        let data = document.querySelectorAll(selector);
+        for (let k = 0; k < data.length; k++) {
+          if (data[k] !== this) {
+            data[k].classList.remove(classname);
+          }
+        }
+        if (this.classList.contains(classname)) {
+          this.classList.remove(classname);
+        } else {
+          this.classList.add(classname);
+        }
+      };
     }
 
     function scanElements(objLabels) {
@@ -412,6 +427,7 @@
               data[i].onmouseout = function () {
                 data[i].classList.remove("alpdeskfee-active");
               };
+              setContextMenu(data[i], 'alpdeskfee-active-force', '*[data-alpdeskfee]');
             }
           }
         }
