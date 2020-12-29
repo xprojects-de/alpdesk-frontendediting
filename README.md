@@ -104,15 +104,7 @@ class ProjectsAlpdeskFrontendViewListener {
 }
 ```
 
-- Die Item-Bars und die Rollover-Markierung des Frontend-Views arbeiten mit einem z-index: 1000. Manchmal kann es hier Probleme mit einem z.B. fixed header geben wo prinzipiell der Content hinter den Header läuft. Hat das fixe Element einen z-index < 1000 dann überlagert der Overlay diesen. Wenn nicht dann kann das in eurem Frontend-CSS angepasst werden. Hier müsst ihr dann einfach folgende CSS-Klassen überschreiben.
-
-```
-.alpdeskfee-active {z-index: XXXX;}
-div.alpdeskfee-utilscontainer {z-index: XXXX;}
-```
-
-
-
+- Lösung für z.B. fixed-Headers oder überlagerte Elemente: Manchmal kann es Probleme mit einem z.B. fixed header geben wo prinzipiell der Content hinter den Header läuft. Über einen "Rechts-Klick" auf das Element kann Dieses in den Vordergrund (z-index: 200000) "geholt" werden und dann bearbeitet werden.
 - Ist kein Backend-User eingelogged wird der ganze "zusätzliche" Code NICHT ausgeführt und die Hooks werden sofort wieder verlassen. Somit gibt es hier keine Performanceprobleme im normalen Betrieb.
 
 ## Was ist noch zu tun?

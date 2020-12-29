@@ -47,17 +47,16 @@
         e = e || window.event;
         initialX = e.clientX;
         initialY = e.clientY;
-        if (e.target === el) {
-          currentElement = el;
-          barContainer = el.parentElement;
+        if (e.target === this) {
+          currentElement = this;
+          barContainer = this.parentElement;
         }
       };
 
       // Check if contentElementContainer still has a listener 
       if (contentElementContainer.getAttribute('data-movelistener') !== 'true') {
 
-        contentElementContainer.onmouseup = function (e) {
-          e = e || window.event;
+        contentElementContainer.onmouseup = function () {
           currentElement = null;
           barContainer = null;
         };
@@ -100,7 +99,7 @@
           }
         };
         contentElementContainer.setAttribute('data-movelistener', 'true');
-      } 
+      }
     }
 
     function dispatchEvent(params) {
@@ -383,8 +382,23 @@
         cClear.classList.add('alpdeskfee-utilscontainer-clearcontainer');
         c.appendChild(cClear);
       }
+    }
 
-
+    function setContextMenu(element, classname, selector) {
+      element.oncontextmenu = function (e) {
+        e.preventDefault();
+        let data = document.querySelectorAll(selector);
+        for (let k = 0; k < data.length; k++) {
+          if (data[k] !== this) {
+            data[k].classList.remove(classname);
+          }
+        }
+        if (this.classList.contains(classname)) {
+          this.classList.remove(classname);
+        } else {
+          this.classList.add(classname);
+        }
+      };
     }
 
     function scanElements(objLabels) {
@@ -407,11 +421,12 @@
             } else {
               appendUtilsContainer(obj, data[i], true, objLabels, true);
               data[i].onmouseover = function () {
-                data[i].classList.add("alpdeskfee-active");
+                data[i].classList.add('alpdeskfee-active');
               };
               data[i].onmouseout = function () {
-                data[i].classList.remove("alpdeskfee-active");
+                data[i].classList.remove('alpdeskfee-active');
               };
+              setContextMenu(data[i], 'alpdeskfee-active-force', '*[data-alpdeskfee]');
             }
           }
         }
