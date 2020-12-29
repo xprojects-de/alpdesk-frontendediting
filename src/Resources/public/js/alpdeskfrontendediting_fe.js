@@ -420,7 +420,8 @@
                   for (let i = 0; i < this.childNodes.length; i++) {
                     if (this.childNodes[i].classList !== null && this.childNodes[i].classList !== undefined && this.childNodes[i].classList.contains('alpdeskfee-utilscontainer')) {
                       if (this.childNodes[i].getAttribute('data-movedevent') !== 'true') {
-                        this.childNodes[i].style.top = (this.offsetHeight - this.childNodes[i].offsetHeight) + 'px';
+                        //this.childNodes[i].style.top = (this.offsetHeight - this.childNodes[i].offsetHeight) + 'px';
+                        this.childNodes[i].style.position = 'fixed';
                       }
                     }
                   }
@@ -431,7 +432,8 @@
                 for (let i = 0; i < this.childNodes.length; i++) {
                   if (this.childNodes[i].classList !== null && this.childNodes[i].classList !== undefined && this.childNodes[i].classList.contains('alpdeskfee-utilscontainer')) {
                     if (this.childNodes[i].getAttribute('data-movedevent') !== 'true') {
-                      this.childNodes[i].style.top = '0px';
+                      //this.childNodes[i].style.top = '0px';
+                      this.childNodes[i].style.position = 'absolute';
                     }
                   }
                 }

@@ -38,7 +38,7 @@ div.alpdeskfee-utilscontainer-page {
   line-height:1;
   color:#444;
   border-bottom: 2px solid rgb(244, 124, 0);
-  /*z-index: 1000;*/
+  z-index: 1000;
   border-radius: 4px;
 }
 
