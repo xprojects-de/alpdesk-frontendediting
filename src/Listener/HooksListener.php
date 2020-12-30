@@ -249,12 +249,16 @@ class HooksListener {
     return $buffer;
   }
 
-  public function onGetFrontendModule(ModuleModel $model, string $buffer, Module $module): string {
+  // @ToDo $module must not be of Type Module!!! Currently when e.g. Form there is a FORM-Object as 3 parameter
+  // In future check also other Typs!
+  public function onGetFrontendModule(ModuleModel $model, string $buffer, $module): string {
 
     if ($this->checkAccess()) {
 
-      $modDoType = Custom::processModule($module, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
-      return $this->renderModuleOutput($modDoType, $buffer);
+      if ($module instanceof Module) {
+        $modDoType = Custom::processModule($module, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
+        return $this->renderModuleOutput($modDoType, $buffer);
+      }
     }
 
     return $buffer;
