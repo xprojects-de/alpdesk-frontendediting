@@ -133,10 +133,10 @@ class HooksListener {
     }
   }
 
-  public function onGetContentElement(ContentModel $element, string $buffer): string {
+  public function onGetContentElement(ContentModel $element, string $buffer, $el): string {
 
     if ($this->checkAccess()) {
-
+      
       $modDoType = Custom::processElement($element, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
 
       // We have a module as content element
