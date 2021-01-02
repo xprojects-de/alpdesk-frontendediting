@@ -6,6 +6,8 @@ $GLOBALS['TL_LANG']['alpdeskfee_backend_lables'] = [
     'page_select' => 'Seite auswählen',
     'fullscreen' => 'Fullscreen',
     'live_mode' => 'Live-Modus aktivieren/deaktivieren',
+    'help' => 'Hilfe anzeigen',
+    'helptitle' => 'Hilfe',
 ];
 
 $GLOBALS['TL_LANG']['alpdeskfee_lables'] = [
@@ -38,5 +40,17 @@ $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'] = [
     'navigation' => 'Navigation',
     'rocksolidslider' => 'RockSolidSlider',
     'events' => 'Events',
+];
+
+$GLOBALS['TL_LANG']['alpdeskfee_backend_helpitems'] = [
+    [
+        'icon' => '',
+        'label' => 'Rollover über Element',
+        'desc' => 'Beim Rollover über das jeweilige Element wird die Item-Bar sichtbar und das aktive Element wird zum Bearbeiten farblich markiert'
+    ], [
+        'icon' => '',
+        'label' => '"Rechts-Klick" auf Element',
+        'desc' => 'Über einen "Rechts-Klick" auf das Element wird Dieses in den Vordergrund geholt und gelb markiert. Das ist beispielweise notwendig wenn das Element hinter einen fixen Header positioniert ist'
+    ]
 ];
 

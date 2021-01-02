@@ -6,6 +6,8 @@ $GLOBALS['TL_LANG']['alpdeskfee_backend_lables'] = [
     'page_select' => 'select page',
     'fullscreen' => 'Fullscreen',
     'live_mode' => 'enable/disable livemode',
+    'help' => 'show help',
+    'helptitle' => 'Help',
 ];
 
 $GLOBALS['TL_LANG']['alpdeskfee_lables'] = [
@@ -37,6 +39,18 @@ $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'] = [
     'navigation' => 'Navigation',
     'rocksolidslider' => 'RockSolidSlider',
     'events' => 'Events',
+];
+
+$GLOBALS['TL_LANG']['alpdeskfee_backend_helpitems'] = [
+    [
+        'icon' => '',
+        'label' => 'Rollover over element',
+        'desc' => 'When rollover over the respective element, the item bar becomes visible and the active element is marked in color for editing'
+    ], [
+        'icon' => '',
+        'label' => '"Right-click" on element',
+        'desc' => '"Right-click" on the element to bring it to the foreground and highlight it in yellow. This is necessary, for example, if the element is positioned behind a fixed header'
+    ]
 ];
 
 

@@ -1,0 +1,11 @@
+<div id="alpdesk-fee-backendcontainer-help">
+  <table>
+    <?php foreach ($GLOBALS['TL_LANG']['alpdeskfee_backend_helpitems'] as $item): ?>
+      <tr>
+        <td><?= ($item['icon'] !== '' ? '<img src="' . $item['icon'] . '" alt="" >' : '') ?></td>
+        <td><?= $item['label'] ?></td>
+        <td><?= $item['desc'] ?></td>
+      </tr>
+    <?php endforeach; ?>
+  </table>
+</div>

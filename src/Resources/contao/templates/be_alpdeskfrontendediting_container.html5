@@ -17,6 +17,9 @@
       </div>
     </div>
     <div class="wx60 widget">
+      <button title="<?= $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['help'] ?>" data-title="<?= $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['helptitle'] ?>" id="helpselect" class="tl_submit">
+        <img width="15" src="bundles/alpdeskfrontendediting/images/help.png">
+      </button>
       <form method="post">
         <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->token ?>">
         <input type="hidden" name="toggleFullsize" value="1">

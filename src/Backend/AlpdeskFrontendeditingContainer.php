@@ -46,6 +46,15 @@ class AlpdeskFrontendeditingContainer {
 
   public function generate(): string {
 
+    if (Input::get('help') == 1) {
+      return $this->generateHelp();
+    } else {
+      return $this->generateMain();
+    }
+  }
+
+  private function generateMain(): string {
+
     if (Input::post('toggleFullsize')) {
       $this->toggleFullesize();
     } else if (Input::post('toggleLivemodus')) {
@@ -70,6 +79,13 @@ class AlpdeskFrontendeditingContainer {
     }
 
     return $containerTemplate->parse();
+  }
+
+  private function generateHelp(): string {
+
+    $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_be_help.css';
+    $helpTemplate = new BackendTemplate('be_alpdeskfrontendediting_help');
+    return $helpTemplate->parse();
   }
 
 }

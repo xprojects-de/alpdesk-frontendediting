@@ -1,0 +1,13 @@
+
+#alpdesk-fee-backendcontainer-help {
+  padding: 20px;
+}
+
+#alpdesk-fee-backendcontainer-help table {
+  width: 100%;
+}
+
+#alpdesk-fee-backendcontainer-help table td {
+  border-bottom: 1px solid #eaeaea;
+  padding: 10px;
+}

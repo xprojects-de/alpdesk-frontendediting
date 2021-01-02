@@ -344,6 +344,29 @@ class AlpdeskBackend {
       });
     };
 
+    document.getElementById('helpselect').onclick = function () {
+      var M = new SimpleModal({
+        'width': 900,
+        'hideFooter': true,
+        'draggable': false,
+        'overlayOpacity': .7,
+        'onShow': function () {
+          document.body.setStyle('overflow', 'hidden');
+        },
+        'onHide': function () {
+          document.body.setStyle('overflow', 'auto');
+        }
+      });
+
+      let title = document.getElementById('helpselect').getAttribute('data-title');
+      let url = 'contao?popup=1&do=alpdeskfrontendediting&help=1&rt=' + rt;
+
+      M.show({
+        'title': title,
+        'contents': '<iframe src="' + url + '" width="100%" height="' + (window.innerHeight - 137) + '" frameborder="0"></iframe>'
+      });
+    };
+
     window.document.addEventListener(frameChangedEvent, function (e) {
       document.getElementById('urlparam').value = e.detail.location.replace(base, '');
       document.getElementById('alpdesk-fee-alpdeskloading').style.display = 'none';
