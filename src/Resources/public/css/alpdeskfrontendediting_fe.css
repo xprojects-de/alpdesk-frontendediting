@@ -1,5 +1,4 @@
 
-*[data-alpdeskfee-type],
 div.alpdeskfee-article-container {
   position: relative;
   min-height: 50px;
@@ -7,6 +6,10 @@ div.alpdeskfee-article-container {
 
 .alpdeskfee-article-container:hover {
   border-right: 2px solid rgb(244, 124, 0);
+}
+
+div.alpdeskfee-ce-container {
+  position: relative;
 }
 
 .alpdeskfee-active {
@@ -19,10 +22,6 @@ div.alpdeskfee-article-container {
   z-index: 200000;
   outline: 1px dashed rgb(244, 124, 0);
   background-color: rgba(255, 252, 225, 0.3);
-}
-
-.alpdeskfee-ce {
-  position: relative;
 }
 
 div.alpdeskfee-utilscontainer,
