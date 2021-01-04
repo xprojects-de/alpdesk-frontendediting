@@ -14,7 +14,8 @@
     }
   ],
   "support": {
-    "issues": "https://github.com/xprojects-de/alpdesk-frontendediting/issues"
+    "issues": "https://github.com/xprojects-de/alpdesk-frontendediting/issues",
+    "wiki": "https://github.com/xprojects-de/alpdesk-frontendediting/wiki"
   },
   "require": {
     "php": ">=7.2",
