@@ -419,6 +419,7 @@
                 data[i].classList.remove("alpdeskfee-parent-active");
               };
             } else {
+              data[i].classList.add('alpdeskfee-ce-container');
               appendUtilsContainer(obj, data[i], true, objLabels, true);
               data[i].onmouseover = function () {
                 data[i].classList.add('alpdeskfee-active');
