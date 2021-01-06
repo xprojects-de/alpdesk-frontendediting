@@ -1,7 +1,6 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ItemContainerComponent } from './item-container/item-container.component';
-import { UtilsContainerComponent } from './utils-container/utils-container.component';
 
 @Component({
   selector: 'app-root',
@@ -57,6 +56,7 @@ export class AppComponent implements OnInit {
         const compFactory = this.resolver.resolveComponentFactory(ItemContainerComponent);
         const compRef: ComponentRef<ItemContainerComponent> = this.vcRef.createComponent(compFactory);
         compRef.location.nativeElement.id = 'innerComp';
+        compRef.instance.objLabels = objLabels;
 
         frameContentDocument.body.prepend(compRef.location.nativeElement);
 
@@ -70,38 +70,29 @@ export class AppComponent implements OnInit {
                 let parentNode = e.parentElement;
                 if (parentNode !== null) {
                   parentNode.classList.add('alpdeskfee-article-container');
-
-                  const compFactoryUtils = this.resolver.resolveComponentFactory(UtilsContainerComponent);
-                  const compRefUtils: ComponentRef<UtilsContainerComponent> = this.vcRef.createComponent(compFactoryUtils);
-                  compRefUtils.location.nativeElement.classList.add('alpdeskfee-utils-container');
-                  compRefUtils.location.nativeElement.id = 'alpdeskfee-' + obj.type + '-' + obj.id;
-                  compRef.location.nativeElement.prepend(compRefUtils.location.nativeElement);
-
-                  //appendUtilsContainer(obj, data[i], false, objLabels, true);
-                  /*parentNode.onmouseover = function () {
-                    data[i].classList.add("alpdeskfee-parent-active");
+                  parentNode.onmouseover = function (event) {
+                    if (parentNode !== null && parentNode !== undefined) {
+                      parentNode.classList.add("alpdeskfee-parent-active");
+                      compRef.instance.changeParent(obj, parentNode);
+                      compRef.changeDetectorRef.detectChanges();
+                    }
                   };
                   parentNode.onmouseout = function () {
-                    data[i].classList.remove("alpdeskfee-parent-active");
-                  };*/
+                    compRef.instance.changeParent(null, null);
+                    compRef.changeDetectorRef.detectChanges();
+                  };
                 }
               } else {
                 e.classList.add('alpdeskfee-ce-container');
-
-                const compFactoryUtils = this.resolver.resolveComponentFactory(UtilsContainerComponent);
-                const compRefUtils: ComponentRef<UtilsContainerComponent> = this.vcRef.createComponent(compFactoryUtils);
-                compRefUtils.location.nativeElement.classList.add('alpdeskfee-utils-container');
-                compRefUtils.location.nativeElement.id = 'alpdeskfee-' + obj.type + '-' + obj.id;
-                compRef.location.nativeElement.prepend(compRefUtils.location.nativeElement);
-
-                /*appendUtilsContainer(obj, data[i], true, objLabels, true);
-                data[i].onmouseover = function () {
-                  data[i].classList.add('alpdeskfee-active');
+                e.onmouseover = function (event) {
+                  compRef.instance.changeElement(obj, e);
+                  compRef.changeDetectorRef.detectChanges();
                 };
-                data[i].onmouseout = function () {
-                  data[i].classList.remove('alpdeskfee-active');
+                e.onmouseout = function () {
+                  compRef.instance.changeElement(null, null);
+                  compRef.changeDetectorRef.detectChanges();
                 };
-                setContextMenu(data[i], 'alpdeskfee-active-force', '*[data-alpdeskfee]');*/
+                //setContextMenu(data[i], 'alpdeskfee-active-force', '*[data-alpdeskfee]');
               }
             }
           }

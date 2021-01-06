@@ -1,1 +1,14 @@
-<p>item-container works!</p>
+<div *ngIf="jsonDataParent !== null && jsonDataParent !== undefined">{{jsonDataParent.type}}</div>
+<div *ngIf="jsonDataElement !== null && jsonDataElement !== undefined">
+    <app-item-desc
+        *ngIf="jsonDataElement.desc !== null && jsonDataElement.desc !== undefined && jsonDataElement.desc !== ''"
+        [label]="jsonDataElement.desc"></app-item-desc>
+    <app-item-overview
+        *ngIf="jsonDataElement.canEdit === true && jsonDataElement.type === TARGETTYPE_CE"
+        [action]="objLabels.element_all"
+        [targetType]="TARGETTYPE_CE"
+        [do]="jsonDataElement.do"
+        [id]="jsonDataElement.id"
+        [pid]="jsonDataElement.pid">
+    </app-item-overview>
+</div>

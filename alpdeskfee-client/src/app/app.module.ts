@@ -4,13 +4,15 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ItemContainerComponent } from './item-container/item-container.component';
-import { UtilsContainerComponent } from './utils-container/utils-container.component';
+import { ItemDescComponent } from './items/item-desc/item-desc.component';
+import { ItemOverviewComponent } from './items/item-overview/item-overview.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ItemContainerComponent,
-    UtilsContainerComponent
+    ItemDescComponent,
+    ItemOverviewComponent
   ],
   imports: [
     BrowserModule,
