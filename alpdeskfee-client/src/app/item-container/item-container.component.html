@@ -3,30 +3,30 @@
     <app-item-desc
         *ngIf="jsonDataElement.desc !== null && jsonDataElement.desc !== undefined && jsonDataElement.desc !== ''"
         [label]="jsonDataElement.desc"></app-item-desc>
-    <app-item-overview
-        *ngIf="jsonDataElement.canEdit === true && jsonDataElement.type === TARGETTYPE_CE"
-        [title]="objLabels.element_all"
-        [action]="ACTION_PARENT_EDIT"
-        [targetType]="TARGETTYPE_CE"
-        [do]="jsonDataElement.do"
-        [id]="jsonDataElement.id"
-        [pid]="jsonDataElement.pid">
+    <app-item-overview *ngIf="jsonDataElement.canEdit === true && jsonDataElement.type === TARGETTYPE_CE"
+        [title]="objLabels.element_all" [action]="ACTION_PARENT_EDIT" [targetType]="TARGETTYPE_CE"
+        [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pid]="jsonDataElement.pid">
     </app-item-overview>
-    <app-item-edit
-        *ngIf="jsonDataElement.canEdit === true && jsonDataElement.type === TARGETTYPE_CE"
-        [title]="objLabels.edit_element"
-        [action]="ACTION_ELEMENT_EDIT"
-        [targetType]="TARGETTYPE_CE"
-        [do]="jsonDataElement.do"
-        [id]="jsonDataElement.id">
+    <app-item-edit *ngIf="jsonDataElement.canEdit === true && jsonDataElement.type === TARGETTYPE_CE"
+        [title]="objLabels.edit_element" [action]="ACTION_ELEMENT_EDIT" [targetType]="TARGETTYPE_CE"
+        [do]="jsonDataElement.do" [id]="jsonDataElement.id">
     </app-item-edit>
-    <app-item-copy
-        *ngIf="jsonDataElement.canEdit === true && jsonDataElement.type === TARGETTYPE_CE"
-        [title]="objLabels.copy_element"
-        [action]="ACTION_ELEMENT_COPY"
-        [targetType]="TARGETTYPE_CE"
-        [do]="jsonDataElement.do"
-        [id]="jsonDataElement.id"
-        [pid]="jsonDataElement.pid">
+    <app-item-copy *ngIf="jsonDataElement.canEdit === true && jsonDataElement.type === TARGETTYPE_CE"
+        [title]="objLabels.copy_element" [action]="ACTION_ELEMENT_COPY" [targetType]="TARGETTYPE_CE"
+        [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pid]="jsonDataElement.pid">
     </app-item-copy>
+    <app-item-publish
+        *ngIf="jsonDataElement.canEdit === true && jsonDataElement.canPublish === true && jsonDataElement.type === TARGETTYPE_CE"
+        [title]="objLabels.element_visible" [action]="ACTION_ELEMENT_VISIBILITY" [targetType]="TARGETTYPE_CE"
+        [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pid]="jsonDataElement.pid"
+        [state]="jsonDataElement.invisible">
+    </app-item-publish>
+    <app-item-delete *ngIf="jsonDataElement.canEdit === true && jsonDataElement.type === TARGETTYPE_CE"
+        [title]="objLabels.delete_element" [action]="ACTION_ELEMENT_DELETE" [targetType]="TARGETTYPE_CE"
+        [do]="jsonDataElement.do" [id]="jsonDataElement.id">
+    </app-item-delete>
+    <app-item-overview *ngIf="jsonDataElement.canEdit === true && jsonDataElement.type === TARGETTYPE_CE"
+        [title]="objLabels.new_element" [action]="ACTION_ELEMENT_NEW" [targetType]="TARGETTYPE_CE"
+        [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pid]="jsonDataElement.pid">
+    </app-item-overview>
 </div>

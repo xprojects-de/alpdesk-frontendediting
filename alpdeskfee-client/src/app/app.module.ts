@@ -8,6 +8,9 @@ import { ItemDescComponent } from './items/item-desc/item-desc.component';
 import { ItemOverviewComponent } from './items/item-overview/item-overview.component';
 import { ItemEditComponent } from './items/item-edit/item-edit.component';
 import { ItemCopyComponent } from './items/item-copy/item-copy.component';
+import { ItemPublishComponent } from './items/item-publish/item-publish.component';
+import { ItemDeleteComponent } from './items/item-delete/item-delete.component';
+import { ItemNewComponent } from './items/item-new/item-new.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +19,10 @@ import { ItemCopyComponent } from './items/item-copy/item-copy.component';
     ItemDescComponent,
     ItemOverviewComponent,
     ItemEditComponent,
-    ItemCopyComponent
+    ItemCopyComponent,
+    ItemPublishComponent,
+    ItemDeleteComponent,
+    ItemNewComponent
   ],
   imports: [
     BrowserModule,

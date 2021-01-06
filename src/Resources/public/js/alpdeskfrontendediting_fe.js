@@ -256,7 +256,7 @@
                   pid: obj.pid
                 });
               };*/
-              const elementEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
+              /*const elementEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
               elementEdit.setAttribute('title', objLabels.edit_element);
               elementEdit.onclick = function () {
                 dispatchEvent({
@@ -265,8 +265,8 @@
                   targetDo: obj.do,
                   id: obj.id
                 });
-              };
-              const elementCopy = createContainerElement(c, 'alpdeskfee-utilscontainer-copy');
+              };*/
+              /*const elementCopy = createContainerElement(c, 'alpdeskfee-utilscontainer-copy');
               elementCopy.setAttribute('title', objLabels.copy_element);
               elementCopy.onclick = function () {
                 dispatchEvent({
@@ -276,8 +276,8 @@
                   id: obj.id,
                   pid: obj.pid
                 });
-              };
-              if (obj.canPublish === true) {
+              };*/
+              /*if (obj.canPublish === true) {
                 const elementVisibility = createContainerElement(c, (obj.invisible === true ? 'alpdeskfee-utilscontainer-invisible' : 'alpdeskfee-utilscontainer-visible'));
                 elementVisibility.setAttribute('title', objLabels.element_visible);
                 elementVisibility.onclick = function () {
@@ -290,8 +290,8 @@
                     state: (obj.invisible === true ? 1 : 0)
                   });
                 };
-              }
-              const elementDelete = createContainerElement(c, 'alpdeskfee-utilscontainer-delete');
+              }*/
+              /*const elementDelete = createContainerElement(c, 'alpdeskfee-utilscontainer-delete');
               elementDelete.setAttribute('title', objLabels.delete_element);
               elementDelete.onclick = function () {
                 if (confirm(objLabels.delete_confirm_element)) {
@@ -302,7 +302,7 @@
                     id: obj.id
                   });
                 }
-              };
+              };*/
               const elementNew = createContainerElement(c, 'alpdeskfee-utilscontainer-new');
               elementNew.setAttribute('title', objLabels.new_element);
               elementNew.onclick = function () {
