@@ -18,9 +18,10 @@ export class AppComponent implements OnInit {
   TARGETTYPE_MOD = 'mod';
 
   @HostListener('document:' + AppComponent.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
+    console.log(event.detail);
     if (event.detail.action === AppComponent.ACTION_INIT) {
       this.scanElements(event.detail.labels);
-    }
+    } 
   }
 
   @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
@@ -55,7 +56,6 @@ export class AppComponent implements OnInit {
 
         const compFactory = this.resolver.resolveComponentFactory(ItemContainerComponent);
         const compRef: ComponentRef<ItemContainerComponent> = this.vcRef.createComponent(compFactory);
-        compRef.location.nativeElement.id = 'innerComp';
         compRef.instance.objLabels = objLabels;
 
         frameContentDocument.body.prepend(compRef.location.nativeElement);
@@ -77,21 +77,26 @@ export class AppComponent implements OnInit {
                       compRef.changeDetectorRef.detectChanges();
                     }
                   };
-                  parentNode.onmouseout = function () {
-                    compRef.instance.changeParent(null, null);
-                    compRef.changeDetectorRef.detectChanges();
-                  };
+                  /*parentNode.onmouseout = function () {
+                    if (parentNode !== null && parentNode !== undefined) {
+                      parentNode.classList.remove("alpdeskfee-parent-active");
+                      compRef.instance.changeParent(null, null);
+                      compRef.changeDetectorRef.detectChanges();
+                    }
+                  };*/
                 }
               } else {
                 e.classList.add('alpdeskfee-ce-container');
                 e.onmouseover = function (event) {
+                  e.classList.add('alpdeskfee-active');
                   compRef.instance.changeElement(obj, e);
                   compRef.changeDetectorRef.detectChanges();
                 };
-                e.onmouseout = function () {
+                /*e.onmouseout = function () {
+                  e.classList.remove('alpdeskfee-active');
                   compRef.instance.changeElement(null, null);
                   compRef.changeDetectorRef.detectChanges();
-                };
+                };*/
                 //setContextMenu(data[i], 'alpdeskfee-active-force', '*[data-alpdeskfee]');
               }
             }

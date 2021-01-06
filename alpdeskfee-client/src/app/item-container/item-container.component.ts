@@ -15,6 +15,8 @@ export class ItemContainerComponent implements OnInit {
   elementElement!: HTMLElement;
   jsonDataElement: any;
 
+  offsetTop: string = '0px';
+
   TARGETTYPE_PAGE = 'page';
   TARGETTYPE_ARTICLE = 'article';
   TARGETTYPE_CE = 'ce';
@@ -41,6 +43,11 @@ export class ItemContainerComponent implements OnInit {
   changeElement(jsonData: any, element: any): void {
     this.jsonDataElement = jsonData;
     this.elementElement = element;
+    if (this.elementElement !== null) {
+      this.offsetTop = element.offsetTop + 'px';
+    } else {
+      this.offsetTop = '0px';
+    }
   }
 
 }

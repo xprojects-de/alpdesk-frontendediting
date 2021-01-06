@@ -1,11 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ThisReceiver } from '@angular/compiler';
+import { Component, Input } from '@angular/core';
+import { BaseItemComponent } from '../base-item/base-item.component';
 
 @Component({
   selector: 'app-item-overview',
   templateUrl: './item-overview.component.html',
   styleUrls: ['./item-overview.component.scss']
 })
-export class ItemOverviewComponent implements OnInit {
+export class ItemOverviewComponent extends BaseItemComponent{
 
   @Input() title: string = '';
   @Input() action: string = '';
@@ -14,9 +16,15 @@ export class ItemOverviewComponent implements OnInit {
   @Input() id: string = '';
   @Input() pid: string = '';
 
-  constructor() { }
-
-  ngOnInit(): void {
+  click() {
+    this.dispatchEvent({
+      action: this.action,
+      targetType: this.targetType,
+      do: this.do,
+      id: this.id,
+      pid: this.pid,
+      /*targetPageId: this.pageid*/
+    });
   }
 
 }

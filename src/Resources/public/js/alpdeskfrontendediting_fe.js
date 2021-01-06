@@ -303,7 +303,7 @@
                   });
                 }
               };*/
-              const elementNew = createContainerElement(c, 'alpdeskfee-utilscontainer-new');
+              /*const elementNew = createContainerElement(c, 'alpdeskfee-utilscontainer-new');
               elementNew.setAttribute('title', objLabels.new_element);
               elementNew.onclick = function () {
                 dispatchEvent({
@@ -313,7 +313,7 @@
                   id: obj.id,
                   pid: obj.pid
                 });
-              };
+              };*/
             }
           }
           if (obj.act !== null && obj.act !== '') {

@@ -1,11 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { BaseItemComponent } from '../base-item/base-item.component';
 
 @Component({
   selector: 'app-item-publish',
   templateUrl: './item-publish.component.html',
   styleUrls: ['./item-publish.component.scss']
 })
-export class ItemPublishComponent implements OnInit {
+export class ItemPublishComponent extends BaseItemComponent {
 
   @Input() title: string = '';
   @Input() action: string = '';
@@ -15,9 +16,16 @@ export class ItemPublishComponent implements OnInit {
   @Input() pid: string = '';
   @Input() state: boolean = true;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  click() {
+    this.dispatchEvent({
+      action: this.action,
+      targetType: this.targetType,
+      do: this.do,
+      id: this.id,
+      pid: this.pid,
+      state: this.state
+      /*targetPageId: this.pageid*/
+    });
   }
 
 }

@@ -11,6 +11,7 @@ import { ItemCopyComponent } from './items/item-copy/item-copy.component';
 import { ItemPublishComponent } from './items/item-publish/item-publish.component';
 import { ItemDeleteComponent } from './items/item-delete/item-delete.component';
 import { ItemNewComponent } from './items/item-new/item-new.component';
+import { BaseItemComponent } from './items/base-item/base-item.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ItemNewComponent } from './items/item-new/item-new.component';
     ItemCopyComponent,
     ItemPublishComponent,
     ItemDeleteComponent,
-    ItemNewComponent
+    ItemNewComponent,
+    BaseItemComponent
   ],
   imports: [
     BrowserModule,

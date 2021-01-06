@@ -1,5 +1,9 @@
 <div *ngIf="jsonDataParent !== null && jsonDataParent !== undefined">{{jsonDataParent.type}}</div>
-<div *ngIf="jsonDataElement !== null && jsonDataElement !== undefined">
+<div [style.position]="'absolute'" [style.top]="offsetTop" [style.backgroundColor]="'rgba(255, 255, 255, 1)'"
+    [style.left]="'50%'" [style.transform]="'translateX(-50%)'" [style.fontFamily]="'-apple-system'"
+    [style.fontWeight]="'400'" [style.fontSize]="'.875rem'" [style.lineHeight]="'1'" [style.color]="'#444'"
+    [style.borderBottom]="'2px solid rgb(244, 124, 0)'" [style.zIndex]="'200000'" [style.borderRadius]="'4px'"
+    *ngIf="jsonDataElement !== null && jsonDataElement !== undefined">
     <app-item-desc
         *ngIf="jsonDataElement.desc !== null && jsonDataElement.desc !== undefined && jsonDataElement.desc !== ''"
         [label]="jsonDataElement.desc"></app-item-desc>
@@ -25,8 +29,9 @@
         [title]="objLabels.delete_element" [action]="ACTION_ELEMENT_DELETE" [targetType]="TARGETTYPE_CE"
         [do]="jsonDataElement.do" [id]="jsonDataElement.id">
     </app-item-delete>
-    <app-item-overview *ngIf="jsonDataElement.canEdit === true && jsonDataElement.type === TARGETTYPE_CE"
+    <app-item-new *ngIf="jsonDataElement.canEdit === true && jsonDataElement.type === TARGETTYPE_CE"
         [title]="objLabels.new_element" [action]="ACTION_ELEMENT_NEW" [targetType]="TARGETTYPE_CE"
         [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pid]="jsonDataElement.pid">
-    </app-item-overview>
+    </app-item-new>
+    <div [style.clear]="'both'"></div>
 </div>

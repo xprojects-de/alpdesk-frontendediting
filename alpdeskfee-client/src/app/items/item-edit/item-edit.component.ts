@@ -1,11 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { BaseItemComponent } from '../base-item/base-item.component';
 
 @Component({
   selector: 'app-item-edit',
   templateUrl: './item-edit.component.html',
   styleUrls: ['./item-edit.component.scss']
 })
-export class ItemEditComponent implements OnInit {
+export class ItemEditComponent extends BaseItemComponent {
 
   @Input() title: string = '';
   @Input() action: string = '';
@@ -13,9 +14,14 @@ export class ItemEditComponent implements OnInit {
   @Input() do: string = '';
   @Input() id: string = '';
 
-  constructor() { }
-
-  ngOnInit(): void {
+  click() {
+    this.dispatchEvent({
+      action: this.action,
+      targetType: this.targetType,
+      do: this.do,
+      id: this.id,
+      /*targetPageId: this.pageid*/
+    });
   }
 
 }
