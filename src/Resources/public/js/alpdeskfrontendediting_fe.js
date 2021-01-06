@@ -438,36 +438,45 @@
       return (window.location !== window.parent.location);
     }
 
+    let objLabels = null;
+    if (alpdeskfeeLabels !== null && alpdeskfeeLabels !== undefined && alpdeskfeeLabels !== '') {
+      objLabels = JSON.parse(alpdeskfeeLabels);
+      dispatchEvent({
+        action: 'init',
+        labels: objLabels
+      });
+    }
+
     // Maybe problem at MultiDomain-Webpage
     // Otherwise in future the complete Code can be in Backendjs and the access iframecontent from parent backend directly!
-    if (checkInIframe() === true) {
-
-      // Get from global
-      let objLabels = null;
-      if (alpdeskfeeLabels !== null && alpdeskfeeLabels !== undefined && alpdeskfeeLabels !== '') {
-        objLabels = JSON.parse(alpdeskfeeLabels);
-      }
-
-      scanElements(objLabels);
-
-      // Get from global
-      let showPageEdit = false;
-      if (alpdeskfeeCanPageEdit !== undefined && alpdeskfeeCanPageEdit !== null && alpdeskfeeCanPageEdit === 1) {
-        showPageEdit = true;
-      }
-
-      if (showPageEdit === true && alpdeskfeePageid !== null && alpdeskfeePageid !== '' && alpdeskfeePageid !== undefined && alpdeskfeePageid !== 0) {
-        const bodyElement = document.body;
-        if (bodyElement !== null && bodyElement !== undefined) {
-          const jsonData = '{"type":"' + TARGETTYPE_PAGE + '","do":"' + TARGETTYPE_PAGE + '","id":"' + alpdeskfeePageid + '","pageid":"' + alpdeskfeePageid + '"}';
-          const obj = JSON.parse(jsonData);
-          if (obj !== null && obj !== undefined) {
-            appendUtilsContainer(obj, bodyElement, true, objLabels, false);
-          }
-        }
-      }
-
-    }
+    /*if (checkInIframe() === true) {
+     
+     // Get from global
+     let objLabels = null;
+     if (alpdeskfeeLabels !== null && alpdeskfeeLabels !== undefined && alpdeskfeeLabels !== '') {
+     objLabels = JSON.parse(alpdeskfeeLabels);
+     }
+     
+     scanElements(objLabels);
+     
+     // Get from global
+     let showPageEdit = false;
+     if (alpdeskfeeCanPageEdit !== undefined && alpdeskfeeCanPageEdit !== null && alpdeskfeeCanPageEdit === 1) {
+     showPageEdit = true;
+     }
+     
+     if (showPageEdit === true && alpdeskfeePageid !== null && alpdeskfeePageid !== '' && alpdeskfeePageid !== undefined && alpdeskfeePageid !== 0) {
+     const bodyElement = document.body;
+     if (bodyElement !== null && bodyElement !== undefined) {
+     const jsonData = '{"type":"' + TARGETTYPE_PAGE + '","do":"' + TARGETTYPE_PAGE + '","id":"' + alpdeskfeePageid + '","pageid":"' + alpdeskfeePageid + '"}';
+     const obj = JSON.parse(jsonData);
+     if (obj !== null && obj !== undefined) {
+     appendUtilsContainer(obj, bodyElement, true, objLabels, false);
+     }
+     }
+     }
+     
+     }*/
 
   }, false);
 })(window, document);
