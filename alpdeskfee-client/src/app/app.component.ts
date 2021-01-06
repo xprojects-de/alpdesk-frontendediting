@@ -73,30 +73,30 @@ export class AppComponent implements OnInit {
                   parentNode.onmouseover = function (event) {
                     if (parentNode !== null && parentNode !== undefined) {
                       parentNode.classList.add("alpdeskfee-parent-active");
-                      compRef.instance.changeParent(obj, parentNode);
+                      compRef.instance.changeParent(obj, parentNode, frameContentDocument.documentElement.scrollTop);
                       compRef.changeDetectorRef.detectChanges();
                     }
                   };
-                  /*parentNode.onmouseout = function () {
+                  parentNode.onmouseout = function () {
                     if (parentNode !== null && parentNode !== undefined) {
                       parentNode.classList.remove("alpdeskfee-parent-active");
-                      compRef.instance.changeParent(null, null);
+                      compRef.instance.changeParent(null, null, 0);
                       compRef.changeDetectorRef.detectChanges();
                     }
-                  };*/
+                  };
                 }
               } else {
                 e.classList.add('alpdeskfee-ce-container');
                 e.onmouseover = function (event) {
                   e.classList.add('alpdeskfee-active');
-                  compRef.instance.changeElement(obj, e);
+                  compRef.instance.changeElement(obj, e, frameContentDocument.documentElement.scrollTop);
                   compRef.changeDetectorRef.detectChanges();
                 };
-                /*e.onmouseout = function () {
+                e.onmouseout = function () {
                   e.classList.remove('alpdeskfee-active');
-                  compRef.instance.changeElement(null, null);
-                  compRef.changeDetectorRef.detectChanges();
-                };*/
+                  //compRef.instance.changeElement(null, null, 0);
+                  //compRef.changeDetectorRef.detectChanges();
+                };
                 //setContextMenu(data[i], 'alpdeskfee-active-force', '*[data-alpdeskfee]');
               }
             }

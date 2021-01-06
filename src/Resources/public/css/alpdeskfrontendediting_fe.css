@@ -24,7 +24,7 @@ div.alpdeskfee-article-container {
   background-color: rgba(255, 252, 225, 0.3);
 }
 
-div.alpdeskfee-utilscontainer,
+/*div.alpdeskfee-utilscontainer,
 div.alpdeskfee-utilscontainer-page {
   background-color: rgba(255, 255, 255, 1);
   width: auto;
@@ -44,14 +44,14 @@ div.alpdeskfee-utilscontainer-page {
   border-bottom: 2px solid rgb(244, 124, 0);
   z-index: 200001;
   border-radius: 4px;
-}
+}*/
 
 .alpdeskfee-active-force div.alpdeskfee-utilscontainer {
   outline: 1px dashed rgb(244, 124, 0);
   outline-offset: 2px;
 }
 
-div.alpdeskfee-utilscontainer-page {
+/*div.alpdeskfee-utilscontainer-page {
   left: auto;
   width: 36px;
   right: 0%;
@@ -63,7 +63,7 @@ div.alpdeskfee-utilscontainer-page {
   border-top: 2px solid #222;
   border-bottom: 2px solid #222;
   z-index: 200002;
-}
+}*/
 
 div.alpdeskfee-utilscontainer-move {
   background-repeat: no-repeat;

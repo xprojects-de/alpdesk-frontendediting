@@ -35,16 +35,16 @@ export class ItemContainerComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  changeParent(jsonData: any, element: any): void {
+  changeParent(jsonData: any, element: any, scrollTop: number): void {
     this.jsonDataParent = jsonData;
     this.elementParent = element;    
   }
 
-  changeElement(jsonData: any, element: any): void {
+  changeElement(jsonData: any, element: any, scrollTop: number): void {
     this.jsonDataElement = jsonData;
     this.elementElement = element;
     if (this.elementElement !== null) {
-      this.offsetTop = element.offsetTop + 'px';
+      this.offsetTop = (element.getBoundingClientRect().top + scrollTop) + 'px';
     } else {
       this.offsetTop = '0px';
     }
