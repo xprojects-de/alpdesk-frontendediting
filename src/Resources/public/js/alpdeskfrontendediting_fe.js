@@ -245,7 +245,7 @@
         } else if (obj.type === TARGETTYPE_CE) {
           if (obj.do !== null && obj.do !== '') {
             if (obj.canEdit === true) {
-              const parentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-articles');
+              /*const parentEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-articles');
               parentEdit.setAttribute('title', objLabels.element_all);
               parentEdit.onclick = function () {
                 dispatchEvent({
@@ -255,7 +255,7 @@
                   id: obj.id,
                   pid: obj.pid
                 });
-              };
+              };*/
               const elementEdit = createContainerElement(c, 'alpdeskfee-utilscontainer-edit');
               elementEdit.setAttribute('title', objLabels.edit_element);
               elementEdit.onclick = function () {
