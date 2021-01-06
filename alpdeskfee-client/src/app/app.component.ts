@@ -18,14 +18,14 @@ export class AppComponent implements OnInit {
   TARGETTYPE_MOD = 'mod';
 
   @HostListener('document:' + AppComponent.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
-    if(event.detail.action === AppComponent.ACTION_INIT) {
+    if (event.detail.action === AppComponent.ACTION_INIT) {
       this.scanElements(event.detail.labels);
     }
   }
 
   @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
 
-  title = 'alpdeskfee-client';  
+  title = 'alpdeskfee-client';
   url: any;
   urlBase = 'https://contao.local:8890/preview.php';
   frameHeight = (window.innerHeight - 100) + 'px';
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
 
   compRef!: ComponentRef<ItemContainerComponent>;
 
-  constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver) { 
+  constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver) {
   }
 
   ngOnInit() {
@@ -48,34 +48,51 @@ export class AppComponent implements OnInit {
 
   scanElements(objLabels: any) {
 
-    let data = this.alpdeskfeeframe.nativeElement.contentWindow.document.querySelectorAll("*[data-alpdeskfee]");
-    for (let i = 0; i < data.length; i++) {
-      let jsonData = data[i].getAttribute('data-alpdeskfee');
-      if (jsonData !== null && jsonData !== undefined && jsonData !== '') {
-        const obj = JSON.parse(jsonData);
-        if (obj !== null && obj !== undefined) {
-          if (obj.type === this.TARGETTYPE_ARTICLE) {
-            let parentNode = data[i].parentElement;
-            parentNode.classList.add('alpdeskfee-article-container');
-            //appendUtilsContainer(obj, data[i], false, objLabels, true);
-            /*parentNode.onmouseover = function () {
-              data[i].classList.add("alpdeskfee-parent-active");
-            };
-            parentNode.onmouseout = function () {
-              data[i].classList.remove("alpdeskfee-parent-active");
-            };*/
-          } else {
-            data[i].classList.add('alpdeskfee-ce-container');
-            /*appendUtilsContainer(obj, data[i], true, objLabels, true);
-            data[i].onmouseover = function () {
-              data[i].classList.add('alpdeskfee-active');
-            };
-            data[i].onmouseout = function () {
-              data[i].classList.remove('alpdeskfee-active');
-            };
-            setContextMenu(data[i], 'alpdeskfee-active-force', '*[data-alpdeskfee]');*/
+    if (objLabels !== null && objLabels !== undefined) {
+
+      const frameContentWindow = this.alpdeskfeeframe.nativeElement.contentWindow;
+      const frameContentDocument = this.alpdeskfeeframe.nativeElement.contentDocument;
+
+      if (frameContentWindow !== null && frameContentWindow !== undefined && frameContentDocument !== null && frameContentDocument !== undefined) {
+
+        const compFactory = this.resolver.resolveComponentFactory(ItemContainerComponent);
+        this.compRef = this.vcRef.createComponent(compFactory);
+        this.compRef.location.nativeElement.id = 'innerComp';
+
+        frameContentDocument.body.prepend(this.compRef.location.nativeElement);
+
+        let data = frameContentWindow.document.querySelectorAll("*[data-alpdeskfee]");
+        data.forEach((e: HTMLElement) => {
+          let jsonData = e.getAttribute('data-alpdeskfee');
+          if (jsonData !== null && jsonData !== undefined && jsonData !== '') {
+            const obj = JSON.parse(jsonData);
+            if (obj !== null && obj !== undefined) {
+              if (obj.type === this.TARGETTYPE_ARTICLE) {
+                let parentNode = e.parentElement;
+                if (parentNode !== null) {
+                  parentNode.classList.add('alpdeskfee-article-container');
+                  //appendUtilsContainer(obj, data[i], false, objLabels, true);
+                  /*parentNode.onmouseover = function () {
+                    data[i].classList.add("alpdeskfee-parent-active");
+                  };
+                  parentNode.onmouseout = function () {
+                    data[i].classList.remove("alpdeskfee-parent-active");
+                  };*/
+                }
+              } else {
+                e.classList.add('alpdeskfee-ce-container');
+                /*appendUtilsContainer(obj, data[i], true, objLabels, true);
+                data[i].onmouseover = function () {
+                  data[i].classList.add('alpdeskfee-active');
+                };
+                data[i].onmouseout = function () {
+                  data[i].classList.remove('alpdeskfee-active');
+                };
+                setContextMenu(data[i], 'alpdeskfee-active-force', '*[data-alpdeskfee]');*/
+              }
+            }
           }
-        }
+        });
       }
     }
   }
