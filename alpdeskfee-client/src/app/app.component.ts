@@ -1,6 +1,7 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ItemContainerComponent } from './item-container/item-container.component';
+import { UtilsContainerComponent } from './utils-container/utils-container.component';
 
 @Component({
   selector: 'app-root',
@@ -32,8 +33,6 @@ export class AppComponent implements OnInit {
   frameWidth = '100%';
   frameLocation!: any;
 
-  compRef!: ComponentRef<ItemContainerComponent>;
-
   constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver) {
   }
 
@@ -56,10 +55,10 @@ export class AppComponent implements OnInit {
       if (frameContentWindow !== null && frameContentWindow !== undefined && frameContentDocument !== null && frameContentDocument !== undefined) {
 
         const compFactory = this.resolver.resolveComponentFactory(ItemContainerComponent);
-        this.compRef = this.vcRef.createComponent(compFactory);
-        this.compRef.location.nativeElement.id = 'innerComp';
+        const compRef: ComponentRef<ItemContainerComponent> = this.vcRef.createComponent(compFactory);
+        compRef.location.nativeElement.id = 'innerComp';
 
-        frameContentDocument.body.prepend(this.compRef.location.nativeElement);
+        frameContentDocument.body.prepend(compRef.location.nativeElement);
 
         let data = frameContentWindow.document.querySelectorAll("*[data-alpdeskfee]");
         data.forEach((e: HTMLElement) => {
@@ -71,6 +70,13 @@ export class AppComponent implements OnInit {
                 let parentNode = e.parentElement;
                 if (parentNode !== null) {
                   parentNode.classList.add('alpdeskfee-article-container');
+
+                  const compFactoryUtils = this.resolver.resolveComponentFactory(UtilsContainerComponent);
+                  const compRefUtils: ComponentRef<UtilsContainerComponent> = this.vcRef.createComponent(compFactoryUtils);
+                  compRefUtils.location.nativeElement.classList.add('alpdeskfee-utils-container');
+                  compRefUtils.location.nativeElement.id = 'alpdeskfee-' + obj.type + '-' + obj.id;
+                  compRef.location.nativeElement.prepend(compRefUtils.location.nativeElement);
+
                   //appendUtilsContainer(obj, data[i], false, objLabels, true);
                   /*parentNode.onmouseover = function () {
                     data[i].classList.add("alpdeskfee-parent-active");
@@ -81,6 +87,13 @@ export class AppComponent implements OnInit {
                 }
               } else {
                 e.classList.add('alpdeskfee-ce-container');
+
+                const compFactoryUtils = this.resolver.resolveComponentFactory(UtilsContainerComponent);
+                const compRefUtils: ComponentRef<UtilsContainerComponent> = this.vcRef.createComponent(compFactoryUtils);
+                compRefUtils.location.nativeElement.classList.add('alpdeskfee-utils-container');
+                compRefUtils.location.nativeElement.id = 'alpdeskfee-' + obj.type + '-' + obj.id;
+                compRef.location.nativeElement.prepend(compRefUtils.location.nativeElement);
+
                 /*appendUtilsContainer(obj, data[i], true, objLabels, true);
                 data[i].onmouseover = function () {
                   data[i].classList.add('alpdeskfee-active');
