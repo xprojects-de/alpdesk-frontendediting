@@ -1,29 +1,46 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ItemContainerComponent } from './item-container/item-container.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements OnInit {
 
   @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
 
   title = 'alpdeskfee-client';  
-  url = 'https://contao.local:8890/preview.php';
+  url: any;
+  urlBase = 'https://contao.local:8890/preview.php';
   frameHeight = (window.innerHeight - 100) + 'px';
   frameWidth = '100%';
 
-  constructor(private _sanitizer: DomSanitizer) { 
+  compRef!: ComponentRef<ItemContainerComponent>;
+
+  constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver) { 
   }
 
-  ngAfterViewInit() {
-    console.log(this.alpdeskfeeframe.nativeElement.contentDocument);
+  ngOnInit() {
+    this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.urlBase);
   }
 
   getFrameUrl() {
     return this._sanitizer.bypassSecurityTrustResourceUrl(this.url);
+  }
+
+  iframeLoad() {
+    console.log('drinnen2');
+
+    /*let doc = this.alpdeskfeeframe.nativeElement.contentDocument || this.alpdeskfeeframe.nativeElement.contentWindow;
+
+    const compFactory = this.resolver.resolveComponentFactory(ItemContainerComponent);
+    this.compRef = this.vcRef.createComponent(compFactory);
+    this.compRef.location.nativeElement.id = 'innerComp';
+
+    doc.body.prepend(this.compRef.location.nativeElement);*/
+    console.log(this.alpdeskfeeframe.nativeElement.contentWindow.location.href);
   }
 
   scanElements() {

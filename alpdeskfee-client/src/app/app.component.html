@@ -1,4 +1,4 @@
 
 <div id="alpdesk-fee-frame-container">
-    <iframe #alpdeskfeeframe [src]="getFrameUrl()" width="{{frameWidth}}" height="{{frameHeight}}"></iframe>
+    <iframe #alpdeskfeeframe [src]="url" width="{{frameWidth}}" height="{{frameHeight}}" allow="*" (load)="iframeLoad()"></iframe>
 </div>
