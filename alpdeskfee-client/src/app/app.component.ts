@@ -1,6 +1,7 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
+import { UrlGenerator } from './classes/url-generator';
 import { ItemContainerComponent } from './item-container/item-container.component';
 import { DialogData, ModalIframeComponent } from './utils/modal-iframe/modal-iframe.component';
 
@@ -48,7 +49,10 @@ export class AppComponent implements OnInit {
   }
 
   openDialog(params: any) {
-    const dialogData: DialogData = {url: 'meine URL'};
+
+    const ug: UrlGenerator = new UrlGenerator()
+
+    const dialogData: DialogData = { url: ug.generateUrl(params) };
 
     const dialogRef = this.dialog.open(ModalIframeComponent, {
       width: '900px',

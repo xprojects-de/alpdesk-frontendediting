@@ -1,5 +1,6 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
 
 export interface DialogData {
   url: string;
@@ -10,9 +11,15 @@ export interface DialogData {
   templateUrl: './modal-iframe.component.html',
   styleUrls: ['./modal-iframe.component.scss']
 })
-export class ModalIframeComponent{
+export class ModalIframeComponent implements OnInit{
 
-  constructor(public dialogRef: MatDialogRef<ModalIframeComponent>, @Inject(MAT_DIALOG_DATA) public dataRef: DialogData) {
+  url: any;
+
+  constructor(private _sanitizer: DomSanitizer, public dialogRef: MatDialogRef<ModalIframeComponent>, @Inject(MAT_DIALOG_DATA) public dataRef: DialogData) {
+  }
+
+  ngOnInit() {
+    this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.dataRef.url);
   }
 
 }
