@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ItemContainerComponent implements OnInit {
 
+  currentHeight = 35;
+
   objLabels: any;
   pageEdit: boolean = false;
   pageId: number = 0;
@@ -42,7 +44,7 @@ export class ItemContainerComponent implements OnInit {
     this.jsonDataParent = jsonData;
     this.elementParent = element;  
     if (this.elementParent !== null) {
-      this.offsetTopParent = (element.getBoundingClientRect().top + scrollTop) + 'px';
+      this.offsetTopParent = (element.getBoundingClientRect().top + scrollTop - this.currentHeight) + 'px';
     } else {
       this.offsetTopParent = '0px';
     }  
@@ -52,7 +54,7 @@ export class ItemContainerComponent implements OnInit {
     this.jsonDataElement = jsonData;
     this.elementElement = element;
     if (this.elementElement !== null) {
-      this.offsetTopElement = (element.getBoundingClientRect().top + scrollTop) + 'px';
+      this.offsetTopElement = (element.getBoundingClientRect().top + scrollTop - this.currentHeight) + 'px';
     } else {
       this.offsetTopElement = '0px';
     }

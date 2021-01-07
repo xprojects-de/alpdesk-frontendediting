@@ -112,8 +112,12 @@ export class AppComponent implements OnInit {
                     }
                   };
                   parentNode.onclick = function () {
-                    compRef.instance.changeParent(obj, parentNode, frameContentDocument.documentElement.scrollTop);
-                    compRef.changeDetectorRef.detectChanges();
+                    if (parentNode !== null) {
+                      compRef.instance.changeParent(obj, parentNode, frameContentDocument.documentElement.scrollTop);
+                      compRef.changeDetectorRef.detectChanges();
+                      parentNode.style.outlineOffset = '4px';
+                      parentNode.style.border = '2px solid rgb(244, 124, 0)';
+                    }
                   };
                 }
               } else {
@@ -131,12 +135,10 @@ export class AppComponent implements OnInit {
                   cData.forEach((eC: HTMLElement) => {
                     if(eC !== e) {
                       eC.style.border = 'none';
-                      eC.style.zIndex = '1';
                     }
                   });
+                  e.style.outlineOffset = '4px';
                   e.style.border = '2px solid rgb(244, 124, 0)';
-                  e.style.position = 'relative';
-                  e.style.zIndex = '200000';
                   compRef.instance.changeElement(obj, e, frameContentDocument.documentElement.scrollTop);
                   compRef.changeDetectorRef.detectChanges();
                 };

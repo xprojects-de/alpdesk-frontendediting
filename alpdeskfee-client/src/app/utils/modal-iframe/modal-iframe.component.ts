@@ -14,12 +14,15 @@ export interface DialogData {
 export class ModalIframeComponent implements OnInit{
 
   url: any;
+  height = 500;
 
   constructor(private _sanitizer: DomSanitizer, public dialogRef: MatDialogRef<ModalIframeComponent>, @Inject(MAT_DIALOG_DATA) public dataRef: DialogData) {
+    //this.height = (window.innerHeight - 10);
   }
 
   ngOnInit() {
-    this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.dataRef.url);
+    this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.dataRef.url);    
+    console.log(this.height);
   }
 
 }
