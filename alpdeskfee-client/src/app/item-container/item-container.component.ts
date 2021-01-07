@@ -8,14 +8,17 @@ import { Component, OnInit } from '@angular/core';
 export class ItemContainerComponent implements OnInit {
 
   objLabels: any;
+  pageEdit: boolean = false;
+  pageId: number = 0;
 
   elementParent!: HTMLElement;
   jsonDataParent: any;
+  offsetTopParent: string = '0px';
   
   elementElement!: HTMLElement;
   jsonDataElement: any;
-
-  offsetTop: string = '0px';
+  offsetTopElement: string = '0px';
+  
 
   TARGETTYPE_PAGE = 'page';
   TARGETTYPE_ARTICLE = 'article';
@@ -37,16 +40,21 @@ export class ItemContainerComponent implements OnInit {
 
   changeParent(jsonData: any, element: any, scrollTop: number): void {
     this.jsonDataParent = jsonData;
-    this.elementParent = element;    
+    this.elementParent = element;  
+    if (this.elementParent !== null) {
+      this.offsetTopParent = (element.getBoundingClientRect().top + scrollTop) + 'px';
+    } else {
+      this.offsetTopParent = '0px';
+    }  
   }
 
   changeElement(jsonData: any, element: any, scrollTop: number): void {
     this.jsonDataElement = jsonData;
     this.elementElement = element;
     if (this.elementElement !== null) {
-      this.offsetTop = (element.getBoundingClientRect().top + scrollTop) + 'px';
+      this.offsetTopElement = (element.getBoundingClientRect().top + scrollTop) + 'px';
     } else {
-      this.offsetTop = '0px';
+      this.offsetTopElement = '0px';
     }
   }
 

@@ -15,6 +15,9 @@ export class ItemNewComponent extends BaseItemComponent {
   @Input() id: string = '';
   @Input() pid: string = '';
 
+  @Input() pageEdit: boolean = false;
+  @Input() pageId: number = 0;
+
   click() {
     this.dispatchEvent({
       action: this.action,
@@ -22,7 +25,8 @@ export class ItemNewComponent extends BaseItemComponent {
       do: this.do,
       id: this.id,
       pid: this.pid,
-      /*targetPageId: this.pageid*/
+      pageEdit: this.pageEdit,
+      pageId: this.pageId
     });
   }
 

@@ -14,13 +14,17 @@ export class ItemEditComponent extends BaseItemComponent {
   @Input() do: string = '';
   @Input() id: string = '';
 
+  @Input() pageEdit: boolean = false;
+  @Input() pageId: number = 0;
+
   click() {
     this.dispatchEvent({
       action: this.action,
       targetType: this.targetType,
       do: this.do,
       id: this.id,
-      /*targetPageId: this.pageid*/
+      pageEdit: this.pageEdit,
+      pageId: this.pageId
     });
   }
 

@@ -51,7 +51,7 @@ div.alpdeskfee-utilscontainer-page {
   outline-offset: 2px;
 }
 
-/*div.alpdeskfee-utilscontainer-page {
+div.alpdeskfee-utilscontainer-page {
   left: auto;
   width: 36px;
   right: 0%;
@@ -63,7 +63,7 @@ div.alpdeskfee-utilscontainer-page {
   border-top: 2px solid #222;
   border-bottom: 2px solid #222;
   z-index: 200002;
-}*/
+}
 
 div.alpdeskfee-utilscontainer-move {
   background-repeat: no-repeat;

@@ -1,18 +1,19 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BaseItemComponent } from '../base-item/base-item.component';
 
 @Component({
-  selector: 'app-item-delete',
-  templateUrl: './item-delete.component.html',
-  styleUrls: ['./item-delete.component.scss']
+  selector: 'app-item-parent',
+  templateUrl: './item-parent.component.html',
+  styleUrls: ['./item-parent.component.scss']
 })
-export class ItemDeleteComponent extends BaseItemComponent {
+export class ItemParentComponent extends BaseItemComponent {
 
   @Input() title: string = '';
   @Input() action: string = '';
   @Input() targetType: string = '';
   @Input() do: string = '';
   @Input() id: string = '';
+  @Input() pid: string = '';
 
   @Input() pageEdit: boolean = false;
   @Input() pageId: number = 0;
@@ -23,9 +24,9 @@ export class ItemDeleteComponent extends BaseItemComponent {
       targetType: this.targetType,
       do: this.do,
       id: this.id,
+      pid: this.pid,
       pageEdit: this.pageEdit,
       pageId: this.pageId
     });
   }
-
 }

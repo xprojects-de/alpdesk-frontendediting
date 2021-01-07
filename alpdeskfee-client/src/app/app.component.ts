@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   @HostListener('document:' + AppComponent.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
     console.log(event.detail);
     if (event.detail.action === AppComponent.ACTION_INIT) {
-      this.scanElements(event.detail.labels);
+      this.scanElements(event.detail.labels, event.detail.pageEdit, event.detail.pageId);
     } 
   }
 
@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
     this.frameLocation = this.alpdeskfeeframe.nativeElement.contentWindow.location.href;
   }
 
-  scanElements(objLabels: any) {
+  scanElements(objLabels: any, pageEdit: boolean, pageId: number) {
 
     if (objLabels !== null && objLabels !== undefined) {
 
@@ -57,6 +57,8 @@ export class AppComponent implements OnInit {
         const compFactory = this.resolver.resolveComponentFactory(ItemContainerComponent);
         const compRef: ComponentRef<ItemContainerComponent> = this.vcRef.createComponent(compFactory);
         compRef.instance.objLabels = objLabels;
+        compRef.instance.pageEdit = pageEdit;
+        compRef.instance.pageId = pageId;
 
         frameContentDocument.body.prepend(compRef.location.nativeElement);
 

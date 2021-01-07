@@ -12,6 +12,10 @@ import { ItemPublishComponent } from './items/item-publish/item-publish.componen
 import { ItemDeleteComponent } from './items/item-delete/item-delete.component';
 import { ItemNewComponent } from './items/item-new/item-new.component';
 import { BaseItemComponent } from './items/base-item/base-item.component';
+import { ItemParentComponent } from './items/item-parent/item-parent.component';
+import { ItemPageComponent } from './items/item-page/item-page.component';
+import { ItemArticleComponent } from './items/item-article/item-article.component';
+import { ItemCustomModuleComponent } from './items/item-custom-module/item-custom-module.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +28,11 @@ import { BaseItemComponent } from './items/base-item/base-item.component';
     ItemPublishComponent,
     ItemDeleteComponent,
     ItemNewComponent,
-    BaseItemComponent
+    BaseItemComponent,
+    ItemParentComponent,
+    ItemPageComponent,
+    ItemArticleComponent,
+    ItemCustomModuleComponent
   ],
   imports: [
     BrowserModule,

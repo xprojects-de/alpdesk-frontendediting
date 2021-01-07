@@ -16,6 +16,9 @@ export class ItemPublishComponent extends BaseItemComponent {
   @Input() pid: string = '';
   @Input() state: boolean = true;
 
+  @Input() pageEdit: boolean = false;
+  @Input() pageId: number = 0;
+
   click() {
     this.dispatchEvent({
       action: this.action,
@@ -23,8 +26,9 @@ export class ItemPublishComponent extends BaseItemComponent {
       do: this.do,
       id: this.id,
       pid: this.pid,
-      state: this.state
-      /*targetPageId: this.pageid*/
+      state: this.state,
+      pageEdit: this.pageEdit,
+      pageId: this.pageId
     });
   }
 
