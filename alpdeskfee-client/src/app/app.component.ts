@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ItemContainerComponent } from './item-container/item-container.component';
 
@@ -8,6 +8,11 @@ import { ItemContainerComponent } from './item-container/item-container.componen
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+
+  // Just for Testing - Will be as Input from Component
+  @Input() alpdeskfeePageid = 19;
+  @Input() alpdeskfeeCanPageEdit = true;
+  @Input() alpdeskfeeLabels = '{"ce":"Element","mod":"Modul","page":"Seite","article":"Artikel","delete_confirm_article":"Artikel wirklich l\u00f6schen?","delete_confirm_element":"Element wirklich l\u00f6schen?","page_edit_top":"Diese Seite bearbeiten","article_edit_top":"Artikel der Seite bearbeiten","page_structure":"Seitenstruktur","page_edit":"Diese Seite bearbeiten","article_all":"\u00dcbersicht","edit_article":"Artikel editieren","delete_article":"Artikel l\u00f6schen","article_visible":"Artikel verstecken\/anzeigen","element_all":"\u00dcbersicht","new_element_top":"Neues Element erstellen","new_element":"Neues Element nach diesem Element erstellen","edit_element":"Element editieren","copy_element":"Element kopieren","delete_element":"Element l\u00f6schen","element_visible":"Element verstecken\/anzeigen","element_mod":"Modul bearbeiten"}';
 
   static ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event'
   static ACTION_INIT = 'init';
@@ -19,9 +24,6 @@ export class AppComponent implements OnInit {
 
   @HostListener('document:' + AppComponent.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
     console.log(event.detail);
-    if (event.detail.action === AppComponent.ACTION_INIT) {
-      this.scanElements(event.detail.labels, event.detail.pageEdit, event.detail.pageId);
-    } 
   }
 
   @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
@@ -43,6 +45,7 @@ export class AppComponent implements OnInit {
 
   iframeLoad() {
     this.frameLocation = this.alpdeskfeeframe.nativeElement.contentWindow.location.href;
+    this.scanElements(this.alpdeskfeeLabels, this.alpdeskfeeCanPageEdit, this.alpdeskfeePageid);
   }
 
   scanElements(objLabels: any, pageEdit: boolean, pageId: number) {
@@ -71,35 +74,47 @@ export class AppComponent implements OnInit {
               if (obj.type === this.TARGETTYPE_ARTICLE) {
                 let parentNode = e.parentElement;
                 if (parentNode !== null) {
+                  parentNode.style.minHeight = '50px';
                   parentNode.classList.add('alpdeskfee-article-container');
                   parentNode.onmouseover = function (event) {
                     if (parentNode !== null && parentNode !== undefined) {
-                      parentNode.classList.add("alpdeskfee-parent-active");
-                      compRef.instance.changeParent(obj, parentNode, frameContentDocument.documentElement.scrollTop);
-                      compRef.changeDetectorRef.detectChanges();
+                      parentNode.style.borderRight = '2px solid rgb(244, 124, 0)';
                     }
                   };
                   parentNode.onmouseout = function () {
                     if (parentNode !== null && parentNode !== undefined) {
-                      parentNode.classList.remove("alpdeskfee-parent-active");
-                      compRef.instance.changeParent(null, null, 0);
-                      compRef.changeDetectorRef.detectChanges();
+                      parentNode.style.border = 'none';
                     }
+                  };
+                  parentNode.onclick = function () {
+                    compRef.instance.changeParent(obj, parentNode, frameContentDocument.documentElement.scrollTop);
+                    compRef.changeDetectorRef.detectChanges();
                   };
                 }
               } else {
                 e.classList.add('alpdeskfee-ce-container');
-                e.onmouseover = function (event) {
-                  e.classList.add('alpdeskfee-active');
+                e.onmouseover = function () {
+                  e.style.outline = '1px dashed rgb(244, 124, 0)';
+                  e.style.outlineOffset = '2px';
+                };
+                e.onmouseout = function () {
+                  e.style.outline = '0px dashed rgb(244, 124, 0)';
+                  e.style.outlineOffset = '0px';
+                };
+                e.onclick = function () {
+                  let cData = frameContentWindow.document.querySelectorAll("*[data-alpdeskfee]");
+                  cData.forEach((eC: HTMLElement) => {
+                    if(eC !== e) {
+                      eC.style.border = 'none';
+                      eC.style.zIndex = '1';
+                    }
+                  });
+                  e.style.border = '2px solid rgb(244, 124, 0)';
+                  e.style.position = 'relative';
+                  e.style.zIndex = '200000';
                   compRef.instance.changeElement(obj, e, frameContentDocument.documentElement.scrollTop);
                   compRef.changeDetectorRef.detectChanges();
                 };
-                e.onmouseout = function () {
-                  e.classList.remove('alpdeskfee-active');
-                  //compRef.instance.changeElement(null, null, 0);
-                  //compRef.changeDetectorRef.detectChanges();
-                };
-                //setContextMenu(data[i], 'alpdeskfee-active-force', '*[data-alpdeskfee]');
               }
             }
           }

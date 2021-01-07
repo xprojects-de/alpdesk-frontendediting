@@ -60,15 +60,12 @@ class HooksListener {
 
     if ($this->backendUser !== null && !$this->alpdeskfee_livemodus) {
 
-      $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_fe.js|async';
-      $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_fe.css';
-
       if ($this->backendUser->hasAccess('page', 'modules')) {
         $this->currentPageId = $objPage->id;
       }
       $this->pagemountAccess = Utils::hasPagemountAccess($objPage);
       $this->pageChmodEdit = ($this->backendUser->isAllowed(BackendUser::CAN_EDIT_PAGE, $objPage->row()) == true ? 1 : 0);
-      $this->addLabelsToHeader();
+      //$this->addLabelsToHeader();
     }
   }
 

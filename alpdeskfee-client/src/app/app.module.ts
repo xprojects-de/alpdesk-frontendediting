@@ -16,6 +16,7 @@ import { ItemParentComponent } from './items/item-parent/item-parent.component';
 import { ItemPageComponent } from './items/item-page/item-page.component';
 import { ItemArticleComponent } from './items/item-article/item-article.component';
 import { ItemCustomModuleComponent } from './items/item-custom-module/item-custom-module.component';
+import { ItemMoveComponent } from './items/item-move/item-move.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { ItemCustomModuleComponent } from './items/item-custom-module/item-custo
     ItemParentComponent,
     ItemPageComponent,
     ItemArticleComponent,
-    ItemCustomModuleComponent
+    ItemCustomModuleComponent,
+    ItemMoveComponent
   ],
   imports: [
     BrowserModule,
