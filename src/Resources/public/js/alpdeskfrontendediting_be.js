@@ -258,12 +258,13 @@ class AlpdeskBackend {
 
   ready(function () {
 
+    document.getElementById('alpdesk-fee-alpdeskloading').style.display = 'none';
     const previewLabel = 'preview.php';
     const frameChangedEvent = 'alpdesk_frontendediting_framechangedEvent';
-    const rt = document.getElementById('alpdesk-fee-frame').getAttribute('data-request-token');
-    const base = document.getElementById('alpdesk-fee-frame').getAttribute('data-base') + previewLabel + '/';
+    //const rt = document.getElementById('alpdesk-fee-frame').getAttribute('data-request-token');
+    //const base = document.getElementById('alpdesk-fee-frame').getAttribute('data-base') + previewLabel + '/';
 
-    AlpdeskBackend.init(rt, Backend, 'alpdesk-fee-frame', 'alpdesk-fee-alpdeskloading', frameChangedEvent);
+    //AlpdeskBackend.init(rt, Backend, 'alpdesk-fee-frame', 'alpdesk-fee-alpdeskloading', frameChangedEvent);
 
     let initHeight = (window.getHeight() - 200);
     const phone_1 = 375;
@@ -315,7 +316,7 @@ class AlpdeskBackend {
         urlparam = '/' + previewLabel + '/' + urlparam;
       }
 
-      document.getElementById('alpdesk-fee-frame').src = urlparam;
+      //document.getElementById('alpdesk-fee-frame').src = urlparam;
     }
 
     document.getElementById('seturl').onclick = function () {

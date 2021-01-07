@@ -42,8 +42,7 @@
     </div>
     <div class="clear"></div>
   </div>
-  <div id="alpdesk-fee-frame-container">
-    <iframe data-base="<?= $this->base ?>" data-request-token="<?= $this->token ?>" id="alpdesk-fee-frame" src="<?= $this->url ?>" width="100%" height="100%"></iframe>
-  </div>
+  <app-root base="<?= $this->base ?>" rt="<?= $this->token ?>"></app-root>
+  <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements.js?v=<?= time() ?>"></script>
   <div id="alpdesk-fee-alpdeskloading"></div>
 </div>

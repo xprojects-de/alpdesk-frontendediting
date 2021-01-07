@@ -55,7 +55,15 @@ class AlpdeskFrontendeditingContainer {
     }
 
     $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_be.js';
+    //$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/angular/runtime.js|defer';
+    //$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/angular/polyfills.js|defer';
+    //$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/angular/main.js|defer';
+    //$GLOBALS['TL_HEAD'][] = '<script src="bundles/alpdeskfrontendediting/js/angular/runtime.js" defer=""><script>';
+    //$GLOBALS['TL_HEAD'][] = '<script src="bundles/alpdeskfrontendediting/js/angular/main.js" defer=""><script>';
+    //$GLOBALS['TL_HEAD'][] = '<script src="bundles/alpdeskfrontendediting/js/angular/polyfills.js" defer=""><script>';
     $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_be.css';
+    $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/angular/styles.css';
+  
 
     $containerTemplate = new BackendTemplate('be_alpdeskfrontendediting_container');
     $containerTemplate->token = REQUEST_TOKEN;

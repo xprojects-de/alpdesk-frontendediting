@@ -13,7 +13,8 @@ import { DialogData, ModalIframeComponent } from './utils/modal-iframe/modal-ifr
 export class AppComponent implements OnInit {
 
   // Just for Testing - Will be as Input from Component
-  @Input() urlBase = 'https://contao.local:8890/preview.php';
+  @Input() base: string = '';
+  @Input() rt: string = '';
 
   static ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event'
   static ACTION_INIT = 'init';
@@ -44,14 +45,17 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.urlBase);
+    this.url = this._sanitizer.bypassSecurityTrustResourceUrl('/preview.php');
+    console.log(this.rt);
   }
 
   openDialog(params: any) {
 
     const ug: UrlGenerator = new UrlGenerator()
 
-    const dialogData: DialogData = { url: ug.generateUrl(params) };
+    const url = ug.generateUrl(params, this.base, this.rt);
+    console.log(url);
+    const dialogData: DialogData = { url: url };
 
     const dialogRef = this.dialog.open(ModalIframeComponent, {
       width: '900px',

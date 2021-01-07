@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,6 +21,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { ModalIframeComponent } from './utils/modal-iframe/modal-iframe.component';
+import { createCustomElement } from '@angular/elements';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,16 @@ import { ModalIframeComponent } from './utils/modal-iframe/modal-iframe.componen
     MatDialogModule,
     MatButtonModule
   ],
+  entryComponents: [AppComponent],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private injector: Injector) {
+    
+  }
+  ngDoBootstrap() { 
+    const alpdeskfee = createCustomElement(AppComponent, { injector: this.injector });
+    customElements.define('app-root', alpdeskfee);
+  }
+}
