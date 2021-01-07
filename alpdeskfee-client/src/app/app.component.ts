@@ -1,6 +1,8 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ItemContainerComponent } from './item-container/item-container.component';
+import { DialogData, ModalIframeComponent } from './utils/modal-iframe/modal-iframe.component';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +26,9 @@ export class AppComponent implements OnInit {
 
   @HostListener('document:' + AppComponent.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
     console.log(event.detail);
+    if (event.detail.dialog !== null && event.detail.dialog !== undefined && event.detail.dialog === true) {
+      this.openDialog(event.detail);
+    }
   }
 
   @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
@@ -35,13 +40,29 @@ export class AppComponent implements OnInit {
   frameWidth = '100%';
   frameLocation!: any;
 
-  constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver) {
+  constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog) {
   }
 
   ngOnInit() {
     this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.urlBase);
   }
 
+  openDialog(params: any) {
+    const dialogData: DialogData = {url: 'meine URL'};
+
+    const dialogRef = this.dialog.open(ModalIframeComponent, {
+      width: '900px',
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.reloadIframe();
+    });
+  }
+
+  reloadIframe() {
+    this.alpdeskfeeframe.nativeElement.contentWindow.location.reload();
+  }
 
   iframeLoad() {
     this.frameLocation = this.alpdeskfeeframe.nativeElement.contentWindow.location.href;

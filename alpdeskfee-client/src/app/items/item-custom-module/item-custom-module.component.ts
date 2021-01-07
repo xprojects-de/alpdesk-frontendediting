@@ -30,6 +30,7 @@ export class ItemCustomModuleComponent extends BaseItemComponent implements OnIn
 
   click() {
     this.dispatchEvent({
+      dialog: true,
       targetType: this.targetType,
       do: this.do,
       iconclass: this.iconclass,

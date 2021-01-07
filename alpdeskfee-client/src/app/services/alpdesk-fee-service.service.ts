@@ -10,9 +10,11 @@ export class AlpdeskFeeServiceService {
   constructor() { }
 
   dispatchEvent(params: any) {
+
     document.dispatchEvent(new CustomEvent(this.ALPDESK_EVENTNAME, {
       detail: params
     }));
+
   }
 
 }

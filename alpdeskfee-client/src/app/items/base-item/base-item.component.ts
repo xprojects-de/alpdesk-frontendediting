@@ -10,7 +10,7 @@ export class BaseItemComponent {
 
   constructor(private _alpdeskFeeService: AlpdeskFeeServiceService) { }
 
-  dispatchEvent(params: any) {
+  dispatchEvent(params: any) {    
     this._alpdeskFeeService.dispatchEvent(params);
   }
 

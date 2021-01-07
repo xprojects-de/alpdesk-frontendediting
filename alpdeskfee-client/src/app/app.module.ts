@@ -17,6 +17,10 @@ import { ItemPageComponent } from './items/item-page/item-page.component';
 import { ItemArticleComponent } from './items/item-article/item-article.component';
 import { ItemCustomModuleComponent } from './items/item-custom-module/item-custom-module.component';
 import { ItemMoveComponent } from './items/item-move/item-move.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { ModalIframeComponent } from './utils/modal-iframe/modal-iframe.component';
 
 @NgModule({
   declarations: [
@@ -34,11 +38,15 @@ import { ItemMoveComponent } from './items/item-move/item-move.component';
     ItemPageComponent,
     ItemArticleComponent,
     ItemCustomModuleComponent,
-    ItemMoveComponent
+    ItemMoveComponent,
+    ModalIframeComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

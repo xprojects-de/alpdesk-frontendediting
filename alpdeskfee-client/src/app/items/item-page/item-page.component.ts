@@ -18,6 +18,7 @@ export class ItemPageComponent extends BaseItemComponent {
 
   click() {
     this.dispatchEvent({
+      dialog: true,
       action: this.action,
       targetType: this.targetType,
       do: this.do,
