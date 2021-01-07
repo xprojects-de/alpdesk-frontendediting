@@ -13,9 +13,7 @@ import { DialogData, ModalIframeComponent } from './utils/modal-iframe/modal-ifr
 export class AppComponent implements OnInit {
 
   // Just for Testing - Will be as Input from Component
-  @Input() alpdeskfeePageid = 19;
-  @Input() alpdeskfeeCanPageEdit = true;
-  @Input() alpdeskfeeLabels = '{"ce":"Element","mod":"Modul","page":"Seite","article":"Artikel","delete_confirm_article":"Artikel wirklich l\u00f6schen?","delete_confirm_element":"Element wirklich l\u00f6schen?","page_edit_top":"Diese Seite bearbeiten","article_edit_top":"Artikel der Seite bearbeiten","page_structure":"Seitenstruktur","page_edit":"Diese Seite bearbeiten","article_all":"\u00dcbersicht","edit_article":"Artikel editieren","delete_article":"Artikel l\u00f6schen","article_visible":"Artikel verstecken\/anzeigen","element_all":"\u00dcbersicht","new_element_top":"Neues Element erstellen","new_element":"Neues Element nach diesem Element erstellen","edit_element":"Element editieren","copy_element":"Element kopieren","delete_element":"Element l\u00f6schen","element_visible":"Element verstecken\/anzeigen","element_mod":"Modul bearbeiten"}';
+  @Input() urlBase = 'https://contao.local:8890/preview.php';
 
   static ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event'
   static ACTION_INIT = 'init';
@@ -27,7 +25,9 @@ export class AppComponent implements OnInit {
 
   @HostListener('document:' + AppComponent.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
     console.log(event.detail);
-    if (event.detail.dialog !== null && event.detail.dialog !== undefined && event.detail.dialog === true) {
+    if(event.detail.action !== null && event.detail.action !== undefined && event.detail.action === 'init') {
+      this.scanElements(event.detail.labels, event.detail.pageEdit, event.detail.pageId);
+    } else if (event.detail.dialog !== null && event.detail.dialog !== undefined && event.detail.dialog === true) {
       this.openDialog(event.detail);
     }
   }
@@ -35,8 +35,7 @@ export class AppComponent implements OnInit {
   @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
 
   title = 'alpdeskfee-client';
-  url: any;
-  urlBase = 'https://contao.local:8890/preview.php';
+  url: any;  
   frameHeight = (window.innerHeight - 100) + 'px';
   frameWidth = '100%';
   frameLocation!: any;
@@ -70,7 +69,6 @@ export class AppComponent implements OnInit {
 
   iframeLoad() {
     this.frameLocation = this.alpdeskfeeframe.nativeElement.contentWindow.location.href;
-    this.scanElements(this.alpdeskfeeLabels, this.alpdeskfeeCanPageEdit, this.alpdeskfeePageid);
   }
 
   scanElements(objLabels: any, pageEdit: boolean, pageId: number) {
