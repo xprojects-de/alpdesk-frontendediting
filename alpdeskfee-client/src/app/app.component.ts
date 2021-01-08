@@ -1,0 +1,178 @@
+import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
+import { UrlGenerator } from './classes/url-generator';
+import { ItemContainerComponent } from './item-container/item-container.component';
+import { DialogData, ModalIframeComponent } from './utils/modal-iframe/modal-iframe.component';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
+})
+export class AppComponent implements OnInit {
+
+  // Just for Testing - Will be as Input from Component
+  @Input('base') base: string = 'https://contao.local:8890/';
+  @Input('rt') rt: string = 'e-ZTu2-lbrh4wmgPMm-U92fiGCBAKqdncMi8auv0BI4&ref=HuGD9le5';
+  @Input('frameurl') frameurl: string = '/preview.php';
+  @Input('frameheight') frameheight: string = '800px';
+
+  static ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event';
+  static ALPDESK_EVENTNAME_FRAME = 'alpdesk_frontendediting_framechangedEvent';
+  static ACTION_INIT = 'init';
+
+  TARGETTYPE_PAGE = 'page';
+  TARGETTYPE_ARTICLE = 'article';
+  TARGETTYPE_CE = 'ce';
+  TARGETTYPE_MOD = 'mod';
+
+  @HostListener('document:' + AppComponent.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
+    console.log(event.detail);
+    if (event.detail.action !== null && event.detail.action !== undefined && event.detail.action === 'init') {
+      this.scanElements(event.detail.labels, event.detail.pageEdit, event.detail.pageId);
+    } else if (event.detail.dialog !== null && event.detail.dialog !== undefined && event.detail.dialog === true) {
+      this.openDialog(event.detail);
+    } else if (event.detail.reloadFrame !== null && event.detail.reloadFrame !== undefined && event.detail.reloadFrame === true) {
+      this.reloadIframe();
+    } else if (event.detail.framelocation !== null && event.detail.framelocation !== undefined && event.detail.framelocation !== '') {
+      this.iframeLocation(event.detail.framelocation);
+    }
+  }
+
+  @HostListener('document:' + AppComponent.ALPDESK_EVENTNAME_FRAME, ['$event']) onAFEEFrame_Event(event: CustomEvent) {
+    //console.log(event.detail);    
+  }
+
+  @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
+
+  title = 'alpdeskfee-client';
+  url: any;
+  frameWidth = '100%';
+
+  constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog) {
+  }
+
+  ngOnInit() {
+    this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.frameurl);
+    //console.log(this.url);
+  }
+
+  openDialog(params: any) {
+
+    const ug: UrlGenerator = new UrlGenerator()
+
+    const url = ug.generateUrl(params, this.base, this.rt);
+    const dialogData: DialogData = { url: url };
+
+    const dialogRef = this.dialog.open(ModalIframeComponent, {
+      width: '900px',
+      data: dialogData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.reloadIframe();
+    });
+  }
+
+  reloadIframe() {
+    document.dispatchEvent(new CustomEvent(AppComponent.ALPDESK_EVENTNAME_FRAME, {
+      detail: {
+        reload: true
+      }
+    }));
+    this.alpdeskfeeframe.nativeElement.contentWindow.location.reload();
+  }
+
+  iframeLocation(location: string) {
+    this.alpdeskfeeframe.nativeElement.contentWindow.location.href = location;
+  }
+
+  iframeLoad() {
+    document.dispatchEvent(new CustomEvent(AppComponent.ALPDESK_EVENTNAME_FRAME, {
+      detail: {
+        location: this.alpdeskfeeframe.nativeElement.contentWindow.location.href
+      }
+    }));
+  }
+
+  scanElements(objLabels: any, pageEdit: boolean, pageId: number) {
+
+    if (objLabels !== null && objLabels !== undefined) {
+
+      const frameContentWindow = this.alpdeskfeeframe.nativeElement.contentWindow;
+      const frameContentDocument = this.alpdeskfeeframe.nativeElement.contentDocument;
+
+      if (frameContentWindow !== null && frameContentWindow !== undefined && frameContentDocument !== null && frameContentDocument !== undefined) {
+
+        const compFactory = this.resolver.resolveComponentFactory(ItemContainerComponent);
+        const compRef: ComponentRef<ItemContainerComponent> = this.vcRef.createComponent(compFactory);
+        compRef.instance.base = this.base;
+        compRef.instance.rt = this.rt;
+        compRef.instance.objLabels = objLabels;
+        compRef.instance.pageEdit = pageEdit;
+        compRef.instance.pageId = pageId;
+
+        frameContentDocument.body.prepend(compRef.location.nativeElement);
+
+        let data = frameContentWindow.document.querySelectorAll("*[data-alpdeskfee]");
+        data.forEach((e: HTMLElement) => {
+          let jsonData = e.getAttribute('data-alpdeskfee');
+          if (jsonData !== null && jsonData !== undefined && jsonData !== '') {
+            const obj = JSON.parse(jsonData);
+            if (obj !== null && obj !== undefined) {
+              if (obj.type === this.TARGETTYPE_ARTICLE) {
+                let parentNode = e.parentElement;
+                if (parentNode !== null) {
+                  parentNode.style.minHeight = '50px';
+                  parentNode.classList.add('alpdeskfee-article-container');
+                  parentNode.onmouseover = function (event) {
+                    if (parentNode !== null && parentNode !== undefined) {
+                      parentNode.style.borderRight = '2px solid rgb(244, 124, 0)';
+                    }
+                  };
+                  parentNode.onmouseout = function () {
+                    if (parentNode !== null && parentNode !== undefined) {
+                      parentNode.style.border = 'none';
+                    }
+                  };
+                  parentNode.onclick = function () {
+                    if (parentNode !== null) {
+                      compRef.instance.changeParent(obj, parentNode, frameContentDocument.documentElement.scrollTop);
+                      compRef.changeDetectorRef.detectChanges();
+                      parentNode.style.outlineOffset = '4px';
+                      parentNode.style.border = '2px solid rgb(244, 124, 0)';
+                    }
+                  };
+                }
+              } else {
+                e.classList.add('alpdeskfee-ce-container');
+                e.onmouseover = function () {
+                  e.style.outline = '1px dashed rgb(244, 124, 0)';
+                  e.style.outlineOffset = '2px';
+                };
+                e.onmouseout = function () {
+                  e.style.outline = '0px dashed rgb(244, 124, 0)';
+                  e.style.outlineOffset = '0px';
+                };
+                e.onclick = function () {
+                  let cData = frameContentWindow.document.querySelectorAll("*[data-alpdeskfee]");
+                  cData.forEach((eC: HTMLElement) => {
+                    if(eC !== e) {
+                      eC.style.border = 'none';
+                    }
+                  });
+                  e.style.outlineOffset = '4px';
+                  e.style.border = '2px solid rgb(244, 124, 0)';
+                  compRef.instance.changeElement(obj, e, frameContentDocument.documentElement.scrollTop);
+                  compRef.changeDetectorRef.detectChanges();
+                };
+              }
+            }
+          }
+        });
+      }
+    }
+  }
+
+}

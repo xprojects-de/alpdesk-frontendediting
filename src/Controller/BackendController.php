@@ -61,6 +61,11 @@ class BackendController extends AbstractController {
       $this->checkAccess();
 
       $data = (array) $request->request->get('data');
+      if (\count($data) == 0) {
+        $content = $request->getContent();
+        $json = \json_decode($content, true);
+        $data = \json_decode($json['data'], true);
+      }
 
       $response = new JsonResponse('COMMOM ERROR', self::$STATUSCODE_COMMONERROR);
 
