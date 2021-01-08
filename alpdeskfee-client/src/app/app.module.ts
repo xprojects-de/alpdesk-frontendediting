@@ -53,17 +53,19 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   //entryComponents: [AppComponent],
   providers: [],
-  //bootstrap: []
+  bootstrap: []
   // To develop locally enable this line!
   // To Deploy disable this line
-  bootstrap: [AppComponent]
+  //bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(private injector: Injector) {
     
   }
   ngDoBootstrap() { 
-    const alpdeskfeetest = createCustomElement(AppComponent, { injector: this.injector });
-    customElements.define('app-alpdeskfee', alpdeskfeetest);
+    //const alpdeskfeeroot = createCustomElement(AppComponent, { injector: this.injector });
+    //customElements.define('app-root', alpdeskfeeroot);
+    const alpdeskfeecustom = createCustomElement(AppComponent, { injector: this.injector });
+    customElements.define('app-alpdeskfee', alpdeskfeecustom);
   }
 }

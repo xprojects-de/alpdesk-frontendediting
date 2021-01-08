@@ -42,7 +42,9 @@
     </div>
     <div class="clear"></div>
   </div>
-  <app-alpdeskfee base="<?= $this->base ?>" rt="<?= $this->token ?>"></app-alpdeskfee>
-  <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements.js?v=<?= time() ?>"></script>
+  <div id="alpdesk-fee-frame-container" data-base="<?= $this->base ?>">
+    <app-alpdeskfee base="<?= $this->base ?>" rt="<?= $this->token ?>" frameheight="100%" frameurl="<?= $this->url ?>"></app-alpdeskfee>
+    <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements.js?v=<?= time() ?>"></script>
+  </div>
   <div id="alpdesk-fee-alpdeskloading"></div>
 </div>

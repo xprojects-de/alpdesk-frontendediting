@@ -15,8 +15,11 @@ export class AppComponent implements OnInit {
   // Just for Testing - Will be as Input from Component
   @Input('base') base: string = 'https://contao.local:8890/';
   @Input('rt') rt: string = 'e-ZTu2-lbrh4wmgPMm-U92fiGCBAKqdncMi8auv0BI4&ref=HuGD9le5';
+  @Input('frameurl') frameurl: string = '/preview.php';
+  @Input('frameheight') frameheight: string = '800px';
 
-  static ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event'
+  static ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event';
+  static ALPDESK_EVENTNAME_FRAME = 'alpdesk_frontendediting_framechangedEvent';
   static ACTION_INIT = 'init';
 
   TARGETTYPE_PAGE = 'page';
@@ -25,29 +28,34 @@ export class AppComponent implements OnInit {
   TARGETTYPE_MOD = 'mod';
 
   @HostListener('document:' + AppComponent.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
-    //console.log(event.detail);
+    console.log(event.detail);
     if (event.detail.action !== null && event.detail.action !== undefined && event.detail.action === 'init') {
       this.scanElements(event.detail.labels, event.detail.pageEdit, event.detail.pageId);
     } else if (event.detail.dialog !== null && event.detail.dialog !== undefined && event.detail.dialog === true) {
       this.openDialog(event.detail);
     } else if (event.detail.reloadFrame !== null && event.detail.reloadFrame !== undefined && event.detail.reloadFrame === true) {
       this.reloadIframe();
+    } else if (event.detail.framelocation !== null && event.detail.framelocation !== undefined && event.detail.framelocation !== '') {
+      this.iframeLocation(event.detail.framelocation);
     }
+  }
+
+  @HostListener('document:' + AppComponent.ALPDESK_EVENTNAME_FRAME, ['$event']) onAFEEFrame_Event(event: CustomEvent) {
+    //console.log(event.detail);    
   }
 
   @ViewChild('alpdeskfeeframe') alpdeskfeeframe!: ElementRef;
 
   title = 'alpdeskfee-client';
-  url: any;  
-  frameHeight = (window.innerHeight - 100) + 'px';
+  url: any;
   frameWidth = '100%';
-  frameLocation!: any;
 
   constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog) {
   }
 
   ngOnInit() {
-    this.url = this._sanitizer.bypassSecurityTrustResourceUrl('/preview.php');
+    this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.frameurl);
+    //console.log(this.url);
   }
 
   openDialog(params: any) {
@@ -68,11 +76,24 @@ export class AppComponent implements OnInit {
   }
 
   reloadIframe() {
+    document.dispatchEvent(new CustomEvent(AppComponent.ALPDESK_EVENTNAME_FRAME, {
+      detail: {
+        reload: true
+      }
+    }));
     this.alpdeskfeeframe.nativeElement.contentWindow.location.reload();
   }
 
+  iframeLocation(location: string) {
+    this.alpdeskfeeframe.nativeElement.contentWindow.location.href = location;
+  }
+
   iframeLoad() {
-    this.frameLocation = this.alpdeskfeeframe.nativeElement.contentWindow.location.href;
+    document.dispatchEvent(new CustomEvent(AppComponent.ALPDESK_EVENTNAME_FRAME, {
+      detail: {
+        location: this.alpdeskfeeframe.nativeElement.contentWindow.location.href
+      }
+    }));
   }
 
   scanElements(objLabels: any, pageEdit: boolean, pageId: number) {
