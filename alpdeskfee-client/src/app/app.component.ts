@@ -13,8 +13,8 @@ import { DialogData, ModalIframeComponent } from './utils/modal-iframe/modal-ifr
 export class AppComponent implements OnInit {
 
   // Just for Testing - Will be as Input from Component
-  @Input('base') base: string = '';
-  @Input('rt') rt: string = '';
+  @Input('base') base: string = 'https://contao.local:8890/';
+  @Input('rt') rt: string = 'e-ZTu2-lbrh4wmgPMm-U92fiGCBAKqdncMi8auv0BI4&ref=HuGD9le5';
 
   static ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event'
   static ACTION_INIT = 'init';
@@ -25,11 +25,13 @@ export class AppComponent implements OnInit {
   TARGETTYPE_MOD = 'mod';
 
   @HostListener('document:' + AppComponent.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
-    console.log(event.detail);
-    if(event.detail.action !== null && event.detail.action !== undefined && event.detail.action === 'init') {
+    //console.log(event.detail);
+    if (event.detail.action !== null && event.detail.action !== undefined && event.detail.action === 'init') {
       this.scanElements(event.detail.labels, event.detail.pageEdit, event.detail.pageId);
     } else if (event.detail.dialog !== null && event.detail.dialog !== undefined && event.detail.dialog === true) {
       this.openDialog(event.detail);
+    } else if (event.detail.reloadFrame !== null && event.detail.reloadFrame !== undefined && event.detail.reloadFrame === true) {
+      this.reloadIframe();
     }
   }
 
@@ -46,7 +48,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.url = this._sanitizer.bypassSecurityTrustResourceUrl('/preview.php');
-    console.log(this.rt);
   }
 
   openDialog(params: any) {
@@ -54,7 +55,6 @@ export class AppComponent implements OnInit {
     const ug: UrlGenerator = new UrlGenerator()
 
     const url = ug.generateUrl(params, this.base, this.rt);
-    console.log(url);
     const dialogData: DialogData = { url: url };
 
     const dialogRef = this.dialog.open(ModalIframeComponent, {
@@ -86,6 +86,8 @@ export class AppComponent implements OnInit {
 
         const compFactory = this.resolver.resolveComponentFactory(ItemContainerComponent);
         const compRef: ComponentRef<ItemContainerComponent> = this.vcRef.createComponent(compFactory);
+        compRef.instance.base = this.base;
+        compRef.instance.rt = this.rt;
         compRef.instance.objLabels = objLabels;
         compRef.instance.pageEdit = pageEdit;
         compRef.instance.pageId = pageId;

@@ -9,6 +9,9 @@ export class ItemContainerComponent implements OnInit {
 
   currentHeight = 35;
 
+  base: string = '';
+  rt: string = '';
+
   objLabels: any;
   pageEdit: boolean = false;
   pageId: number = 0;

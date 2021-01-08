@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AlpdeskFeeServiceService } from 'src/app/services/alpdesk-fee-service.service';
 
 @Component({

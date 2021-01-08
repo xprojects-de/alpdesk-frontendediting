@@ -22,6 +22,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { ModalIframeComponent } from './utils/modal-iframe/modal-iframe.component';
 import { createCustomElement } from '@angular/elements';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { createCustomElement } from '@angular/elements';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatDialogModule,
@@ -51,10 +53,10 @@ import { createCustomElement } from '@angular/elements';
   ],
   //entryComponents: [AppComponent],
   providers: [],
-  bootstrap: []
+  //bootstrap: []
   // To develop locally enable this line!
   // To Deploy disable this line
-  //bootstrap: [AppComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(private injector: Injector) {

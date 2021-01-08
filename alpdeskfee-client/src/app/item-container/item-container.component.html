@@ -40,17 +40,17 @@
         *ngIf="jsonDataParent.canPublish === true"
         [title]="objLabels.article_visible" [action]="ACTION_ELEMENT_VISIBILITY" [targetType]="TARGETTYPE_ARTICLE"
         [do]="jsonDataParent.do" [id]="jsonDataParent.id" [pid]="jsonDataParent.pid" [state]="jsonDataParent.invisible"
-        [pageEdit]="pageEdit" [pageId]="pageId">
+        [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-publish>
     <app-item-delete
         *ngIf="jsonDataParent.canDelete === true"
         [title]="objLabels.delete_article" [action]="ACTION_ELEMENT_DELETE" [targetType]="TARGETTYPE_ARTICLE"
-        [do]="jsonDataParent.do" [id]="jsonDataParent.id" [pageEdit]="pageEdit" [pageId]="pageId">
+        [do]="jsonDataParent.do" [id]="jsonDataParent.id" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-delete>
     <app-item-new
         [title]="objLabels.new_element_top" [action]="ACTION_ELEMENT_NEW" [targetType]="TARGETTYPE_ARTICLE"
         [do]="jsonDataParent.do" [id]="jsonDataParent.id" [pid]="jsonDataParent.pid" [pageEdit]="pageEdit"
-        [pageId]="pageId">
+        [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-new>
     <div [style.clear]="'both'"></div>
 </div>
@@ -78,22 +78,22 @@
     <app-item-copy *ngIf="jsonDataElement.canEdit === true"
         [title]="objLabels.copy_element" [action]="ACTION_ELEMENT_COPY" [targetType]="TARGETTYPE_CE"
         [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pid]="jsonDataElement.pid" [pageEdit]="pageEdit"
-        [pageId]="pageId">
+        [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-copy>
     <app-item-publish
         *ngIf="jsonDataElement.canEdit === true && jsonDataElement.canPublish === true"
         [title]="objLabels.element_visible" [action]="ACTION_ELEMENT_VISIBILITY" [targetType]="TARGETTYPE_CE"
         [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pid]="jsonDataElement.pid"
-        [state]="jsonDataElement.invisible" [pageEdit]="pageEdit" [pageId]="pageId">
+        [state]="jsonDataElement.invisible" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-publish>
     <app-item-delete *ngIf="jsonDataElement.canEdit === true"
         [title]="objLabels.delete_element" [action]="ACTION_ELEMENT_DELETE" [targetType]="TARGETTYPE_CE"
-        [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pageEdit]="pageEdit" [pageId]="pageId">
+        [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pageEdit]="pageEdit" [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-delete>
     <app-item-new *ngIf="jsonDataElement.canEdit === true"
         [title]="objLabels.new_element" [action]="ACTION_ELEMENT_NEW" [targetType]="TARGETTYPE_CE"
         [do]="jsonDataElement.do" [id]="jsonDataElement.id" [pid]="jsonDataElement.pid" [pageEdit]="pageEdit"
-        [pageId]="pageId">
+        [pageId]="pageId" [base]="base" [rt]="rt">
     </app-item-new>
     <app-item-custom-module *ngIf="jsonDataElement.act !== null && jsonDataElement.act !== undefined && jsonDataElement.act !== ''"
         [title]="objLabels.element_mod" [targetType]="TARGETTYPE_MOD"

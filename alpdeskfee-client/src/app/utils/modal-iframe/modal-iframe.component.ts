@@ -21,8 +21,7 @@ export class ModalIframeComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.dataRef.url);    
-    console.log(this.height);
+    this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.dataRef.url);
   }
 
 }

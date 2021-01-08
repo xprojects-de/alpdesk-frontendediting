@@ -26,7 +26,7 @@ export class ItemMoveComponent extends BaseItemComponent implements OnInit, Afte
     //this.moveItem.nativeElement.removeEventListener('mousedown');
     //this.containerElement.removeEventListener('onmouseup');
     //this.containerElement.removeEventListener('onmousemove');
-    console.log("Removed event listener");
+    //console.log("Removed event listener");
   }
 
   draggableElement() {
@@ -58,7 +58,7 @@ export class ItemMoveComponent extends BaseItemComponent implements OnInit, Afte
 
     containerElement.onmousemove = function (e: any) {
       if (currentElement !== null && currentElement !== undefined && barContainer !== null && barContainer !== undefined) {
-        console.log(barContainer);
+        //console.log(barContainer);
         e = e || window.event;
         e.preventDefault();
         let currentX = initialX - e.clientX;
@@ -92,8 +92,8 @@ export class ItemMoveComponent extends BaseItemComponent implements OnInit, Afte
 
         barContainer.style.top = top + "px";
         barContainer.style.left = left + "px";
-        console.log(top);
-        console.log(left);
+        //console.log(top);
+        //console.log(left);
       }
     };
   }

@@ -18,8 +18,14 @@ export class ItemNewComponent extends BaseItemComponent {
   @Input() pageEdit: boolean = false;
   @Input() pageId: number = 0;
 
+  @Input() base: string = '';
+  @Input() rt: string = '';
+
   click() {
     this.dispatchEvent({
+      preRequestPost: true,
+      rt: this.rt,
+      url: '/contao/alpdeskfee',
       dialog: true,
       action: this.action,
       targetType: this.targetType,
