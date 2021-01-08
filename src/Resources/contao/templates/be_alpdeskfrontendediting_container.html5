@@ -42,7 +42,7 @@
     </div>
     <div class="clear"></div>
   </div>
-  <app-root base="<?= $this->base ?>" rt="<?= $this->token ?>"></app-root>
+  <app-alpdeskfee base="<?= $this->base ?>" rt="<?= $this->token ?>"></app-alpdeskfee>
   <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements.js?v=<?= time() ?>"></script>
   <div id="alpdesk-fee-alpdeskloading"></div>
 </div>

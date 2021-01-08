@@ -49,16 +49,19 @@ import { createCustomElement } from '@angular/elements';
     MatDialogModule,
     MatButtonModule
   ],
-  entryComponents: [AppComponent],
+  //entryComponents: [AppComponent],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: []
+  // To develop locally enable this line!
+  // To Deploy disable this line
+  //bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(private injector: Injector) {
     
   }
   ngDoBootstrap() { 
-    const alpdeskfee = createCustomElement(AppComponent, { injector: this.injector });
-    customElements.define('app-root', alpdeskfee);
+    const alpdeskfeetest = createCustomElement(AppComponent, { injector: this.injector });
+    customElements.define('app-alpdeskfee', alpdeskfeetest);
   }
 }

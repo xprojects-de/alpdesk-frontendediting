@@ -13,8 +13,8 @@ import { DialogData, ModalIframeComponent } from './utils/modal-iframe/modal-ifr
 export class AppComponent implements OnInit {
 
   // Just for Testing - Will be as Input from Component
-  @Input() base: string = '';
-  @Input() rt: string = '';
+  @Input('base') base: string = '';
+  @Input('rt') rt: string = '';
 
   static ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event'
   static ACTION_INIT = 'init';
