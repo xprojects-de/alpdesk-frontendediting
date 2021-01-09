@@ -17,7 +17,7 @@
     <div [style.clear]="'both'"></div>
 </div>
 
-<div appItemBar [selectedElement]="elementParent" [frameContentDocument]="frameContentDocument" [style.position]="'absolute'" [style.top]="offsetTopParent" [style.backgroundColor]="'rgba(255, 255, 255, 1)'"
+<div appItemBar [selectedElement]="elementParent" [frameContentDocument]="frameContentDocument" [sticky]="false" [style.position]="'absolute'" [style.top]="offsetTopParent" [style.backgroundColor]="'rgba(255, 255, 255, 1)'"
     [style.width]="'auto'" [style.right]="'0px'" [style.paddingRight]="'30px'"
     [style.fontFamily]="'-apple-system,system-ui,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif'"
     [style.fontWeight]="'400'" [style.fontSize]="'.875rem'" [style.lineHeight]="'1'" [style.color]="'#444'"
@@ -55,13 +55,13 @@
     <div [style.clear]="'both'"></div>
 </div>
 
-<div [style.position]="'absolute'" [style.top]="offsetTopElement" [style.backgroundColor]="'rgba(255, 255, 255, 1)'"
+<div appItemBar [selectedElement]="elementParent" [frameContentDocument]="frameContentDocument" [sticky]="false" [style.position]="'absolute'" [style.top]="offsetTopElement" [style.backgroundColor]="'rgba(255, 255, 255, 1)'"
     [style.width]="'auto'" [style.left]="'50%'" [style.transform]="'translateX(-50%)'"
     [style.fontFamily]="'-apple-system,system-ui,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif'"
     [style.fontWeight]="'400'" [style.fontSize]="'.875rem'" [style.lineHeight]="'1'" [style.color]="'#444'"
     [style.borderTop]="'2px solid rgb(244, 124, 0)'" [style.borderBottom]="'2px solid rgb(244, 124, 0)'" [style.zIndex]="'200000'" [style.borderRadius]="'4px'"
     *ngIf="jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement.type === TARGETTYPE_CE">
-    <app-item-move [containerElement]="elementElement"></app-item-move>
+    <app-item-move></app-item-move>
     <app-item-desc
         *ngIf="jsonDataElement.desc !== null && jsonDataElement.desc !== undefined && jsonDataElement.desc !== ''"
         [label]="jsonDataElement.desc">
@@ -102,7 +102,7 @@
     <div [style.clear]="'both'"></div>
 </div>
 
-<div [style.position]="'absolute'" [style.top]="offsetTopElement" [style.backgroundColor]="'rgba(255, 255, 255, 1)'"
+<div appItemBar [selectedElement]="elementParent" [frameContentDocument]="frameContentDocument" [sticky]="false" [style.position]="'absolute'" [style.top]="offsetTopElement" [style.backgroundColor]="'rgba(255, 255, 255, 1)'"
     [style.width]="'auto'"
     [style.fontFamily]="'-apple-system,system-ui,\'Segoe UI\',Roboto,Oxygen-Sans,Ubuntu,Cantarell,\'Helvetica Neue\',sans-serif'"
     [style.fontWeight]="'400'" [style.fontSize]="'.875rem'" [style.lineHeight]="'1'" [style.color]="'#444'"
