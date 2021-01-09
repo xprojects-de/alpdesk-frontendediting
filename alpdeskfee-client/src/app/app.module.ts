@@ -23,6 +23,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ModalIframeComponent } from './utils/modal-iframe/modal-iframe.component';
 import { createCustomElement } from '@angular/elements';
 import { HttpClientModule } from '@angular/common/http';
+import { ItemBarDirective } from './directives/item-bar.directive';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { HttpClientModule } from '@angular/common/http';
     ItemArticleComponent,
     ItemCustomModuleComponent,
     ItemMoveComponent,
-    ModalIframeComponent
+    ModalIframeComponent,
+    ItemBarDirective
   ],
   imports: [
     BrowserModule,
@@ -53,10 +55,10 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   //entryComponents: [AppComponent],
   providers: [],
-  bootstrap: []
+  //bootstrap: []
   // To develop locally enable this line!
   // To Deploy disable this line
-  //bootstrap: [AppComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(private injector: Injector) {

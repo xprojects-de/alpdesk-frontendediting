@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
 
   // Just for Testing - Will be as Input from Component
   @Input('base') base: string = 'https://contao.local:8890/';
-  @Input('rt') rt: string = 'e-ZTu2-lbrh4wmgPMm-U92fiGCBAKqdncMi8auv0BI4&ref=HuGD9le5';
+  @Input('rt') rt: string = 'GplU6loiSGPizKIrwqtSgWVnYe8TIJEbyrc_kmp7B-0&ref=E4Mql9-C';
   @Input('frameurl') frameurl: string = '/preview.php';
   @Input('frameheight') frameheight: string = '800px';
 
@@ -107,6 +107,7 @@ export class AppComponent implements OnInit {
 
         const compFactory = this.resolver.resolveComponentFactory(ItemContainerComponent);
         const compRef: ComponentRef<ItemContainerComponent> = this.vcRef.createComponent(compFactory);
+        compRef.instance.frameContentDocument = frameContentDocument;
         compRef.instance.base = this.base;
         compRef.instance.rt = this.rt;
         compRef.instance.objLabels = objLabels;
@@ -128,20 +129,20 @@ export class AppComponent implements OnInit {
                   parentNode.classList.add('alpdeskfee-article-container');
                   parentNode.onmouseover = function (event) {
                     if (parentNode !== null && parentNode !== undefined) {
-                      parentNode.style.borderRight = '2px solid rgb(244, 124, 0)';
+                      parentNode.style.outline = '1px dashed rgb(244, 124, 0)';
                     }
                   };
                   parentNode.onmouseout = function () {
                     if (parentNode !== null && parentNode !== undefined) {
-                      parentNode.style.border = 'none';
+                      parentNode.style.outline = '0px dashed rgb(244, 124, 0)';
                     }
                   };
                   parentNode.onclick = function () {
                     if (parentNode !== null) {
-                      compRef.instance.changeParent(obj, parentNode, frameContentDocument.documentElement.scrollTop);
+                      compRef.instance.changeParent(obj, parentNode);
                       compRef.changeDetectorRef.detectChanges();
-                      parentNode.style.outlineOffset = '4px';
-                      parentNode.style.border = '2px solid rgb(244, 124, 0)';
+                      //parentNode.style.outlineOffset = '4px';
+                      //parentNode.style.borderLeft = '2px solid rgb(244, 124, 0)';
                     }
                   };
                 }
@@ -158,13 +159,13 @@ export class AppComponent implements OnInit {
                 e.onclick = function () {
                   let cData = frameContentWindow.document.querySelectorAll("*[data-alpdeskfee]");
                   cData.forEach((eC: HTMLElement) => {
-                    if(eC !== e) {
+                    if (eC !== e) {                      
                       eC.style.border = 'none';
-                    }
+                    } 
                   });
                   e.style.outlineOffset = '4px';
                   e.style.border = '2px solid rgb(244, 124, 0)';
-                  compRef.instance.changeElement(obj, e, frameContentDocument.documentElement.scrollTop);
+                  compRef.instance.changeElement(obj, e);
                   compRef.changeDetectorRef.detectChanges();
                 };
               }

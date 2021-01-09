@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ItemContainerComponent implements OnInit {
 
+  frameContentDocument!: HTMLDocument;
+
   currentHeight = 35;
 
   base: string = '';
@@ -43,24 +45,35 @@ export class ItemContainerComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  changeParent(jsonData: any, element: any, scrollTop: number): void {
+  changeParent(jsonData: any, element: HTMLElement): void {
     this.jsonDataParent = jsonData;
     this.elementParent = element;  
     if (this.elementParent !== null) {
-      this.offsetTopParent = (element.getBoundingClientRect().top + scrollTop - this.currentHeight) + 'px';
+      let top = element.getBoundingClientRect().top - this.currentHeight;
+      if (top > 0) {
+        this.offsetTopParent = (top + this.frameContentDocument.documentElement.scrollTop) + 'px';
+      } else {
+        this.offsetTopParent = this.frameContentDocument.documentElement.scrollTop + 'px';
+      }
     } else {
       this.offsetTopParent = '0px';
     }  
   }
 
-  changeElement(jsonData: any, element: any, scrollTop: number): void {
+  changeElement(jsonData: any, element: HTMLElement): void {
     this.jsonDataElement = jsonData;
     this.elementElement = element;
     if (this.elementElement !== null) {
-      this.offsetTopElement = (element.getBoundingClientRect().top + scrollTop - this.currentHeight) + 'px';
+      let top = element.getBoundingClientRect().top - this.currentHeight;
+      if (top > 0) {
+        this.offsetTopElement = (top + this.frameContentDocument.documentElement.scrollTop) + 'px';
+      } else {
+        this.offsetTopElement = this.frameContentDocument.documentElement.scrollTop + 'px';
+      }
     } else {
       this.offsetTopElement = '0px';
     }
+
   }
 
 }
