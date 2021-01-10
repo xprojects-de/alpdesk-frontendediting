@@ -156,17 +156,40 @@ export class AppComponent implements OnInit {
                   e.style.outline = '0px dashed rgb(244, 124, 0)';
                   e.style.outlineOffset = '0px';
                 };
-                e.onclick = function () {
+                e.onclick = function (event: Event) {
+
                   let cData = frameContentWindow.document.querySelectorAll("*[data-alpdeskfee]");
                   cData.forEach((eC: HTMLElement) => {
                     if (eC !== e) {                      
                       eC.style.border = 'none';
                     } 
-                  });
+                  });                  
                   e.style.outlineOffset = '4px';
                   e.style.border = '2px solid rgb(244, 124, 0)';
-                  compRef.instance.changeElement(obj, e);
-                  compRef.changeDetectorRef.detectChanges();
+
+                  let currentElement = event.target as HTMLElement;
+                  if (currentElement !== null && currentElement !== undefined) {
+                    let jsonDataElement = currentElement.getAttribute('data-alpdeskfee');
+                    if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {                      
+                      const objElement = JSON.parse(jsonDataElement);
+                      if (objElement !== null && objElement !== undefined) {
+                        compRef.instance.changeElement(objElement, currentElement);
+                        compRef.changeDetectorRef.detectChanges();
+                      }
+                    } else {
+                      let closestElement = currentElement.closest('[data-alpdeskfee]') as HTMLElement;
+                      if (closestElement !== null && closestElement !== undefined) {
+                        let jsonDataElement = closestElement.getAttribute('data-alpdeskfee');
+                        if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {
+                          const objElement = JSON.parse(jsonDataElement);
+                          if (objElement !== null && objElement !== undefined) {
+                            compRef.instance.changeElement(objElement, closestElement);
+                            compRef.changeDetectorRef.detectChanges();
+                          }
+                        }
+                      }
+                    }
+                  }
                 };
               }
             }
