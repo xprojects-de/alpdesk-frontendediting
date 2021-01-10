@@ -23,11 +23,14 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     //this.stickyBarItem();
     this.draggableElement();
-
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((s) => s.unsubscribe());
+    this.subscriptions.forEach((s) => {
+      if (s !== null && s !== undefined) {
+        s.unsubscribe()
+      }
+    });
   }
 
   private stickyBarItem() {
@@ -58,9 +61,7 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy {
 
       const dragStart$ = fromEvent<MouseEvent>(moveItem, "mousedown");
       const dragEnd$ = fromEvent<MouseEvent>(this.frameContentDocument, "mouseup");
-      const drag$ = fromEvent<MouseEvent>(this.frameContentDocument, "mousemove").pipe(
-        takeUntil(dragEnd$)
-      );
+      const drag$ = fromEvent<MouseEvent>(this.frameContentDocument, "mousemove").pipe(takeUntil(dragEnd$));
 
       let initialX: number, initialY: number, currentX = 0, currentY = 0;
       let dragSub!: Subscription;
@@ -73,9 +74,7 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy {
           event.preventDefault();
           currentX = event.clientX - initialX;
           currentY = event.clientY - initialY;
-          this.element.style.top = currentY + "px";
-          this.element.style.left = currentX + "px";
-          //this.element.style.transform = "translate3d(" + currentX + "px, " + currentY + "px, 0)";
+          this.element.style.transform = "translate3d(" + currentX + "px, " + currentY + "px, 0)";
         });
       });
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-item-container',
@@ -6,6 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./item-container.component.scss']
 })
 export class ItemContainerComponent implements OnInit {
+
+  @ViewChild('articleContainer') articleContainer!: ElementRef;
+  @ViewChild('elementContainer') elementContainer!: ElementRef;
+  @ViewChild('modContainer') modContainer!: ElementRef;
 
   frameContentDocument!: HTMLDocument;
 
@@ -25,6 +29,8 @@ export class ItemContainerComponent implements OnInit {
   elementElement!: HTMLElement;
   jsonDataElement: any;
   offsetTopElement: string = '0px';
+  offsetLeftElement: string = '0px';
+  transformElement: string =  'translate3d(0, 0, 0)';
   
 
   TARGETTYPE_PAGE = 'page';
@@ -70,8 +76,22 @@ export class ItemContainerComponent implements OnInit {
       } else {
         this.offsetTopElement = this.frameContentDocument.documentElement.scrollTop + 'px';
       }
+      this.offsetLeftElement = element.getBoundingClientRect().left + 'px';
+      if(this.elementContainer !== null && this.elementContainer !== undefined) {
+        this.elementContainer.nativeElement.style.transform = this.transformElement;
+      }
+      if(this.modContainer !== null && this.modContainer !== undefined) {
+        this.modContainer.nativeElement.style.transform = this.transformElement;
+      }
     } else {
       this.offsetTopElement = '0px';
+      this.offsetLeftElement = '0px';
+      if(this.elementContainer !== null && this.elementContainer !== undefined) {
+        this.elementContainer.nativeElement.style.transform = this.transformElement;
+      }
+      if(this.modContainer !== null && this.modContainer !== undefined) {
+        this.modContainer.nativeElement.style.transform = this.transformElement;
+      }
     }
 
   }

@@ -24,6 +24,7 @@ import { ModalIframeComponent } from './utils/modal-iframe/modal-iframe.componen
 import { createCustomElement } from '@angular/elements';
 import { HttpClientModule } from '@angular/common/http';
 import { ItemBarDirective } from './directives/item-bar.directive';
+import {DragDropModule} from '@angular/cdk/drag-drop'; 
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { ItemBarDirective } from './directives/item-bar.directive';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    DragDropModule
   ],
   //entryComponents: [AppComponent],
   providers: [],
