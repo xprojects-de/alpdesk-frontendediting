@@ -25,6 +25,7 @@ export class ItemContainerComponent implements OnInit {
   elementParent!: HTMLElement;
   jsonDataParent: any;
   offsetTopParent: string = '0px';
+  transformParent: string =  'translate3d(0, 0, 0)';
   
   elementElement!: HTMLElement;
   jsonDataElement: any;
@@ -61,8 +62,14 @@ export class ItemContainerComponent implements OnInit {
       } else {
         this.offsetTopParent = this.frameContentDocument.documentElement.scrollTop + 'px';
       }
+      if(this.articleContainer !== null && this.articleContainer !== undefined) {
+        this.articleContainer.nativeElement.style.transform = this.transformParent;
+      }
     } else {
       this.offsetTopParent = '0px';
+      if(this.articleContainer !== null && this.articleContainer !== undefined) {
+        this.articleContainer.nativeElement.style.transform = this.transformParent;
+      }
     }  
   }
 

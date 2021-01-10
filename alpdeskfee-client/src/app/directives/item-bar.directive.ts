@@ -1,18 +1,17 @@
-import { AfterViewInit, Directive, ElementRef, Input, OnDestroy } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, Input, OnChanges, OnDestroy } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Directive({
   selector: '[appItemBar]'
 })
-export class ItemBarDirective implements AfterViewInit, OnDestroy {
+export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
 
   @Input() frameContentDocument!: HTMLDocument;
   @Input() selectedElement!: HTMLElement;
-  @Input() sticky: boolean = false;
 
   private element: HTMLElement;
-  private isSticky: boolean = false;
+  private changed: boolean = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -21,8 +20,11 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    //this.stickyBarItem();
     this.draggableElement();
+  }
+
+  ngOnChanges() {
+    this.changed = true;
   }
 
   ngOnDestroy(): void {
@@ -33,25 +35,16 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy {
     });
   }
 
-  private stickyBarItem() {
-    if (this.frameContentDocument !== null && this.frameContentDocument !== undefined) {
-      this.frameContentDocument.addEventListener('scroll', () => {
-        if (this.selectedElement !== null && this.selectedElement !== undefined && this.element !== null && this.element !== undefined) {
-          const selectedElementTop = this.selectedElement.getBoundingClientRect().top - this.element.offsetHeight;
-          if (selectedElementTop <= 0 && this.isSticky === false) {
-            this.element.style.position = 'fixed';
-            this.element.style.top = '0px';
-            this.isSticky = true;
-          } else if (selectedElementTop > 0 && this.isSticky === true) {
-            this.element.style.position = 'absolute';
-            this.element.style.top = (selectedElementTop + this.frameContentDocument.documentElement.scrollTop) + 'px';
-            this.isSticky = false;
-          }
-        }
+  private getTransformMatrix(value: string) {
 
-      });
+    if (value !== null && value !== undefined && value !== '') {
+      const values = value.split(/\w+\(|\);?/);
+      const transform = values[1].split(/,\s?/g).map((numStr: string) => parseInt(numStr));
+      return { x: transform[0], y: transform[1], z: transform[2] };
     }
+    return { x: 0, y: 0, z: 0 };
   }
+
 
   draggableElement() {
 
@@ -67,6 +60,15 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy {
       let dragSub!: Subscription;
 
       const dragStartSub = dragStart$.subscribe((event: MouseEvent) => {
+
+        let transformMatrix = this.getTransformMatrix(this.element.style.transform);
+        if (transformMatrix.x === 0) {
+          currentX = 0;
+        }
+        if (transformMatrix.y === 0) {
+          currentY = 0;
+        }
+
         initialX = event.clientX - currentX;
         initialY = event.clientY - currentY;
 

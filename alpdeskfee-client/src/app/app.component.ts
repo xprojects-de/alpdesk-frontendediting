@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   TARGETTYPE_MOD = 'mod';
 
   @HostListener('document:' + AppComponent.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
-    console.log(event.detail);
+    //console.log(event.detail);
     if (event.detail.action !== null && event.detail.action !== undefined && event.detail.action === 'init') {
       this.scanElements(event.detail.labels, event.detail.pageEdit, event.detail.pageId);
     } else if (event.detail.dialog !== null && event.detail.dialog !== undefined && event.detail.dialog === true) {
