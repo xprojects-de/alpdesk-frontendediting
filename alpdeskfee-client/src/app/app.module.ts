@@ -25,6 +25,7 @@ import { createCustomElement } from '@angular/elements';
 import { HttpClientModule } from '@angular/common/http';
 import { ItemBarDirective } from './directives/item-bar.directive';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -53,22 +54,22 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     BrowserAnimationsModule,
     MatDialogModule,
     MatButtonModule,
-    DragDropModule
+    DragDropModule,
+    MatIconModule
   ],
   //entryComponents: [AppComponent],
   providers: [],
-  //bootstrap: []
+  // Bootstrapping is done int the ngDoBootstrap-Method
+  bootstrap: []
   // To develop locally enable this line!
   // To Deploy disable this line
-  bootstrap: [AppComponent]
+  //bootstrap: [AppComponent]
 })
 export class AppModule {
   constructor(private injector: Injector) {
 
   }
   ngDoBootstrap() {
-    //const alpdeskfeeroot = createCustomElement(AppComponent, { injector: this.injector });
-    //customElements.define('app-root', alpdeskfeeroot);
     const alpdeskfeecustom = createCustomElement(AppComponent, { injector: this.injector });
     customElements.define('app-alpdeskfee', alpdeskfeecustom);
   }

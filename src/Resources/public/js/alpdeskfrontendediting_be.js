@@ -107,7 +107,7 @@
     };
 
     document.addEventListener(ALPDESK_EVENTNAME_FRAME, function (e) {
-      console.log(e.detail);
+      //console.log(e.detail);
       if (e.detail.location !== null && e.detail.location !== undefined && e.detail.location !== '') {
         document.getElementById('urlparam').value = e.detail.location.replace(base, '');
         document.getElementById('alpdesk-fee-alpdeskloading').style.display = 'none';

@@ -55,23 +55,19 @@ export class ItemContainerComponent implements OnInit {
 
   changeParent(jsonData: any, element: HTMLElement): void {
     this.jsonDataParent = jsonData;
-    this.elementParent = element;  
+    this.elementParent = element;
     if (this.elementParent !== null) {
       let top = element.getBoundingClientRect().top - this.currentHeight;
-      if (top > 0) {
-        this.offsetTopParent = (top + this.frameContentDocument.documentElement.scrollTop) + 'px';
-      } else {
-        this.offsetTopParent = this.frameContentDocument.documentElement.scrollTop + 'px';
-      }
-      if(this.articleContainer !== null && this.articleContainer !== undefined) {
+      this.offsetTopParent = (top + this.frameContentDocument.documentElement.scrollTop) + 'px';
+      if (this.articleContainer !== null && this.articleContainer !== undefined) {
         this.articleContainer.nativeElement.style.transform = this.transformParent;
       }
     } else {
       this.offsetTopParent = '0px';
-      if(this.articleContainer !== null && this.articleContainer !== undefined) {
+      if (this.articleContainer !== null && this.articleContainer !== undefined) {
         this.articleContainer.nativeElement.style.transform = this.transformParent;
       }
-    }  
+    }
   }
 
   changeElement(jsonData: any, element: HTMLElement): void {
@@ -79,11 +75,7 @@ export class ItemContainerComponent implements OnInit {
     this.elementElement = element;
     if (this.elementElement !== null) {
       let top = element.getBoundingClientRect().top - this.currentHeight;
-      if (top > 0) {
-        this.offsetTopElement = (top + this.frameContentDocument.documentElement.scrollTop) + 'px';
-      } else {
-        this.offsetTopElement = this.frameContentDocument.documentElement.scrollTop + 'px';
-      }
+      this.offsetTopElement = (top + this.frameContentDocument.documentElement.scrollTop) + 'px';
       this.offsetLeftElement = element.getBoundingClientRect().left + 'px';
       if(this.elementContainer !== null && this.elementContainer !== undefined) {
         this.elementContainer.nativeElement.style.transform = this.transformElement;

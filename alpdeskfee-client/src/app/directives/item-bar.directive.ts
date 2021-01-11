@@ -9,6 +9,7 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
 
   @Input() frameContentDocument!: HTMLDocument;
   @Input() selectedElement!: HTMLElement;
+  @Input() offsetTop: string = '0px';
 
   private element: HTMLElement;
   private changed: boolean = false;
@@ -28,6 +29,7 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
 
   ngOnChanges() {
     this.changed = true;
+    this.positionStickyElement();
   }
 
   ngOnDestroy(): void {
@@ -41,9 +43,28 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
     }
   }
 
+  private positionStickyElement() {
+    let topSelected = this.selectedElement.getBoundingClientRect().top - this.element.offsetHeight;
+    let bottomBorder = this.selectedElement.getBoundingClientRect().bottom;
+    if (bottomBorder <= 0) {
+      this.element.style.position = 'absolute';
+      this.element.style.top = this.offsetTop;
+      this.sticky = false;
+    } else {
+      if (topSelected <= 0 && !this.sticky) {
+        this.element.style.position = 'fixed';
+        this.element.style.top = '0px';
+        this.sticky = true;
+      } else if (topSelected > 0 && this.sticky) {
+        this.element.style.position = 'absolute';
+        this.element.style.top = this.offsetTop;
+        this.sticky = false;
+      }
+    }
+  }
+
   stickyItemBar() {
     const frameScrollEvent$ = fromEvent<MouseEvent>(this.frameContentDocument, "scroll");
-    let savedTop = 0;
     this.frameScrollSubscription = frameScrollEvent$.subscribe((event: MouseEvent) => {
       if (this.frameContentDocument !== undefined && this.frameContentDocument !== null) {
         let scrollValue = 0;
@@ -52,17 +73,7 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
         } else if(this.frameContentDocument.documentElement.scrollTop) {
           scrollValue = this.frameContentDocument.documentElement.scrollTop;
         } 
-        let topSelected = this.selectedElement.getBoundingClientRect().top - this.element.offsetHeight;
-        if (topSelected <= 0 && !this.sticky) {
-          savedTop = this.element.offsetTop;
-          this.element.style.position = 'fixed';
-          this.element.style.top = '0px';
-          this.sticky = true;
-        } else if (topSelected > 0 && this.sticky) {
-          this.element.style.position = 'absolute';
-          this.element.style.top = savedTop + 'px';
-          this.sticky = false;
-        }
+        this.positionStickyElement();  
       }
     });
   }

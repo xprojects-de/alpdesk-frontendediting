@@ -1,60 +1,55 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
+import { catchError, retry} from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AlpdeskFeeServiceService {
 
-  ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event';
+  public static ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event';
 
-  constructor(private http: HttpClient) { }
+  constructor(private _httpClient: HttpClient) { }
 
   dispatchEvent(params: any) {
+    document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
+      detail: params
+    }));
+  }
 
-    if (params.preRequestGet !== null && params.preRequestGet !== undefined && params.preRequestGet === true) {
-      this.callGetRequest(params.url).subscribe(
-        (data) => {
-          document.dispatchEvent(new CustomEvent(this.ALPDESK_EVENTNAME, {
-            detail: params
-          }));
-        },
-        (error) => {
-          document.dispatchEvent(new CustomEvent(this.ALPDESK_EVENTNAME, {
-            detail: params
-          }));
-        }
-      );
-    } else if (params.preRequestPost !== null && params.preRequestPost !== undefined && params.preRequestPost === true) {
-      this.callPostRequest(params.url, params).subscribe(
-        (data) => {
-          document.dispatchEvent(new CustomEvent(this.ALPDESK_EVENTNAME, {
-            detail: params
-          }));
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } else {
-      document.dispatchEvent(new CustomEvent(this.ALPDESK_EVENTNAME, {
-        detail: params
-      }));
-    }
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.log(error);
+      return of(result as T);
+    };
   }
 
   callPostRequest(url: string, data: any): Observable<any> {
     const options = {
-      headers: new HttpHeaders().append('Content-Type', 'application/json')
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'X-CSRFToken': data.rt
+      })
     };
     const body = { data: JSON.stringify(data), rt: data.rt };
     //console.log(body);
-    return this.http.post(url, body, options);
+    //console.log(url);
+
+    return this._httpClient.post(url, body, options).pipe(
+      retry(1), catchError(this.handleError<any[]>('call', undefined))
+    );
   }
 
   callGetRequest(url: string): Observable<any> {
-    return this.http.get(url);
+    //console.log(url);
+    const httpHeaders: HttpHeaders = new HttpHeaders({
+      'Content-Type': 'text/plain'
+    });
+    return this._httpClient.get(url, { headers: httpHeaders, observe: 'response', responseType: 'text' }).pipe(
+      retry(1), catchError(this.handleError<any[]>('call', undefined))
+    );
   }
 
 }

@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "alpdeskfee": "ng build --prod --output-hashing none && node concate.js",
+    "alpdeskfeedev": "ng build --output-hashing none && node concatedev.js",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

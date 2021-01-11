@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Constants } from './classes/constants';
 import { UrlGenerator } from './classes/url-generator';
 import { ItemContainerComponent } from './item-container/item-container.component';
+import { AlpdeskFeeServiceService } from './services/alpdesk-fee-service.service';
 import { DialogData, ModalIframeComponent } from './utils/modal-iframe/modal-iframe.component';
 
 @Component({
@@ -21,7 +22,37 @@ export class AppComponent implements OnInit {
 
   @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
     //console.log(event.detail);
-    if (event.detail.action !== null && event.detail.action !== undefined && event.detail.action === 'init') {
+    if (event.detail.preRequestGet !== null && event.detail.preRequestGet !== undefined && event.detail.preRequestGet === true) {
+      let params = event.detail;
+      params.preRequestGet = false;
+      this._alpdeskFeeService.callGetRequest(event.detail.url).subscribe(
+        (data) => {
+          //console.log(data);
+          document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
+            detail: params
+          }));
+        },
+        (error) => {
+          console.log(error);
+          document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
+            detail: params
+          }));
+        }
+      );
+    } else if (event.detail.preRequestPost !== null && event.detail.preRequestPost !== undefined && event.detail.preRequestPost === true) {
+      let params = event.detail;
+      params.preRequestPost = false;
+      this._alpdeskFeeService.callPostRequest(event.detail.url, event.detail).subscribe(
+        (data) => {
+          document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
+            detail: params
+          }));
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+    } else if (event.detail.action !== null && event.detail.action !== undefined && event.detail.action === 'init') {
       this.scanElements(event.detail.labels, event.detail.pageEdit, event.detail.pageId);
     } else if (event.detail.dialog !== null && event.detail.dialog !== undefined && event.detail.dialog === true) {
       this.openDialog(event.detail);
@@ -42,7 +73,7 @@ export class AppComponent implements OnInit {
   url: any;
   frameWidth = '100%';
 
-  constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog) {
+  constructor(private _sanitizer: DomSanitizer, private vcRef: ViewContainerRef, private resolver: ComponentFactoryResolver, private dialog: MatDialog, private _alpdeskFeeService: AlpdeskFeeServiceService) {
   }
 
   ngOnInit() {

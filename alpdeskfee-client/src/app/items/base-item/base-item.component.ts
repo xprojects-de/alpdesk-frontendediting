@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { AlpdeskFeeServiceService } from 'src/app/services/alpdesk-fee-service.service';
 
 @Component({
@@ -8,10 +8,12 @@ import { AlpdeskFeeServiceService } from 'src/app/services/alpdesk-fee-service.s
 })
 export class BaseItemComponent {
 
-  constructor(private _alpdeskFeeService: AlpdeskFeeServiceService) { }
+  constructor() { }
 
-  dispatchEvent(params: any) {    
-    this._alpdeskFeeService.dispatchEvent(params);
+  dispatchEvent(params: any) {
+    document.dispatchEvent(new CustomEvent(AlpdeskFeeServiceService.ALPDESK_EVENTNAME, {
+      detail: params
+    }));
   }
 
 }
