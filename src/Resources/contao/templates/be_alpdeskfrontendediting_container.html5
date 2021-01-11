@@ -45,7 +45,8 @@
   <div id="alpdesk-fee-frame-container" data-base="<?= $this->base ?>">
     <app-alpdeskfee base="<?= $this->base ?>" rt="<?= $this->token ?>" frameheight="100%" frameurl="<?= $this->url ?>"></app-alpdeskfee>
     <style type="text/css">@font-face{font-family:'Material Icons';font-style:normal;font-weight:400;src:url(https://fonts.gstatic.com/s/materialicons/v70/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2) format('woff2');}.material-icons{font-family:'Material Icons';font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased;}</style>
-    <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements.js?v=<?= time() ?>"></script>
+    <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements-es5.js?v=<?= time() ?>"></script>
+    <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements-es6.js?v=<?= time() ?>" nomodule defer></script>
   </div>
   <div id="alpdesk-fee-alpdeskloading"></div>
 </div>
