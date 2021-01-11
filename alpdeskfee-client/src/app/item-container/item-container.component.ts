@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Constants } from '../classes/constants';
 
 @Component({
   selector: 'app-item-container',
@@ -34,18 +35,18 @@ export class ItemContainerComponent implements OnInit {
   transformElement: string =  'translate3d(0, 0, 0)';
   
 
-  TARGETTYPE_PAGE = 'page';
-  TARGETTYPE_ARTICLE = 'article';
-  TARGETTYPE_CE = 'ce';
-  TARGETTYPE_MOD = 'mod';
+  TARGETTYPE_PAGE = Constants.TARGETTYPE_PAGE;
+  TARGETTYPE_ARTICLE = Constants.TARGETTYPE_ARTICLE;
+  TARGETTYPE_CE = Constants.TARGETTYPE_CE;
+  TARGETTYPE_MOD = Constants.TARGETTYPE_MOD;
 
-  ACTION_PARENT_EDIT = 'parent_edit';
-  ACTION_ELEMENT_EDIT = 'element_edit';
-  ACTION_ELEMENT_VISIBILITY = 'element_visibility';
-  ACTION_ELEMENT_DELETE = 'element_delete';
-  ACTION_ELEMENT_SHOW = 'element_show';
-  ACTION_ELEMENT_NEW = 'element_new';
-  ACTION_ELEMENT_COPY = 'element_copy';
+  ACTION_PARENT_EDIT = Constants.ACTION_PARENT_EDIT;
+  ACTION_ELEMENT_EDIT = Constants.ACTION_ELEMENT_EDIT;
+  ACTION_ELEMENT_VISIBILITY = Constants.ACTION_ELEMENT_VISIBILITY;
+  ACTION_ELEMENT_DELETE = Constants.ACTION_ELEMENT_DELETE;
+  ACTION_ELEMENT_SHOW = Constants.ACTION_ELEMENT_SHOW;
+  ACTION_ELEMENT_NEW = Constants.ACTION_ELEMENT_NEW;
+  ACTION_ELEMENT_COPY = Constants.ACTION_ELEMENT_COPY;
 
   constructor() { }
 

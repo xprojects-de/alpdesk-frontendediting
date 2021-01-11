@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { UrlGenerator } from 'src/app/classes/url-generator';
+import { Constants } from 'src/app/classes/constants';
 import { BaseItemComponent } from '../base-item/base-item.component';
 
 @Component({
@@ -23,9 +23,9 @@ export class ItemDeleteComponent extends BaseItemComponent {
 
   private generteRequestUrl(): string {
     let url: string = '';
-    if (this.targetType === UrlGenerator.TARGETTYPE_CE) {
+    if (this.targetType === Constants.TARGETTYPE_CE) {
       url = '/contao?do=' + this.do + '&table=tl_content&act=delete&id=' + this.id + '&rt=' + this.rt;
-    } else if (this.targetType === UrlGenerator.TARGETTYPE_ARTICLE) {
+    } else if (this.targetType === Constants.TARGETTYPE_ARTICLE) {
       url = '/contao?do=' + this.targetType + '&act=delete' + '&id=' + this.id + '&rt=' + this.rt;
     }
     return url;

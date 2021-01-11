@@ -1,4 +1,4 @@
-<div *ngIf="state === true"
+<div *ngIf="state === true" title="{{title}}"
 [style.backgroundRepeat]="'no-repeat'" 
 [style.width]="'30px'" 
 [style.height]="'35px'" 
@@ -11,7 +11,7 @@
 [style.backgroundImage]="'url(\'../../../system/themes/flexible/icons/invisible.svg\')'" 
 (click)="click()"></div>
 
-<div *ngIf="state === false"
+<div *ngIf="state === false" title="{{title}}"
 [style.backgroundRepeat]="'no-repeat'" 
 [style.width]="'30px'" 
 [style.height]="'35px'" 

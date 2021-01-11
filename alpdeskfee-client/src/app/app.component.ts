@@ -1,6 +1,7 @@
 import { Component, ComponentFactoryResolver, ComponentRef, ElementRef, HostListener, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Constants } from './classes/constants';
 import { UrlGenerator } from './classes/url-generator';
 import { ItemContainerComponent } from './item-container/item-container.component';
 import { DialogData, ModalIframeComponent } from './utils/modal-iframe/modal-iframe.component';
@@ -18,16 +19,7 @@ export class AppComponent implements OnInit {
   @Input('frameurl') frameurl: string = '/preview.php';
   @Input('frameheight') frameheight: string = '800px';
 
-  static ALPDESK_EVENTNAME = 'alpdesk_frontendediting_event';
-  static ALPDESK_EVENTNAME_FRAME = 'alpdesk_frontendediting_framechangedEvent';
-  static ACTION_INIT = 'init';
-
-  TARGETTYPE_PAGE = 'page';
-  TARGETTYPE_ARTICLE = 'article';
-  TARGETTYPE_CE = 'ce';
-  TARGETTYPE_MOD = 'mod';
-
-  @HostListener('document:' + AppComponent.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
+  @HostListener('document:' + Constants.ALPDESK_EVENTNAME, ['$event']) onAFEE_Event(event: CustomEvent) {
     //console.log(event.detail);
     if (event.detail.action !== null && event.detail.action !== undefined && event.detail.action === 'init') {
       this.scanElements(event.detail.labels, event.detail.pageEdit, event.detail.pageId);
@@ -40,7 +32,7 @@ export class AppComponent implements OnInit {
     }
   }
 
-  @HostListener('document:' + AppComponent.ALPDESK_EVENTNAME_FRAME, ['$event']) onAFEEFrame_Event(event: CustomEvent) {
+  @HostListener('document:' + Constants.ALPDESK_EVENTNAME_FRAME, ['$event']) onAFEEFrame_Event(event: CustomEvent) {
     //console.log(event.detail);    
   }
 
@@ -76,7 +68,7 @@ export class AppComponent implements OnInit {
   }
 
   reloadIframe() {
-    document.dispatchEvent(new CustomEvent(AppComponent.ALPDESK_EVENTNAME_FRAME, {
+    document.dispatchEvent(new CustomEvent(Constants.ALPDESK_EVENTNAME_FRAME, {
       detail: {
         reload: true
       }
@@ -89,7 +81,7 @@ export class AppComponent implements OnInit {
   }
 
   iframeLoad() {
-    document.dispatchEvent(new CustomEvent(AppComponent.ALPDESK_EVENTNAME_FRAME, {
+    document.dispatchEvent(new CustomEvent(Constants.ALPDESK_EVENTNAME_FRAME, {
       detail: {
         location: this.alpdeskfeeframe.nativeElement.contentWindow.location.href
       }
@@ -122,21 +114,21 @@ export class AppComponent implements OnInit {
           if (jsonData !== null && jsonData !== undefined && jsonData !== '') {
             const obj = JSON.parse(jsonData);
             if (obj !== null && obj !== undefined) {
-              if (obj.type === this.TARGETTYPE_ARTICLE) {
+              if (obj.type === Constants.TARGETTYPE_ARTICLE) {
                 let parentNode = e.parentElement;
                 if (parentNode !== null) {
                   parentNode.style.minHeight = '50px';
                   parentNode.classList.add('alpdeskfee-article-container');
-                  parentNode.onmouseover = function (event) {
+                  /*parentNode.onmouseover = function (event) {
                     if (parentNode !== null && parentNode !== undefined) {
-                      parentNode.style.outline = '1px dashed rgb(244, 124, 0)';
+                      parentNode.style.outline = '2px dashed rgb(244, 124, 0)';
                     }
                   };
                   parentNode.onmouseout = function () {
                     if (parentNode !== null && parentNode !== undefined) {
                       parentNode.style.outline = '0px dashed rgb(244, 124, 0)';
                     }
-                  };
+                  };*/
                   parentNode.onclick = function () {
                     if (parentNode !== null) {
                       compRef.instance.changeParent(obj, parentNode);
@@ -149,7 +141,7 @@ export class AppComponent implements OnInit {
               } else {
                 e.classList.add('alpdeskfee-ce-container');
                 e.onmouseover = function () {
-                  e.style.outline = '1px dashed rgb(244, 124, 0)';
+                  e.style.outline = '2px dashed rgb(244, 124, 0)';
                   e.style.outlineOffset = '2px';
                 };
                 e.onmouseout = function () {
@@ -176,8 +168,8 @@ export class AppComponent implements OnInit {
                         compRef.instance.changeElement(objElement, currentElement);
                         compRef.changeDetectorRef.detectChanges();
                       }
-                    } else {
-                      let closestElement = currentElement.closest('[data-alpdeskfee]') as HTMLElement;
+                    } else {                      
+                      let closestElement = currentElement.closest('*[data-alpdeskfee]') as HTMLElement;
                       if (closestElement !== null && closestElement !== undefined) {
                         let jsonDataElement = closestElement.getAttribute('data-alpdeskfee');
                         if (jsonDataElement !== null && jsonDataElement !== undefined && jsonDataElement !== '') {

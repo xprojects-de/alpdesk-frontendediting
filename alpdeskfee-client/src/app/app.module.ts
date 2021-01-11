@@ -24,7 +24,7 @@ import { ModalIframeComponent } from './utils/modal-iframe/modal-iframe.componen
 import { createCustomElement } from '@angular/elements';
 import { HttpClientModule } from '@angular/common/http';
 import { ItemBarDirective } from './directives/item-bar.directive';
-import {DragDropModule} from '@angular/cdk/drag-drop'; 
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -64,9 +64,9 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 })
 export class AppModule {
   constructor(private injector: Injector) {
-    
+
   }
-  ngDoBootstrap() { 
+  ngDoBootstrap() {
     //const alpdeskfeeroot = createCustomElement(AppComponent, { injector: this.injector });
     //customElements.define('app-root', alpdeskfeeroot);
     const alpdeskfeecustom = createCustomElement(AppComponent, { injector: this.injector });

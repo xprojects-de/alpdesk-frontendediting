@@ -12,14 +12,17 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
 
   private element: HTMLElement;
   private changed: boolean = false;
+  private sticky: boolean = false;
 
   private subscriptions: Subscription[] = [];
+  private frameScrollSubscription!: Subscription;
 
   constructor(el: ElementRef) {
     this.element = el.nativeElement;
   }
 
   ngAfterViewInit() {
+    this.stickyItemBar();
     this.draggableElement();
   }
 
@@ -31,6 +34,35 @@ export class ItemBarDirective implements AfterViewInit, OnDestroy, OnChanges {
     this.subscriptions.forEach((s) => {
       if (s !== null && s !== undefined) {
         s.unsubscribe()
+      }
+    });
+    if(this.frameScrollSubscription !== null && this.frameScrollSubscription !== undefined) {
+      this.frameScrollSubscription.unsubscribe();
+    }
+  }
+
+  stickyItemBar() {
+    const frameScrollEvent$ = fromEvent<MouseEvent>(this.frameContentDocument, "scroll");
+    let savedTop = 0;
+    this.frameScrollSubscription = frameScrollEvent$.subscribe((event: MouseEvent) => {
+      if (this.frameContentDocument !== undefined && this.frameContentDocument !== null) {
+        let scrollValue = 0;
+        if(this.frameContentDocument.scrollingElement) {
+          scrollValue = this.frameContentDocument.scrollingElement.scrollTop;
+        } else if(this.frameContentDocument.documentElement.scrollTop) {
+          scrollValue = this.frameContentDocument.documentElement.scrollTop;
+        } 
+        let topSelected = this.selectedElement.getBoundingClientRect().top - this.element.offsetHeight;
+        if (topSelected <= 0 && !this.sticky) {
+          savedTop = this.element.offsetTop;
+          this.element.style.position = 'fixed';
+          this.element.style.top = '0px';
+          this.sticky = true;
+        } else if (topSelected > 0 && this.sticky) {
+          this.element.style.position = 'absolute';
+          this.element.style.top = savedTop + 'px';
+          this.sticky = false;
+        }
       }
     });
   }
