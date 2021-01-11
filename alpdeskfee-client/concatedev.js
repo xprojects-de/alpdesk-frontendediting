@@ -2,6 +2,7 @@ const fs = require('fs-extra');
 const concat = require('concat');
 (async function build() {
     const files = [
+        './mootoolscompat.js',
         './dist/alpdeskfee-client/runtime.js',
         './dist/alpdeskfee-client/polyfills.js',
         './dist/alpdeskfee-client/vendor.js',
