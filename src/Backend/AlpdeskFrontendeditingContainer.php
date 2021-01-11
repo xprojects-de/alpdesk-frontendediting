@@ -56,7 +56,7 @@ class AlpdeskFrontendeditingContainer {
 
     $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_be.js';
     $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_be.css';
-    $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/angular/styles.css';
+    $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/angular/alpdeskfee-styles.css';
 
 
     $containerTemplate = new BackendTemplate('be_alpdeskfrontendediting_container');
