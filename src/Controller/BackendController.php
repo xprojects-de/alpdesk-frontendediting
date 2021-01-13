@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Alpdesk\AlpdeskFrontendediting\Controller;
 
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +21,8 @@ class BackendController extends AbstractController {
   private $security = null;
   private $tokenChecker = null;
   private $backendUser = null;
+  private $csrfTokenManager = null;
+  private $csrfTokenName;
   public static $STATUSCODE_OK = 200;
   public static $STATUSCODE_COMMONERROR = 400;
   public static $TARGETTYPE_PAGE = 'page';
@@ -33,9 +37,11 @@ class BackendController extends AbstractController {
   public static $ACTION_ELEMENT_NEW = 'element_new';
   public static $ACTION_ELEMENT_COPY = 'element_copy';
 
-  public function __construct(TokenChecker $tokenChecker, Security $security) {
+  public function __construct(TokenChecker $tokenChecker, Security $security, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName) {
     $this->tokenChecker = $tokenChecker;
     $this->security = $security;
+    $this->csrfTokenManager = $csrfTokenManager;
+    $this->csrfTokenName = $csrfTokenName;
     $this->getBackendUser();
   }
 
@@ -54,6 +60,14 @@ class BackendController extends AbstractController {
     }
   }
 
+  private function checkToken($token) {
+    $token = new CsrfToken($this->csrfTokenName, $token);
+    $valid = $this->csrfTokenManager->isTokenValid($token);
+    if ($valid !== true) {
+      throw new \Exception('Invalid Token');
+    }
+  }
+
   public function endpoint(Request $request): JsonResponse {
 
     try {
@@ -61,6 +75,15 @@ class BackendController extends AbstractController {
       $this->checkAccess();
 
       $data = (array) $request->request->get('data');
+      $rt = (string) $request->request->get('rt');
+      if (\count($data) == 0) {
+        $content = $request->getContent();
+        $json = \json_decode($content, true);
+        $data = \json_decode($json['data'], true);
+        $rt = (string) $json['rt'];
+      }
+
+      $this->checkToken($rt);
 
       $response = new JsonResponse('COMMOM ERROR', self::$STATUSCODE_COMMONERROR);
 

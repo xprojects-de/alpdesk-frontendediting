@@ -5,35 +5,6 @@
 
 #alpdesk-fee-frame-legend {
   background-color: #eaeaec;
-  padding: 10px;
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-bottom: 0px;
-}
-
-#alpdesk-fee-frame-container {
-  resize: both;
-  overflow: auto;
-  max-width: 100%;
-  border: 1px solid #d0d0d2;
-  background-color: #ffffff;
-}
-
-#alpdesk-fee-frame {
-  border: none;
-}
-
-#alpdesk-fee-alpdeskloading {
-  background-color: #fff;
-  background-image: url('../images/loading.gif');
-  background-repeat: no-repeat;
-  background-position: center center;
-  position: absolute;
-  top: 0;
-  left:0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.9;
 }
 
 .clear {
@@ -53,21 +24,9 @@
   text-align: right;
 }
 
-.w33 select {
-  float: left;
-  width: 200px;
-}
-
 .wx60 .tl_text {
   float: right;
   width: 225px;
-}
-
-.w33 button {
-  float: left;
-  width: 75px;
-  margin-left: 10px;
-  margin-top: 3px;
 }
 
 .wx60 button {
@@ -94,13 +53,4 @@
 
 #livemodeactive {
   background-color: rgba(244, 124, 0, 1);
-}
-
-#devicedimensoninfocontainer {
-  padding-left: 8px;
-  margin-top: 3px;
-  padding-top:3px;
-  padding-bottom: 3px;
-  background-color: #fff;
-  max-width: 125px;
 }

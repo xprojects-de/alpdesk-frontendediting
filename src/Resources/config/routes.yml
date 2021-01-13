@@ -4,5 +4,5 @@ alpdesk_frontendediting:
     defaults:
         _controller: Alpdesk\AlpdeskFrontendediting\Controller\BackendController:endpoint
         _scope: backend
-        _token_check: true
+        _token_check: false
     methods: [POST]

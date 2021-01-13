@@ -1,21 +1,5 @@
 <div id="alpdesk-fee-backendcontainer">
   <div id="alpdesk-fee-frame-legend">
-    <div class="w33 widget">
-      <select id="getdevice" class="tl_select">
-        <option value="desktop">Desktop</option>
-        <option value="tablet">Tablet</option>
-        <option value="tablet_landscape">Tablet landscape</option>
-        <option value="phone">Phone</option>
-        <option value="phone_landscape">Phone landscape</option>
-      </select>
-      <button title="<?= $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['device_select'] ?>" id="setdevice" class="tl_submit">
-        <img src="system/themes/flexible/icons/published.svg">
-      </button>
-      <div class="clear"></div>
-      <div id="devicedimensoninfocontainer">
-        <span id="devicedimensoninfo">-</span>
-      </div>
-    </div>
     <div class="wx60 widget">
       <form method="post">
         <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->token ?>">
@@ -34,16 +18,10 @@
       <button title="<?= $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['page_select'] ?>" id="pageselect" class="tl_submit">
         <img src="system/themes/flexible/icons/root.svg">
       </button>
-      <button title="<?= $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['refresh_frame'] ?>" id="seturl" class="tl_submit">
-        <img width="18" src="bundles/alpdeskfrontendediting/images/refresh.png">
-      </button>
-      <input id="urlparam" value="" class="tl_text">
-      <strong>/preview.php/</strong>
     </div>
     <div class="clear"></div>
   </div>
-  <div id="alpdesk-fee-frame-container">
-    <iframe data-base="<?= $this->base ?>" data-request-token="<?= $this->token ?>" id="alpdesk-fee-frame" src="<?= $this->url ?>" width="100%" height="100%"></iframe>
-  </div>
-  <div id="alpdesk-fee-alpdeskloading"></div>
+  <app-alpdeskfee base="<?= $this->base ?>" rt="<?= $this->token ?>" frameheight="100%" frameurl="<?= $this->url ?>"></app-alpdeskfee>
+  <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements-es5.js?v=<?= time() ?>"></script>
+  <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements-es6.js?v=<?= time() ?>" nomodule defer></script>
 </div>

@@ -2,15 +2,20 @@
 # Alpdesk Frontend-Editing für Contao
 Mit Hilfe dieser Erweiterung lässt sich deine Webseite visuell direkt im Backend bearbeiten.
 
+## Repo Angular/Javascript Sourcen
+https://github.com/xprojects-de/alpdesk-frontendediting-client
+
+## Wiki
+https://github.com/xprojects-de/alpdesk-frontendediting/wiki
+
 
 ## Konzept
 
 Die Erweiterung ist ein normales Backendmodul und läuft somit direkt im Backend-Scope.
-Auf Basis des Javascript-Eventhandlings werden lediglich lokale Events (Same-Origin-Policy) der Frontendansicht ins Backend geschickt und dort verarbeitet.
+Auf Basis von Angular (kompiliert dann natives Javascript) werden Bearbeitungssymbole direkt visuell im View dargestellt. Augfrund der  Same-Origin-Policy ist es mit Hilfe von Javascript möglich, dass Backend und Frontend miteinander agieren.
 Das Backend bedient sich dann dem mächtigen Backend-Editing von Contao indem einfach die passenden URLs in einem Overlay-Dialog angezeigt werden. Somit steht das komplette Backend-Editing wie gewohnt zur Verfügung, nur halt ein bisschen visueller dargestellt.
 
-Aufgrund der "Same-Origin-Policy" ist es nur möglich und auch gewollt das Frontend-Editing direkt übers Backend zu bedienen.
-Wird die Frontend-Vorschau aufgerufen, sind die Elemente nicht verfügbar! Aus Sicherheitsgründen ist das auch so gewollt, da das Backend nur einen EventListener auf Events des "Same-Origin" bereitstellt und diese verarbeitet. Es wird KEIN "postMessage-Cross-Domain"-Eventlistenerer bereitgestellt, was auch gut so ist :-)
+Wird die Frontend-Vorschau aufgerufen, sind die Elemente nicht verfügbar, was auch so gewollt ist :-)
 
 ## Verwendung
 
@@ -35,7 +40,7 @@ Aber es ist es auch möglich die eigene Erweiterung über das Symfony-Eventhandl
 
 ## Sonstiges
 
-- Die Erweiterung verwendet bewusst keine Javascript-Libs und kommt mit nativem Javascript aus. Somit sollte es keine Probleme im Frontend geben
+- Die Erweiterung verwendet bewusst keine Javascript-Libs und kommt mit nativem Javascript aus. Es wird zwar alles auf Basis von Angular programmiert, aber nach dem kompilieren ist es dann wirkliches natives Javascript.  Somit sollte es keine Probleme im Frontend geben
 - Tests wurden mit den aktuellen Versionen von Firefox, Chrome und Safari durchgeführt
 
 
@@ -104,7 +109,6 @@ class ProjectsAlpdeskFrontendViewListener {
 }
 ```
 
-- Lösung für z.B. fixed-Headers oder überlagerte Elemente: Manchmal kann es Probleme mit einem z.B. fixed header geben wo prinzipiell der Content hinter den Header läuft. Über einen "Rechts-Klick" auf das Element kann Dieses in den Vordergrund (z-index: 200000) "geholt" werden und dann bearbeitet werden.
 - Ist kein Backend-User eingelogged wird der ganze "zusätzliche" Code NICHT ausgeführt und die Hooks werden sofort wieder verlassen. Somit gibt es hier keine Performanceprobleme im normalen Betrieb.
 
 ## Was ist noch zu tun?
@@ -117,17 +121,11 @@ class ProjectsAlpdeskFrontendViewListener {
 Für diese Erweiterung übernehme ich keinerlei Haftung!
 
 ## Bilder
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild1.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild2.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild3.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild4.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild5.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild6.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild7.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild8.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild9.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild10.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild11.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild12.png" alt=""></p>  
-<p><img src="https://x-projects.de/files/alpdesk/frontendediting/bild13.png" alt=""></p>   
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/v1.1.0/bild1.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/v1.1.0/bild2.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/v1.1.0/bild3.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/v1.1.0/bild4.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/v1.1.0/bild5.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/v1.1.0/bild6.png" alt=""></p>  
+<p><img src="https://x-projects.de/files/alpdesk/frontendediting/v1.1.0/bild7.png" alt=""></p>  
 

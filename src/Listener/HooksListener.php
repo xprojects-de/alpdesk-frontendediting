@@ -61,7 +61,6 @@ class HooksListener {
     if ($this->backendUser !== null && !$this->alpdeskfee_livemodus) {
 
       $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_fe.js|async';
-      $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_fe.css';
 
       if ($this->backendUser->hasAccess('page', 'modules')) {
         $this->currentPageId = $objPage->id;
@@ -136,7 +135,7 @@ class HooksListener {
   public function onGetContentElement(ContentModel $element, string $buffer, $el): string {
 
     if ($this->checkAccess()) {
-      
+
       $modDoType = Custom::processElement($element, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
 
       // We have a module as content element
