@@ -53,7 +53,7 @@ Die Erweiterung sollte voll funktionsfähig sein, bis auf die Bugs die ich selbe
 
 Beispiel um einen eigenen Icon für ein Inhaltselement einzufügen:
 
-```
+```yaml
 # service.yml oder listener.yml
 
 services:
@@ -64,7 +64,7 @@ services:
       - { name: kernel.event_listener, event: alpdeskfrontendediting.element}
 ```
 
-```
+```php
 
 // Passende Eventklasse dazu
 // Modul funktioniert analog
