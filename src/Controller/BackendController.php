@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Contao\BackendUser;
 use Contao\System;
+use Contao\ContentModel;
 
 // CHeck Route: sudo /Applications/MAMP/bin/php/php7.4.9/bin/php vendor/bin/contao-console debug:router
 
@@ -29,6 +30,7 @@ class BackendController extends AbstractController {
   public static $TARGETTYPE_ARTICLE = 'article';
   public static $TARGETTYPE_CE = 'ce';
   public static $TARGETTYPE_MOD = 'mod';
+  public static $TARGETTYPE_INFO = 'info';
   public static $ACTION_PARENT_EDIT = 'parent_edit';
   public static $ACTION_ELEMENT_EDIT = 'element_edit';
   public static $ACTION_ELEMENT_VISIBILITY = 'element_visibility';
@@ -36,6 +38,11 @@ class BackendController extends AbstractController {
   public static $ACTION_ELEMENT_SHOW = 'element_show';
   public static $ACTION_ELEMENT_NEW = 'element_new';
   public static $ACTION_ELEMENT_COPY = 'element_copy';
+  public static $ACTION_ELEMENT_CUT = 'element_cut';
+  public static $ACTION_ELEMENT_DRAG = 'element_drag';
+  public static $ACTION_ELEMENT_PASTEAFTER = 'element_pasteafter';
+  public static $ACTION_CLIPBOARD = 'clipboard';
+  public static $ACTION_NEWRECORDS = 'new_records';
 
   public function __construct(TokenChecker $tokenChecker, Security $security, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName) {
     $this->tokenChecker = $tokenChecker;
@@ -96,6 +103,10 @@ class BackendController extends AbstractController {
             $response = $this->procceedType_Article($data);
             break;
           }
+        case self::$TARGETTYPE_INFO: {
+            $response = $this->procceedType_Info($data);
+            break;
+          }
         default:
           break;
       }
@@ -130,6 +141,25 @@ class BackendController extends AbstractController {
       $data['clipboard'] = $clipboard;
 
       return (new JsonResponse($data));
+    } else if ($data['action'] == self::$ACTION_ELEMENT_CUT) {
+
+      $clipboard = System::getContainer()->get('session')->get('CLIPBOARD');
+
+      if (!\is_array($clipboard) || $clipboard === null) {
+        $clipboard = [];
+      }
+
+      $clipboard['tl_content'] = [
+          'childs' => null,
+          'id' => \intval($data['id']),
+          'mode' => 'cut'
+      ];
+
+      System::getContainer()->get('session')->set('CLIPBOARD', $clipboard);
+
+      $data['clipboard'] = $clipboard;
+
+      return (new JsonResponse($data));
     } else if ($data['action'] == self::$ACTION_ELEMENT_NEW) {
 
       System::getContainer()->get('session')->set('CURRENT_ID', \intval($data['pid']));
@@ -154,6 +184,68 @@ class BackendController extends AbstractController {
       $data['CURRENT_ID'] = $currentid;
 
       return (new JsonResponse($data));
+    }
+
+    throw new \Exception('invalid action');
+  }
+
+  private function procceedType_Info($data): JsonResponse {
+
+    // currently we do not need any Access-Check because only the clipboard is modified and no record of Database is affected
+    // In future be careful!
+
+    if ($data['action'] == self::$ACTION_CLIPBOARD) {
+
+      $clipboard = System::getContainer()->get('session')->get('CLIPBOARD');
+      if (!\is_array($clipboard) || $clipboard === null) {
+        $clipboard = [];
+      }
+
+      return (new JsonResponse($clipboard));
+    } else if ($data['action'] == self::$ACTION_NEWRECORDS) {
+
+      $objSession = System::getContainer()->get('session');
+      $objSessionBag = $objSession->getBag('contao_backend');
+      $new_records = $objSessionBag->get('new_records');
+      if (!\is_array($new_records) || $new_records === null) {
+        $new_records = [];
+      }
+
+      $updatedrecords = [];
+      if ($data['updateContentRecords'] == true && count($new_records) > 0) {
+        foreach ($new_records as $key => $value) {
+          if ($key == 'tl_content') {
+            if (\is_array($value)) {
+              foreach ($value as $uId) {
+                $contentModel = ContentModel::findById(\intval($uId));
+                if ($contentModel !== null) {
+                  if ($contentModel->tstamp == 0) {
+                    $contentModel->tstamp = time();
+                    $contentModel->save();
+                    \array_push($updatedrecords, \intval($uId));
+                  }
+                }
+              }
+            } else {
+              $contentModel = ContentModel::findById(\intval($value));
+              if ($contentModel !== null) {
+                if ($contentModel->tstamp == 0) {
+                  $contentModel->tstamp = time();
+                  $contentModel->save();
+                  \array_push($updatedrecords, \intval($value));
+                }
+              }
+            }
+          }
+        }
+      }
+
+      $result = [
+          'new_records' => $new_records,
+          'updatedrecords' => $updatedrecords
+      ];
+
+      return (new JsonResponse($result));
     }
 
     throw new \Exception('invalid action');

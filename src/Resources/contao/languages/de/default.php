@@ -30,7 +30,11 @@ $GLOBALS['TL_LANG']['alpdeskfee_lables'] = [
     'copy_element' => 'Element kopieren',
     'delete_element' => 'Element löschen',
     'element_visible' => 'Element verstecken/anzeigen',
-    'element_mod' => 'Modul bearbeiten'
+    'element_mod' => 'Modul bearbeiten',
+    'cut_drag_element' => 'Element verschieben',
+    'paste_element' => 'Element aus Zwischenablage einfügen',
+    'clipboard_element_cut' => 'Element zum Verschieben in Zwischenablage gelegt',
+    'clipboard_element_copy' => 'Element zum Kopieren in Zwischenablage gelegt'
 ];
 
 $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'] = [
