@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Contao\BackendUser;
 use Contao\System;
+use Contao\ContentModel;
 
 // CHeck Route: sudo /Applications/MAMP/bin/php/php7.4.9/bin/php vendor/bin/contao-console debug:router
 
@@ -41,6 +42,7 @@ class BackendController extends AbstractController {
   public static $ACTION_ELEMENT_DRAG = 'element_drag';
   public static $ACTION_ELEMENT_PASTEAFTER = 'element_pasteafter';
   public static $ACTION_CLIPBOARD = 'clipboard';
+  public static $ACTION_NEWRECORDS = 'new_records';
 
   public function __construct(TokenChecker $tokenChecker, Security $security, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName) {
     $this->tokenChecker = $tokenChecker;
@@ -200,6 +202,50 @@ class BackendController extends AbstractController {
       }
 
       return (new JsonResponse($clipboard));
+    } else if ($data['action'] == self::$ACTION_NEWRECORDS) {
+
+      $objSession = System::getContainer()->get('session');
+      $objSessionBag = $objSession->getBag('contao_backend');
+      $new_records = $objSessionBag->get('new_records');
+      if (!\is_array($new_records) || $new_records === null) {
+        $new_records = [];
+      }
+
+      $updatedrecords = [];
+      if ($data['updateContentRecords'] == true && count($new_records) > 0) {
+        foreach ($new_records as $key => $value) {
+          if ($key == 'tl_content') {
+            if (\is_array($value)) {
+              foreach ($value as $uId) {
+                $contentModel = ContentModel::findById(\intval($uId));
+                if ($contentModel !== null) {
+                  if ($contentModel->tstamp == 0) {
+                    $contentModel->tstamp = time();
+                    $contentModel->save();
+                    \array_push($updatedrecords, \intval($uId));
+                  }
+                }
+              }
+            } else {
+              $contentModel = ContentModel::findById(\intval($value));
+              if ($contentModel !== null) {
+                if ($contentModel->tstamp == 0) {
+                  $contentModel->tstamp = time();
+                  $contentModel->save();
+                  \array_push($updatedrecords, \intval($value));
+                }
+              }
+            }
+          }
+        }
+      }
+
+      $result = [
+          'new_records' => $new_records,
+          'updatedrecords' => $updatedrecords
+      ];
+
+      return (new JsonResponse($result));
     }
 
     throw new \Exception('invalid action');
