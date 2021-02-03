@@ -1,5 +1,9 @@
 
 # Alpdesk Frontend-Editing für Contao
+
+[![Version](https://img.shields.io/packagist/v/alpdesk/alpdesk-frontendediting)](https://packagist.org/packages/alpdesk/alpdesk-frontendediting)
+[![Contao Version](https://img.shields.io/badge/Contao-%5E4.9-orange)](https://contao.org)
+
 Mit Hilfe dieser Erweiterung lässt sich deine Webseite visuell direkt im Backend bearbeiten.
 
 ## Repo Angular/Javascript Sourcen
