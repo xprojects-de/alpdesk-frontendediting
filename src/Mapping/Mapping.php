@@ -6,12 +6,14 @@ namespace Alpdesk\AlpdeskFrontendediting\Mapping;
 
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 use Contao\Module;
+use Contao\Form;
 use Contao\ContentModel;
 use Contao\BackendUser;
 use Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\Base;
 use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventService;
 use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventElement;
 use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventModule;
+use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventForm;
 
 class Mapping {
 
@@ -94,6 +96,24 @@ class Mapping {
 
     $eventModule = new AlpdeskFrontendeditingEventModule($item, $module);
     $this->alpdeskfeeEventDispatcher->getDispatcher()->dispatch($eventModule, AlpdeskFrontendeditingEventModule::NAME);
+    return $eventModule->getItem();
+  }
+
+  public function mapForm(CustomViewItem $item, Form $form): CustomViewItem {
+
+    $instance = Base::findClassByForm($form, $this->mappingconfig);
+    if ($instance !== null) {
+      $item->setIcon($instance->icon);
+      $item->setIconclass($instance->iconclass);
+      $item->setLabel($instance->label);
+      $modifiedItem = $instance->run($item);
+      $eventModule = new AlpdeskFrontendeditingEventForm($modifiedItem, $form);
+      $this->alpdeskfeeEventDispatcher->getDispatcher()->dispatch($eventModule, AlpdeskFrontendeditingEventForm::NAME);
+      return $eventModule->getItem();
+    }
+
+    $eventModule = new AlpdeskFrontendeditingEventForm($item, $form);
+    $this->alpdeskfeeEventDispatcher->getDispatcher()->dispatch($eventModule, AlpdeskFrontendeditingEventForm::NAME);
     return $eventModule->getItem();
   }
 
