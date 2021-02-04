@@ -143,7 +143,7 @@ class HooksListener {
       $modDoType = Custom::processElement($element, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
 
       // We have a module as content element
-      if ($modDoType->getType() == CustomViewItem::$TYPE_MODULE) {
+      if ($modDoType->getType() == CustomViewItem::$TYPE_MODULE || $modDoType->getType() == CustomViewItem::$TYPE_FORM) {
         return $this->renderModuleOutput($modDoType, $buffer);
       }
 
@@ -205,13 +205,16 @@ class HooksListener {
       if ($modDoType->getCustomBackendModule() !== '') {
         $do = $modDoType->getCustomBackendModule();
       }
+      
+      $access = true;
       if (!$hasElementAccess || !$hasBackendModuleAccess || !$modDoType->getHasParentAccess()) {
-        $do = '';
+        $access = false;
       }
 
       $data = [
           'type' => 'ce',
           'do' => $do,
+          'access' => $access,
           'id' => $element->id,
           'pid' => $element->pid,
           'invisible' => ($element->invisible == 1 ? true : false),
@@ -233,7 +236,7 @@ class HooksListener {
 
   private function renderModuleOutput(CustomViewItem $modDoType, string $buffer) {
 
-    if ($modDoType->getValid() === true && $modDoType->getType() == CustomViewItem::$TYPE_MODULE) {
+    if ($modDoType->getValid() === true && ($modDoType->getType() == CustomViewItem::$TYPE_MODULE || $modDoType->getType() == CustomViewItem::$TYPE_FORM)) {
       $data = [
           'type' => 'mod',
           'do' => $modDoType->getPath(),
