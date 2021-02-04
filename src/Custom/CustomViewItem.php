@@ -8,6 +8,7 @@ class CustomViewItem {
 
   public static $TYPE_MODULE = 1;
   public static $TYPE_CE = 2;
+  public static $TYPE_FORM = 3;
   private $type = 0;
   private $valid = false;
   private $path = '';

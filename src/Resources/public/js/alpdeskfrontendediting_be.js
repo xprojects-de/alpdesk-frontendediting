@@ -20,12 +20,12 @@
     document.getElementById('pageselect').onclick = function () {
       Backend.openModalSelector({
         id: 'tl_listing',
-        title: 'Frontend-View',
+        title: 'Frontend-Editing',
         url: '/contao/picker?context=page&fieldType=radio',
         callback: function (table, value) {
           if (value !== null && value !== undefined) {
             if (value.length > 0) {
-              window.location.href = window.location.href + "&pageselect=" + value[0];
+              window.location.href = window.location.href + "?pageselect=" + value[0];
             }
           }
         }

@@ -6,12 +6,14 @@ namespace Alpdesk\AlpdeskFrontendediting\Mapping;
 
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 use Contao\Module;
+use Contao\Form;
 use Contao\ContentModel;
 use Contao\BackendUser;
 use Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\Base;
 use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventService;
 use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventElement;
 use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventModule;
+use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventForm;
 
 class Mapping {
 
@@ -26,6 +28,7 @@ class Mapping {
   public function checkCustomTypeElementAccess(ContentModel $element, CustomViewItem $item) {
 
     //e.g. if user has access to special news item or event item defined in user settings
+    // Check if tl_content element can be editied e.g. news which have a different ptable
     if ($this->mappingconfig !== null && \is_array($this->mappingconfig)) {
       $pTable = str_replace('tl_', '', $element->ptable);
       if (\array_key_exists($pTable, $this->mappingconfig['alpdesk_frontendediting_mapping']['element_access_check'])) {
@@ -94,6 +97,24 @@ class Mapping {
 
     $eventModule = new AlpdeskFrontendeditingEventModule($item, $module);
     $this->alpdeskfeeEventDispatcher->getDispatcher()->dispatch($eventModule, AlpdeskFrontendeditingEventModule::NAME);
+    return $eventModule->getItem();
+  }
+
+  public function mapForm(CustomViewItem $item, Form $form): CustomViewItem {
+
+    $instance = Base::findClassByForm($form, $this->mappingconfig);
+    if ($instance !== null) {
+      $item->setIcon($instance->icon);
+      $item->setIconclass($instance->iconclass);
+      $item->setLabel($instance->label);
+      $modifiedItem = $instance->run($item);
+      $eventModule = new AlpdeskFrontendeditingEventForm($modifiedItem, $form);
+      $this->alpdeskfeeEventDispatcher->getDispatcher()->dispatch($eventModule, AlpdeskFrontendeditingEventForm::NAME);
+      return $eventModule->getItem();
+    }
+
+    $eventModule = new AlpdeskFrontendeditingEventForm($item, $form);
+    $this->alpdeskfeeEventDispatcher->getDispatcher()->dispatch($eventModule, AlpdeskFrontendeditingEventForm::NAME);
     return $eventModule->getItem();
   }
 
