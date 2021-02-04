@@ -42,5 +42,6 @@ $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'] = [
     'navigation' => 'Navigation',
     'rocksolidslider' => 'RockSolidSlider',
     'events' => 'Events',
+    'form' => 'Formular',
 ];
 
