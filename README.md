@@ -33,6 +33,7 @@ Weiter kann zusätzlich in den Benutzereinstellungen angewählt werden, welche E
 - Newsmodul (Newsliste und Newsreader)
 - Eventmodul (Eventliste und Eventreader)
 - RocksolidSlider
+- Formulare
 - ... mehr werden folgen wenn diese gebraucht werden :-) Aber man kann auch auch selber tätig werden... (siehe Technisches)
 
 ## Mapping Backendmodule zu Inhaltselementen und Frontendmodulen
@@ -52,7 +53,7 @@ Die Erweiterung sollte voll funktionsfähig sein, bis auf die Bugs die ich selbe
 
 ## Technisches
 
-- Die Erweiterung stellt zwei Events bereit (alpdeskfrontendediting.element und alpdeskfrontendediting.module) auf welche man sich per EventListener registieren kann.
+- Die Erweiterung stellt drei Events bereit (alpdeskfrontendediting.element, alpdeskfrontendediting.module und alpdeskfrontendediting.form) auf welche man sich per EventListener registieren kann.
 -  Das Event wird bei bei jedem Rendern eines FrontendModules und Inhaltselement getriggert und liefert jeweils das Model und das spezifische FrontendEditing-Object (Hooks getContentElement und getFrontendModule). Auf diesem Wege können vorhandene Frontend-Bar-Items angepasst werden oder sogar neue, eigene Frontend-Bar-Items hinzugefügt werden und mit passender Logik zum BackendModul versehen werden.
 
 Beispiel um einen eigenen Icon für ein Inhaltselement einzufügen:
