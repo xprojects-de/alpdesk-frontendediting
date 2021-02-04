@@ -1,3 +1,3 @@
 <?php
 
-$GLOBALS['TL_LANG']['MOD']['alpdeskfrontendediting'] = ['Frontend-View', ''];
+$GLOBALS['TL_LANG']['MOD']['alpdeskfrontendediting'] = ['Frontend-Editing', ''];

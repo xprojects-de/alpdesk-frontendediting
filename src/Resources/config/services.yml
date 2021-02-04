@@ -28,3 +28,9 @@ services:
           - '%contao.csrf_token_name%'
       tags:
           - controller.service_arguments
+          
+  Alpdesk\AlpdeskFrontendediting\Controller\AlpdeskbackendController:
+      arguments:
+          - '@twig'
+      tags:
+          - controller.service_arguments
