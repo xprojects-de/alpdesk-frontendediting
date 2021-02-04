@@ -45,8 +45,9 @@ class Utils {
       $time = Date::floorToMinute();
 
       foreach ((array) $backendUser->groups as $id) {
-        $objGroup = Database::getInstance()->prepare("SELECT alpdesk_fee_elements FROM tl_user_group WHERE id=? AND disable!='1' AND (start='' OR start<='$time') AND (stop='' OR stop>'$time')")->limit(1)->execute($id);
+        $objGroup = Database::getInstance()->prepare("SELECT alpdesk_fee_enabled,alpdesk_fee_elements FROM tl_user_group WHERE id=? AND disable!='1' AND (start='' OR start<='$time') AND (stop='' OR stop>'$time')")->limit(1)->execute($id);
         if ($objGroup->numRows > 0) {
+          $backendUser->alpdesk_fee_enabled = $objGroup->alpdesk_fee_enabled;
           $value = StringUtil::deserialize($objGroup->alpdesk_fee_elements, true);
           if (!empty($value)) {
             if ($backendUser->alpdesk_fee_elements === null) {

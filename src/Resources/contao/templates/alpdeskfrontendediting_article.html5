@@ -1,1 +1,0 @@
-<div class="alpdeskfee-article" data-alpdeskfee='<?= $this->data ?>'></div>

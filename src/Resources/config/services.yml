@@ -14,6 +14,7 @@ services:
       arguments:
           - '@contao.security.token_checker'
           - '@alpdeskfrontendediting.eventservice'
+          - '@twig'
       tags:
           - { name: contao.hook, hook: getPageLayout, method: onGetPageLayout, priority: 0 }
           - { name: contao.hook, hook: compileArticle, method: onCompileArticle, priority: 0 }
@@ -32,5 +33,9 @@ services:
   Alpdesk\AlpdeskFrontendediting\Controller\AlpdeskbackendController:
       arguments:
           - '@twig'
+          - '@contao.csrf.token_manager'
+          - '%contao.csrf_token_name%'
+          - '@router'
+          - '@security.helper'
       tags:
           - controller.service_arguments

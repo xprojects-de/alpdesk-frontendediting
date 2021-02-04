@@ -14,6 +14,7 @@ class AlpdeskFrontendeditingExtension extends Extension {
   public function load(array $mergedConfig, ContainerBuilder $container) {
     $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
     $loader->load('services.yml');
+    $loader->load('listener.yml');
   }
 
 }

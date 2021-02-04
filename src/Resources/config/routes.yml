@@ -7,10 +7,9 @@ alpdesk_frontendediting:
         _token_check: false
     methods: [POST]
     
-alpdesk_backend:
+alpdesk_frontendediting_backend:
     path: /contao/alpdeskfeebackend
     defaults:
         _controller: Alpdesk\AlpdeskFrontendediting\Controller\AlpdeskbackendController:endpoint
         _scope: backend
-        _token_check: true
-    methods: [POST,GET]    
+    methods: [POST, GET]    
