@@ -28,6 +28,7 @@ class Mapping {
   public function checkCustomTypeElementAccess(ContentModel $element, CustomViewItem $item) {
 
     //e.g. if user has access to special news item or event item defined in user settings
+    // Check if tl_content element can be editied e.g. news which have a different ptable
     if ($this->mappingconfig !== null && \is_array($this->mappingconfig)) {
       $pTable = str_replace('tl_', '', $element->ptable);
       if (\array_key_exists($pTable, $this->mappingconfig['alpdesk_frontendediting_mapping']['element_access_check'])) {
