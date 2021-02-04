@@ -39,8 +39,6 @@ class BackendmenuListener {
     $factory = $event->getFactory();
     $tree = $event->getTree();
 
-    //dump($tree->getChildren());
-
     if ('mainMenu' === $tree->getName()) {
       $contentNode = $tree->getChild('content');
       $node = $factory
@@ -59,7 +57,11 @@ class BackendmenuListener {
               ->setLinkAttribute('title', 'Frontend-Editing')
               ->setLinkAttribute('class', 'alpdesk_frontendediting_backend')
               ->setCurrent($this->requestStack->getCurrentRequest()->get('_route') === 'alpdesk_frontendediting_backend');
+
       $tree->addChild($node);
+      $childs = $tree->getChildren();
+      $newChilds = \array_merge(array_splice($childs, -1), $childs);
+      $tree->setChildren($newChilds);
     }
   }
 
