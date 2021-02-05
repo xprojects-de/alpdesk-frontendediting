@@ -11,6 +11,7 @@ use Contao\PageRegular;
 use Contao\ContentModel;
 use Contao\ModuleModel;
 use Contao\Module;
+use Contao\Form;
 use Contao\BackendUser;
 use Contao\System;
 use Contao\FrontendTemplate;
@@ -142,11 +143,6 @@ class HooksListener {
 
       $modDoType = Custom::processElement($element, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
 
-      // We have a module as content element
-      if ($modDoType->getType() == CustomViewItem::$TYPE_MODULE || $modDoType->getType() == CustomViewItem::$TYPE_FORM) {
-        return $this->renderModuleOutput($modDoType, $buffer);
-      }
-
       // Check if access to element
       $hasElementAccess = true;
       if (!$this->backendUser->hasAccess($element->type, 'elements') || !$this->backendUser->hasAccess($element->type, 'alpdesk_fee_elements')) {
@@ -163,14 +159,6 @@ class HooksListener {
       }
       if (!$this->backendUser->hasAccess($modulesCheck, 'modules')) {
         $hasBackendModuleAccess = false;
-      }
-
-      // Check access if Module wasn´´ specially mappend in Custom::class and is invalid there
-      // getHasParentAccess() means e.g. if user has no access to special News-Feed where the contentelement is stored
-      if ($modDoType->getValid() == false) {
-        if (!$hasElementAccess || !$hasBackendModuleAccess || !$modDoType->getHasParentAccess()) {
-          return $buffer;
-        }
       }
 
       // Check when Artikel if the element can be edited
@@ -215,6 +203,7 @@ class HooksListener {
           'type' => 'ce',
           'do' => $do,
           'access' => $access,
+          'parentaccess' => $modDoType->getHasParentAccess(),
           'id' => $element->id,
           'pid' => $element->pid,
           'invisible' => ($element->invisible == 1 ? true : false),
@@ -263,6 +252,9 @@ class HooksListener {
 
       if ($module instanceof Module) {
         $modDoType = Custom::processModule($module, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
+        return $this->renderModuleOutput($modDoType, $buffer);
+      } else if ($module instanceof Form) {
+        $modDoType = Custom::processForm($module, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
         return $this->renderModuleOutput($modDoType, $buffer);
       }
     }
