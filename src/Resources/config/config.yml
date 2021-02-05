@@ -93,3 +93,14 @@ alpdesk_frontendediting_mapping:
       icon: ../../../system/themes/flexible/icons/group.svg
       iconclass: tl_event_baritem
       labelkey: events
+      
+    form:
+      element: form
+      module: \Contao\Form
+      backend_module: form
+      table: tl_form_field
+      additional_static_params: []
+      mapping_object: \Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes\TypeForm
+      icon: ../../../system/themes/flexible/icons/editor.svg
+      iconclass: tl_form_baritem
+      labelkey: form

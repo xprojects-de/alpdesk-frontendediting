@@ -11,6 +11,7 @@ use Contao\PageRegular;
 use Contao\ContentModel;
 use Contao\ModuleModel;
 use Contao\Module;
+use Contao\Form;
 use Contao\BackendUser;
 use Contao\System;
 use Contao\FrontendTemplate;
@@ -20,11 +21,13 @@ use Alpdesk\AlpdeskFrontendediting\Custom\Custom;
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventService;
 use Symfony\Component\Yaml\Yaml;
+use Twig\Environment as TwigEnvironment;
 
 class HooksListener {
 
   private $tokenChecker = null;
   private $alpdeskfeeEventDispatcher = null;
+  private $twig = null;
   private $backendUser = null;
   private $currentPageId = 0;
   private $pagemountAccess = false;
@@ -32,9 +35,10 @@ class HooksListener {
   private $alpdeskfee_livemodus = false;
   private $mappingconfig = null;
 
-  public function __construct(TokenChecker $tokenChecker, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher) {
+  public function __construct(TokenChecker $tokenChecker, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, TwigEnvironment $twig) {
     $this->tokenChecker = $tokenChecker;
     $this->alpdeskfeeEventDispatcher = $alpdeskfeeEventDispatcher;
+    $this->twig = $twig;
     $this->getBackendUser();
   }
 
@@ -123,10 +127,11 @@ class HooksListener {
             'desc' => $GLOBALS['TL_LANG']['alpdeskfee_lables']['article']
         ];
 
-        $templateArticle = new FrontendTemplate('alpdeskfrontendediting_article');
-        $templateArticle->data = \json_encode($tdata);
+        $articleContainerTwig = $this->twig->render('@AlpdeskFrontendediting/alpdeskfrontendediting_article.html.twig', [
+            'data' => \json_encode($tdata)
+        ]);
         $elements = $template->elements;
-        array_unshift($elements, $templateArticle->parse());
+        array_unshift($elements, $articleContainerTwig);
         $template->elements = $elements;
       }
     }
@@ -137,11 +142,6 @@ class HooksListener {
     if ($this->checkAccess()) {
 
       $modDoType = Custom::processElement($element, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
-
-      // We have a module as content element
-      if ($modDoType->getType() == CustomViewItem::$TYPE_MODULE) {
-        return $this->renderModuleOutput($modDoType, $buffer);
-      }
 
       // Check if access to element
       $hasElementAccess = true;
@@ -159,14 +159,6 @@ class HooksListener {
       }
       if (!$this->backendUser->hasAccess($modulesCheck, 'modules')) {
         $hasBackendModuleAccess = false;
-      }
-
-      // Check access if Module wasn´´ specially mappend in Custom::class and is invalid there
-      // getHasParentAccess() means e.g. if user has no access to special News-Feed where the contentelement is stored
-      if ($modDoType->getValid() == false) {
-        if (!$hasElementAccess || !$hasBackendModuleAccess || !$modDoType->getHasParentAccess()) {
-          return $buffer;
-        }
       }
 
       // Check when Artikel if the element can be edited
@@ -201,13 +193,17 @@ class HooksListener {
       if ($modDoType->getCustomBackendModule() !== '') {
         $do = $modDoType->getCustomBackendModule();
       }
+      
+      $access = true;
       if (!$hasElementAccess || !$hasBackendModuleAccess || !$modDoType->getHasParentAccess()) {
-        $do = '';
+        $access = false;
       }
 
       $data = [
           'type' => 'ce',
           'do' => $do,
+          'access' => $access,
+          'parentaccess' => $modDoType->getHasParentAccess(),
           'id' => $element->id,
           'pid' => $element->pid,
           'invisible' => ($element->invisible == 1 ? true : false),
@@ -229,7 +225,7 @@ class HooksListener {
 
   private function renderModuleOutput(CustomViewItem $modDoType, string $buffer) {
 
-    if ($modDoType->getValid() === true && $modDoType->getType() == CustomViewItem::$TYPE_MODULE) {
+    if ($modDoType->getValid() === true && ($modDoType->getType() == CustomViewItem::$TYPE_MODULE || $modDoType->getType() == CustomViewItem::$TYPE_FORM)) {
       $data = [
           'type' => 'mod',
           'do' => $modDoType->getPath(),
@@ -256,6 +252,9 @@ class HooksListener {
 
       if ($module instanceof Module) {
         $modDoType = Custom::processModule($module, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
+        return $this->renderModuleOutput($modDoType, $buffer);
+      } else if ($module instanceof Form) {
+        $modDoType = Custom::processForm($module, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
         return $this->renderModuleOutput($modDoType, $buffer);
       }
     }

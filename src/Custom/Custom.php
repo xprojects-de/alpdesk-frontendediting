@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Alpdesk\AlpdeskFrontendediting\Custom;
 
 use Contao\Module;
+use Contao\Form;
 use Contao\ContentModel;
 use Contao\ModuleModel;
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
@@ -24,12 +25,22 @@ class Custom {
       $objModule = new $strClass($moduleObject);
       if ($objModule !== null && $objModule instanceof Module) {
         return $objModule;
+      } else if ($objModule !== null && $objModule instanceof Form) {
+        return $objModule;
       } else {
         return null;
       }
     } catch (\Exception $e) {
       return null;
     }
+  }
+
+  public static function processForm(Form $form, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, array $mappingconfig): CustomViewItem {
+
+    $response = new CustomViewItem();
+    $response->setType(CustomViewItem::$TYPE_FORM);
+
+    return (new Mapping($alpdeskfeeEventDispatcher, $mappingconfig))->mapForm($response, $form);
   }
 
   public static function processModule(Module $module, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, array $mappingconfig): CustomViewItem {
@@ -48,7 +59,11 @@ class Custom {
     if ($element->type === 'module') {
       $objModule = self::getModuleTypeInstanceById($element->module);
       if ($objModule !== null) {
-        return self::processModule($objModule, $alpdeskfeeEventDispatcher, $mappingconfig);
+        if ($objModule instanceof Module) {
+          return self::processModule($objModule, $alpdeskfeeEventDispatcher, $mappingconfig);
+        } else if ($objModule instanceof Form) {
+          return self::processForm($objModule, $alpdeskfeeEventDispatcher, $mappingconfig);
+        }
       }
       return $response;
     }

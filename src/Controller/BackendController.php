@@ -133,7 +133,8 @@ class BackendController extends AbstractController {
       $clipboard['tl_content'] = [
           'childs' => null,
           'id' => \intval($data['id']),
-          'mode' => 'copy'
+          'mode' => 'copy',
+          'alpdeskptable' => $data['do']
       ];
 
       System::getContainer()->get('session')->set('CLIPBOARD', $clipboard);
@@ -152,7 +153,8 @@ class BackendController extends AbstractController {
       $clipboard['tl_content'] = [
           'childs' => null,
           'id' => \intval($data['id']),
-          'mode' => 'cut'
+          'mode' => 'cut',
+          'alpdeskptable' => $data['do']
       ];
 
       System::getContainer()->get('session')->set('CLIPBOARD', $clipboard);
