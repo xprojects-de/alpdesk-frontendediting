@@ -198,12 +198,17 @@ class HooksListener {
       if (!$hasElementAccess || !$hasBackendModuleAccess || !$modDoType->getHasParentAccess()) {
         $access = false;
       }
+      
+      $parentaccess = true;
+      if (!$hasBackendModuleAccess || !$modDoType->getHasParentAccess()) {
+        $parentaccess = false;
+      }
 
       $data = [
           'type' => 'ce',
           'do' => $do,
           'access' => $access,
-          'parentaccess' => $modDoType->getHasParentAccess(),
+          'parentaccess' => $parentaccess,
           'id' => $element->id,
           'pid' => $element->pid,
           'invisible' => ($element->invisible == 1 ? true : false),
