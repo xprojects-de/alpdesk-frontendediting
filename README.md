@@ -46,7 +46,7 @@ Aber es ist es auch möglich die eigene Erweiterung über das Symfony-Eventhandl
 ## Sonstiges
 
 - Die Erweiterung verwendet bewusst keine Javascript-Libs und kommt mit nativem Javascript aus. Es wird zwar alles auf Basis von Angular programmiert, aber nach dem kompilieren ist es dann wirkliches natives Javascript.  Somit sollte es keine Probleme im Frontend geben
-- Tests wurden mit den aktuellen Versionen von Firefox, Chrome und Safari durchgeführt
+- Tests wurden mit den aktuellen Versionen von Firefox, Chrome und Safari und jeweils mit der Contao::LTS und Contao::Latest durchgeführt
 
 
 Die Erweiterung sollte voll funktionsfähig sein, bis auf die Bugs die ich selber nicht gefunden habe :-) Aber dennoch ist Sie noch "frisch" und ich bin über jegliches Feedback froh was die Erweiterung weiter bringt.
