@@ -15,7 +15,7 @@ $GLOBALS['TL_DCA']['tl_user']['fields']['alpdesk_fee_enabled'] = [
     'exclude' => true,
     'inputType' => 'checkbox',
     'reference' => &$GLOBALS['TL_LANG']['CTE'],
-    'eval' => array('multiple' => false, 'helpwizard' => true, 'tl_class' => 'clr'),
+    'eval' => array('multiple' => false, 'helpwizard' => false, 'tl_class' => 'clr'),
     'sql' => "int(10) unsigned NOT NULL default '0'"
 ];
 
