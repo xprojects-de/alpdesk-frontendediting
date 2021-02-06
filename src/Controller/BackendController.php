@@ -15,7 +15,7 @@ use Contao\BackendUser;
 use Contao\System;
 use Contao\ContentModel;
 
-// CHeck Route: sudo /Applications/MAMP/bin/php/php7.4.9/bin/php vendor/bin/contao-console debug:router
+// Check Route: sudo /Applications/MAMP/bin/php/php7.4.9/bin/php vendor/bin/contao-console debug:router
 
 class BackendController extends AbstractController {
 
@@ -122,7 +122,7 @@ class BackendController extends AbstractController {
     // currently we do not need any Access-Check because only the clipboard is modified and no record of Database is affected
     // In future be careful!
 
-    if ($data['action'] == self::$ACTION_ELEMENT_COPY) {
+    if ($data['action'] == self::$ACTION_ELEMENT_COPY || $data['action'] == self::$ACTION_ELEMENT_CUT) {
 
       $objSession = System::getContainer()->get('session');
 
@@ -132,17 +132,27 @@ class BackendController extends AbstractController {
         $clipboard = [];
       }
 
-      $clipboard['tl_content'] = [
-          'childs' => null,
-          'id' => \intval($data['id']),
-          'mode' => 'copy',
-          'alpdeskptable' => $data['do']
-      ];
+      if ($data['action'] == self::$ACTION_ELEMENT_COPY) {
+        $clipboard['tl_content'] = [
+            'childs' => null,
+            'id' => \intval($data['id']),
+            'mode' => 'copy',
+            'alpdeskptable' => $data['do']
+        ];
+      } else if ($data['action'] == self::$ACTION_ELEMENT_CUT) {
+        $clipboard['tl_content'] = [
+            'childs' => null,
+            'id' => \intval($data['id']),
+            'mode' => 'cut',
+            'alpdeskptable' => $data['do']
+        ];
+      }
 
       $objSession->set('CLIPBOARD', $clipboard);
       $data['clipboard'] = $clipboard;
 
-      // If copy is pressed from Frontend blacklist all other new Records
+      // If copy/cut is pressed from Frontend blacklist all other new Records
+      // whitlisting not possibel because we do not know the next ID
       $objSessionBag = $objSession->getBag('contao_backend');
       $new_records = $objSessionBag->get('new_records');
       if (!\is_array($new_records) || $new_records === null) {
@@ -151,26 +161,6 @@ class BackendController extends AbstractController {
       $objSessionBag->set('alpdeskfee_blacklist', $new_records);
       $data['new_records'] = $new_records;
       $data['alpdeskfee_blacklist'] = $objSessionBag->get('alpdeskfee_blacklist');
-
-      return (new JsonResponse($data));
-    } else if ($data['action'] == self::$ACTION_ELEMENT_CUT) {
-
-      $clipboard = System::getContainer()->get('session')->get('CLIPBOARD');
-
-      if (!\is_array($clipboard) || $clipboard === null) {
-        $clipboard = [];
-      }
-
-      $clipboard['tl_content'] = [
-          'childs' => null,
-          'id' => \intval($data['id']),
-          'mode' => 'cut',
-          'alpdeskptable' => $data['do']
-      ];
-
-      System::getContainer()->get('session')->set('CLIPBOARD', $clipboard);
-
-      $data['clipboard'] = $clipboard;
 
       return (new JsonResponse($data));
     } else if ($data['action'] == self::$ACTION_ELEMENT_NEW) {
