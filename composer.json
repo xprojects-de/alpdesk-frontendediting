@@ -4,7 +4,7 @@
   "keywords": ["contao", "frontendediting"],
   "type": "contao-bundle",
   "homepage": "https://github.com/xprojects-de/alpdesk-frontendediting",
-  "license": "LGPL-3.0-or-later",
+  "license": "MIT",
   "authors": [
     {
       "name": "XProjects",
