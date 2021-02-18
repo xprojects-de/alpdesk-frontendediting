@@ -1,11 +1,20 @@
 
 header,
 .tl_edit_form #sbtog,
+.tl_edit_form .invisible,
 .tl_panel,
 .header_back,
 .tl_header,
 #main_headline {
   display: none;
+}
+
+#main {
+  background: none;
+}
+
+.popup #main {
+  width: 100%;
 }
 
 #container {
