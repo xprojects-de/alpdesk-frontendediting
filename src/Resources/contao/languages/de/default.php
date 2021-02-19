@@ -34,7 +34,8 @@ $GLOBALS['TL_LANG']['alpdeskfee_lables'] = [
     'cut_drag_element' => 'Element verschieben',
     'paste_element' => 'Element aus Zwischenablage einfügen',
     'clipboard_element_cut' => 'Element zum Verschieben in Zwischenablage gelegt',
-    'clipboard_element_copy' => 'Element zum Kopieren in Zwischenablage gelegt'
+    'clipboard_element_copy' => 'Element zum Kopieren in Zwischenablage gelegt',
+    'filemanagement' => 'Dateiverwaltung'
 ];
 
 $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'] = [
