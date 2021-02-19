@@ -32,12 +32,19 @@
       if (alpdeskfeePageid !== undefined && alpdeskfeePageid !== null && alpdeskfeePageid !== 0) {
         pageId = alpdeskfeePageid;
       }
+
+      let accessFilemanagement = false;
+      if (alpdeskfeeAccessFilemanagement !== undefined && alpdeskfeeAccessFilemanagement !== null && alpdeskfeeAccessFilemanagement !== 0) {
+        accessFilemanagement = true;
+      }
+
       window.parent.document.dispatchEvent(new CustomEvent(ALPDESK_EVENTNAME, {
         detail: {
           action: 'init',
           labels: objLabels,
           pageEdit: canPageEdit,
-          pageId: pageId
+          pageId: pageId,
+          accessFilemanagement: accessFilemanagement
         }
       }));
     }

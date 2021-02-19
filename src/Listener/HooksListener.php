@@ -32,6 +32,7 @@ class HooksListener {
   private $currentPageId = 0;
   private $pagemountAccess = false;
   private $pageChmodEdit = 0;
+  private $accessFilesmanagement = 0;
   private $alpdeskfee_livemodus = false;
   private $mappingconfig = null;
 
@@ -57,7 +58,7 @@ class HooksListener {
 
   private function addLabelsToHeader() {
     $labels = \json_encode($GLOBALS['TL_LANG']['alpdeskfee_lables']);
-    $GLOBALS['TL_HEAD'][] = "<script>const alpdeskfeePageid=" . $this->currentPageId . "; const alpdeskfeeCanPageEdit=" . $this->pageChmodEdit . "; const alpdeskfeeLabels='" . $labels . "';</script>";
+    $GLOBALS['TL_HEAD'][] = "<script>const alpdeskfeePageid=" . $this->currentPageId . "; const alpdeskfeeCanPageEdit=" . $this->pageChmodEdit . "; const alpdeskfeeAccessFilemanagement=" . $this->accessFilesmanagement . "; const alpdeskfeeLabels='" . $labels . "';</script>";
   }
 
   public function onGetPageLayout(PageModel $objPage, LayoutModel $objLayout, PageRegular $objPageRegular): void {
@@ -71,6 +72,11 @@ class HooksListener {
       }
       $this->pagemountAccess = Utils::hasPagemountAccess($objPage);
       $this->pageChmodEdit = ($this->backendUser->isAllowed(BackendUser::CAN_EDIT_PAGE, $objPage->row()) == true ? 1 : 0);
+
+      if ($this->backendUser->hasAccess('files', 'modules')) {
+        $this->accessFilesmanagement = 1;
+      }
+
       $this->addLabelsToHeader();
     }
   }
@@ -193,12 +199,12 @@ class HooksListener {
       if ($modDoType->getCustomBackendModule() !== '') {
         $do = $modDoType->getCustomBackendModule();
       }
-      
+
       $access = true;
       if (!$hasElementAccess || !$hasBackendModuleAccess || !$modDoType->getHasParentAccess()) {
         $access = false;
       }
-      
+
       $parentaccess = true;
       if (!$hasBackendModuleAccess || !$modDoType->getHasParentAccess()) {
         $parentaccess = false;

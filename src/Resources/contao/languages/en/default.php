@@ -33,7 +33,8 @@ $GLOBALS['TL_LANG']['alpdeskfee_lables'] = [
     'cut_drag_element' => 'Move element',
     'paste_element' => 'Paste element from clipboard',
     'clipboard_element_cut' => 'Item placed on clipboard for moving',
-    'clipboard_element_copy' => 'Item placed on clipboard for copying'
+    'clipboard_element_copy' => 'Item placed on clipboard for copying',
+    'filemanagement' => 'Filemanagement'
 ];
 
 $GLOBALS['TL_LANG']['alpdeskfee_mapping_lables'] = [
