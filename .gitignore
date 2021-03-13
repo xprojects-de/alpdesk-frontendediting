@@ -7,3 +7,5 @@ src/Resources/public/.DS_Store
 .DS_Store
 /.idea/
 /vendor/
+/composer.lock
+/public/
