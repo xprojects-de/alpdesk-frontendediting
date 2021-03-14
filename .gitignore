@@ -9,3 +9,4 @@ src/Resources/public/.DS_Store
 /vendor/
 /composer.lock
 /public/
+/.run/
