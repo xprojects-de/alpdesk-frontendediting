@@ -8,32 +8,37 @@ use Symfony\Contracts\EventDispatcher\Event;
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 use Contao\Form;
 
-class AlpdeskFrontendeditingEventForm extends Event {
+class AlpdeskFrontendeditingEventForm extends Event
+{
+    public const NAME = 'alpdeskfrontendediting.form';
 
-  public const NAME = 'alpdeskfrontendediting.form';
+    private $item;
+    private $form;
 
-  private $item;
-  private $form;
+    public function __construct(CustomViewItem $item, Form $form)
+    {
+        $this->item = $item;
+        $this->form = $form;
+    }
 
-  public function __construct(CustomViewItem $item, Form $form) {
-    $this->item = $item;
-    $this->form = $form;
-  }
+    public function getItem(): CustomViewItem
+    {
+        return $this->item;
+    }
 
-  public function getItem(): CustomViewItem {
-    return $this->item;
-  }
+    public function setItem(CustomViewItem $item): void
+    {
+        $this->item = $item;
+    }
 
-  public function setItem(CustomViewItem $item): void {
-    $this->item = $item;
-  }
+    public function getForm(): Form
+    {
+        return $this->form;
+    }
 
-  public function getForm(): Form {
-    return $this->form;
-  }
-
-  public function setForm(Form $form): void {
-    $this->form = $form;
-  }
+    public function setForm(Form $form): void
+    {
+        $this->form = $form;
+    }
 
 }

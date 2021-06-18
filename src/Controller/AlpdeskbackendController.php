@@ -21,9 +21,8 @@ use Alpdesk\AlpdeskFrontendediting\Utils\Utils;
 
 class AlpdeskbackendController extends AbstractController
 {
-
     private $twig;
-    private $csrfTokenManager = null;
+    private $csrfTokenManager;
     private $csrfTokenName;
     protected $router;
     private $security;
@@ -41,37 +40,48 @@ class AlpdeskbackendController extends AbstractController
     {
         $userModel = UserModel::findById(BackendUser::getInstance()->id);
         if ($userModel !== null) {
+
             $userModel->fullscreen = ($userModel->fullscreen == 1 ? 0 : 1);
             $userModel->save();
+
         }
+
         Controller::reload();
     }
 
     private function toggleLiveModus()
     {
         $liveModus = System::getContainer()->get('session')->get('alpdeskfee_livemodus');
+
         if ($liveModus === true) {
             System::getContainer()->get('session')->set('alpdeskfee_livemodus', false);
         } else {
             System::getContainer()->get('session')->set('alpdeskfee_livemodus', true);
         }
+
         Controller::reload();
     }
 
     private function getPageAlias($id)
     {
         $pageModel = PageModel::findById($id);
+
         if ($pageModel !== null) {
             System::getContainer()->get('session')->set('alpdeskfee_pageselect', $pageModel->alias);
         } else {
             System::getContainer()->get('session')->set('alpdeskfee_pageselect', '');
         }
+
         Controller::redirect($this->router->generate('alpdesk_frontendediting_backend'));
     }
 
+    /**
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function endpoint(): Response
     {
-
         $backendUser = $this->security->getUser();
 
         if (!$backendUser instanceof BackendUser) {

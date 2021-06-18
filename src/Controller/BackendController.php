@@ -24,6 +24,7 @@ class BackendController extends AbstractController
     private $backendUser = null;
     private $csrfTokenManager = null;
     private $csrfTokenName;
+
     public static $STATUSCODE_OK = 200;
     public static $STATUSCODE_COMMONERROR = 400;
     public static $TARGETTYPE_PAGE = 'page';

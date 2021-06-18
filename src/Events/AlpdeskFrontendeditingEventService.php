@@ -6,16 +6,18 @@ namespace Alpdesk\AlpdeskFrontendediting\Events;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class AlpdeskFrontendeditingEventService {
+class AlpdeskFrontendeditingEventService
+{
+    protected $dispatcher;
 
-  protected $dispatcher;
+    public function __construct(EventDispatcherInterface $dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
+    }
 
-  public function __construct(EventDispatcherInterface $dispatcher) {
-    $this->dispatcher = $dispatcher;
-  }
-
-  public function getDispatcher(): EventDispatcherInterface {
-    return $this->dispatcher;
-  }
+    public function getDispatcher(): EventDispatcherInterface
+    {
+        return $this->dispatcher;
+    }
 
 }
