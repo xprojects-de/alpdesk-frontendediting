@@ -17,14 +17,17 @@ class TypeNewslist extends Base
         if (class_exists('\Contao\NewsArchiveModel')) {
 
             $newsarchives = StringUtil::deserialize($this->module->news_archives);
+
             if (count($newsarchives) == 1) {
 
                 $objNews = \Contao\NewsArchiveModel::findById($newsarchives[0]);
                 if ($objNews !== null) {
 
                     if (BackendUser::getInstance()->hasAccess($objNews->id, 'news')) {
+
                         $item->setValid(true);
                         $item->setPath('do=' . $this->backendmodule . '&table=' . $this->table . '&id=' . $objNews->id);
+
                     }
 
                 }

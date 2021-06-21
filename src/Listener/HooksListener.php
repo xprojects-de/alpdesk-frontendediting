@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Alpdesk\AlpdeskFrontendediting\Listener;
 
+use Alpdesk\AlpdeskFrontendediting\Mapping\MappingArticle;
 use Contao\LayoutModel;
 use Contao\PageModel;
 use Contao\ArticleModel;
@@ -20,6 +21,7 @@ use Alpdesk\AlpdeskFrontendediting\Utils\Utils;
 use Alpdesk\AlpdeskFrontendediting\Custom\Custom;
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventService;
+use Contao\Template;
 use Symfony\Component\Yaml\Yaml;
 use Twig\Environment as TwigEnvironment;
 
@@ -301,6 +303,14 @@ class HooksListener
         }
 
         return $buffer;
+    }
+
+    public function onParseArticles(FrontendTemplate $template, array $newsEntry, Module $module): void
+    {
+        if ($this->checkAccess()) {
+            (new MappingArticle($template, $newsEntry, $module, (string)$this->currentPageId))->prepare();
+        }
+
     }
 
 }
