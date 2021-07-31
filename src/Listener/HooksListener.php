@@ -95,6 +95,7 @@ class HooksListener
 
     private function checkAccess(): bool
     {
+        // @TODO Use the ScopeMatcher service instead. See https://github.com/contao/contao/blob/4.12/DEPRECATED.md
         if (TL_MODE == 'FE' && $this->backendUser !== null && $this->pagemountAccess == true && !$this->alpdeskfee_livemodus) {
             return true;
         }

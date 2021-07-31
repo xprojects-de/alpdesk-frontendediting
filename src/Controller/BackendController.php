@@ -71,6 +71,7 @@ class BackendController extends AbstractController
      */
     private function checkAccess()
     {
+        // @TODO Use the ScopeMatcher service instead. See https://github.com/contao/contao/blob/4.12/DEPRECATED.md
         if (TL_MODE !== 'BE' || $this->backendUser === null) {
             throw new \Exception('No Access');
         }
