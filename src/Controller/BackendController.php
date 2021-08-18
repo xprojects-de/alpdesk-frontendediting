@@ -19,10 +19,10 @@ use Contao\ContentModel;
 
 class BackendController extends AbstractController
 {
-    private $security = null;
-    private $tokenChecker = null;
+    private $security;
+    private $tokenChecker;
     private $backendUser = null;
-    private $csrfTokenManager = null;
+    private $csrfTokenManager;
     private $csrfTokenName;
 
     public static $STATUSCODE_OK = 200;

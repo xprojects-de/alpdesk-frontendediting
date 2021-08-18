@@ -3,8 +3,8 @@ services:
   alpdeskfrontendediting.backendmenulistener:
     class: Alpdesk\AlpdeskFrontendediting\Listener\BackendmenuListener
     arguments:
-          - '@security.helper'
-          - '@router'
-          - '@request_stack'
+      - '@security.helper'
+      - '@router'
+      - '@request_stack'
     tags:
       - { name: kernel.event_listener, event: contao.backend_menu_build, priority: -255 }

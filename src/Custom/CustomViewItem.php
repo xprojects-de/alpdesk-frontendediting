@@ -71,7 +71,7 @@ class CustomViewItem
         $this->sublevelpath = $sublevelpath;
     }
 
-    public function getSubviewitems(): CustomSubviewItem
+    public function getSubviewitems(): array
     {
         return $this->subviewitems;
     }

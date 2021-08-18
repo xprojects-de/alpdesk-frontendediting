@@ -4,11 +4,11 @@ use Contao\Backend;
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
 
 PaletteManipulator::create()
-        ->addLegend('alpdeskfee_legend', 'elements_legend', PaletteManipulator::POSITION_BEFORE, true)
-        ->addField('alpdesk_fee_enabled', 'alpdeskfee_legend', PaletteManipulator::POSITION_APPEND)
-        ->addField('alpdesk_fee_elements', 'alpdeskfee_legend', PaletteManipulator::POSITION_APPEND)
-        ->applyToPalette('extend', 'tl_user')
-        ->applyToPalette('custom', 'tl_user');
+    ->addLegend('alpdeskfee_legend', 'elements_legend', PaletteManipulator::POSITION_BEFORE, true)
+    ->addField('alpdesk_fee_enabled', 'alpdeskfee_legend', PaletteManipulator::POSITION_APPEND)
+    ->addField('alpdesk_fee_elements', 'alpdeskfee_legend', PaletteManipulator::POSITION_APPEND)
+    ->applyToPalette('extend', 'tl_user')
+    ->applyToPalette('custom', 'tl_user');
 
 $GLOBALS['TL_DCA']['tl_user']['fields']['alpdesk_fee_enabled'] = [
     'label' => &$GLOBALS['TL_LANG']['tl_user']['alpdesk_fee_enabled'],
@@ -29,10 +29,11 @@ $GLOBALS['TL_DCA']['tl_user']['fields']['alpdesk_fee_elements'] = [
     'sql' => "blob NULL"
 ];
 
-class tl_user_alpdeskfee extends Backend {
-
-  public function getContentElements() {
-    return array_map('array_keys', $GLOBALS['TL_CTE']);
-  }
+class tl_user_alpdeskfee extends Backend
+{
+    public function getContentElements()
+    {
+        return array_map('array_keys', $GLOBALS['TL_CTE']);
+    }
 
 }

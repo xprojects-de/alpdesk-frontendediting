@@ -7,31 +7,34 @@
 {% block error %}{% endblock %}
 
 {% block main %}
-  <div id="alpdesk-fee-backendcontainer">
-    <div id="alpdesk-fee-frame-legend">
-      <div class="wx60 widget">
-        <form method="post">
-          <input type="hidden" name="REQUEST_TOKEN" value="{{ token }}">
-          <input type="hidden" name="toggleFullsize" value="1">
-          <button title="{{ label_fullscreen }}" id="fullsize" class="tl_submit">
-            <img width="15" src="bundles/alpdeskfrontendediting/images/fullsize.png">
-          </button>
-        </form>
-        <form method="post" class="livemodus_form">
-          <input type="hidden" name="REQUEST_TOKEN" value="{{ token }}">
-          <input type="hidden" name="toggleLivemodus" value="1">
-          <button title="{{ label_livemodus }}" id="{% if livemodus == true %}livemodeactive{% else %}livemode{% endif %}" class="tl_submit">
-            <img src="system/themes/flexible/icons/preview.svg">
-          </button>
-        </form>
-        <button title="{{ label_pageselect }}" id="pageselect" class="tl_submit">
-          <img src="system/themes/flexible/icons/root.svg">
-        </button>
-      </div>
-      <div class="clear"></div>
+    <div id="alpdesk-fee-backendcontainer">
+        <div id="alpdesk-fee-frame-legend">
+            <div class="wx60 widget">
+                <form method="post">
+                    <input type="hidden" name="REQUEST_TOKEN" value="{{ token }}">
+                    <input type="hidden" name="toggleFullsize" value="1">
+                    <button title="{{ label_fullscreen }}" id="fullsize" class="tl_submit">
+                        <img width="15" src="bundles/alpdeskfrontendediting/images/fullsize.png">
+                    </button>
+                </form>
+                <form method="post" class="livemodus_form">
+                    <input type="hidden" name="REQUEST_TOKEN" value="{{ token }}">
+                    <input type="hidden" name="toggleLivemodus" value="1">
+                    <button title="{{ label_livemodus }}"
+                            id="{% if livemodus == true %}livemodeactive{% else %}livemode{% endif %}"
+                            class="tl_submit">
+                        <img src="system/themes/flexible/icons/preview.svg">
+                    </button>
+                </form>
+                <button title="{{ label_pageselect }}" id="pageselect" class="tl_submit">
+                    <img src="system/themes/flexible/icons/root.svg">
+                </button>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <app-alpdeskfee base="{{ base }}" rt="{{ token }}" frameheight="100%" frameurl="{{ url }}"></app-alpdeskfee>
+        <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements-es5.js?v={{ cachingTime }}"></script>
+        <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements-es6.js?v={{ cachingTime }}" nomodule
+                defer></script>
     </div>
-    <app-alpdeskfee base="{{ base }}" rt="{{ token }}" frameheight="100%" frameurl="{{ url }}"></app-alpdeskfee>
-    <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements-es5.js?v={{ cachingTime }}"></script>
-    <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements-es6.js?v={{ cachingTime }}" nomodule defer></script>
-  </div>
 {% endblock %}

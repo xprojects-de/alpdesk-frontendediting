@@ -1,60 +1,60 @@
 
 #main #main_headline {
-  display: none;
-} 
+    display: none;
+}
 
 #alpdesk-fee-backendcontainer {
-  position: relative;
+    position: relative;
 }
 
 #alpdesk-fee-frame-legend {
-  background-color: #eaeaec;
+    background-color: #eaeaec;
 }
 
 .clear {
-  clear: both;
+    clear: both;
 }
 
 .w33 {
-  width: calc(33% - 30px);
-  float: left;
-  margin-left: 0px;
+    width: calc(33% - 30px);
+    float: left;
+    margin-left: 0px;
 }
 
 .wx60 {
-  width: calc(60% - 30px);
-  float: right;
-  margin-right: 0px;
-  text-align: right;
+    width: calc(60% - 30px);
+    float: right;
+    margin-right: 0px;
+    text-align: right;
 }
 
 .wx60 .tl_text {
-  float: right;
-  width: 225px;
+    float: right;
+    width: 225px;
 }
 
 .wx60 button {
-  float: right;
-  width: 50px;
-  margin-left: 10px;
-  margin-top: 3px;
+    float: right;
+    width: 50px;
+    margin-left: 10px;
+    margin-top: 3px;
 }
 
 .wx60 strong {
-  display: inline-block;
-  padding-right: 10px;
-  padding-top: 10px;
+    display: inline-block;
+    padding-right: 10px;
+    padding-top: 10px;
 }
 
 #main .content {
-  background-color: #eaeaec;
-  border: none;
+    background-color: #eaeaec;
+    border: none;
 }
 
 #livemode {
-  background-color: #ddd;
+    background-color: #ddd;
 }
 
 #livemodeactive {
-  background-color: rgba(244, 124, 0, 1);
+    background-color: rgba(244, 124, 0, 1);
 }
