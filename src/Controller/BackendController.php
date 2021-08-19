@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Alpdesk\AlpdeskFrontendediting\Controller;
 
+use Contao\CoreBundle\Routing\ScopeMatcher;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Core\Security;
@@ -24,6 +26,8 @@ class BackendController extends AbstractController
     private $backendUser = null;
     private $csrfTokenManager;
     private $csrfTokenName;
+    private $requestStack;
+    private $scopeMatcher;
 
     public static $STATUSCODE_OK = 200;
     public static $STATUSCODE_COMMONERROR = 400;
@@ -45,12 +49,15 @@ class BackendController extends AbstractController
     public static $ACTION_CLIPBOARD = 'clipboard';
     public static $ACTION_NEWRECORDS = 'new_records';
 
-    public function __construct(TokenChecker $tokenChecker, Security $security, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName)
+    public function __construct(TokenChecker $tokenChecker, Security $security, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName, RequestStack $requestStack, ScopeMatcher $scopeMatcher)
     {
         $this->tokenChecker = $tokenChecker;
         $this->security = $security;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->csrfTokenName = $csrfTokenName;
+        $this->requestStack = $requestStack;
+        $this->scopeMatcher = $scopeMatcher;
+
         $this->getBackendUser();
     }
 
@@ -71,8 +78,9 @@ class BackendController extends AbstractController
      */
     private function checkAccess()
     {
-        // @TODO Use the ScopeMatcher service instead. See https://github.com/contao/contao/blob/4.12/DEPRECATED.md
-        if (TL_MODE !== 'BE' || $this->backendUser === null) {
+        $isBackend = $this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest());
+
+        if ($isBackend === false || $this->backendUser === null) {
             throw new \Exception('No Access');
         }
     }

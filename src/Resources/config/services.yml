@@ -15,6 +15,8 @@ services:
       - '@contao.security.token_checker'
       - '@alpdeskfrontendediting.eventservice'
       - '@twig'
+      - '@request_stack'
+      - '@contao.routing.scope_matcher'
     tags:
       - { name: contao.hook, hook: getPageLayout, method: onGetPageLayout, priority: 0 }
       - { name: contao.hook, hook: compileArticle, method: onCompileArticle, priority: 0 }
@@ -28,6 +30,8 @@ services:
       - '@security.helper'
       - '@contao.csrf.token_manager'
       - '%contao.csrf_token_name%'
+      - '@request_stack'
+      - '@contao.routing.scope_matcher'
     tags:
       - controller.service_arguments
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Alpdesk\AlpdeskFrontendediting\Listener;
 
 use Alpdesk\AlpdeskFrontendediting\Mapping\MappingArticle;
+use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\LayoutModel;
 use Contao\PageModel;
 use Contao\ArticleModel;
@@ -22,6 +23,7 @@ use Alpdesk\AlpdeskFrontendediting\Custom\Custom;
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventService;
 use Contao\Template;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Yaml\Yaml;
 use Twig\Environment as TwigEnvironment;
 
@@ -30,6 +32,9 @@ class HooksListener
     private $tokenChecker;
     private $alpdeskfeeEventDispatcher;
     private $twig;
+    private $requestStack;
+    private $scopeMatcher;
+
     private $backendUser = null;
     private $currentPageId = 0;
     private $pagemountAccess = false;
@@ -38,11 +43,14 @@ class HooksListener
     private $alpdeskfee_livemodus = false;
     private $mappingconfig = null;
 
-    public function __construct(TokenChecker $tokenChecker, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, TwigEnvironment $twig)
+    public function __construct(TokenChecker $tokenChecker, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, TwigEnvironment $twig, RequestStack $requestStack, ScopeMatcher $scopeMatcher)
     {
         $this->tokenChecker = $tokenChecker;
         $this->alpdeskfeeEventDispatcher = $alpdeskfeeEventDispatcher;
         $this->twig = $twig;
+        $this->requestStack = $requestStack;
+        $this->scopeMatcher = $scopeMatcher;
+
         $this->getBackendUser();
     }
 
@@ -95,10 +103,12 @@ class HooksListener
 
     private function checkAccess(): bool
     {
-        // @TODO Use the ScopeMatcher service instead. See https://github.com/contao/contao/blob/4.12/DEPRECATED.md
-        if (TL_MODE == 'FE' && $this->backendUser !== null && $this->pagemountAccess == true && !$this->alpdeskfee_livemodus) {
+        $isFrontend = $this->scopeMatcher->isFrontendRequest($this->requestStack->getCurrentRequest());
+
+        if ($isFrontend === true && $this->backendUser !== null && $this->pagemountAccess == true && !$this->alpdeskfee_livemodus) {
             return true;
         }
+
         return false;
     }
 
