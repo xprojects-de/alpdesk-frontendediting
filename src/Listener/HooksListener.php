@@ -22,7 +22,6 @@ use Alpdesk\AlpdeskFrontendediting\Utils\Utils;
 use Alpdesk\AlpdeskFrontendediting\Custom\Custom;
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventService;
-use Contao\Template;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Yaml\Yaml;
 use Twig\Environment as TwigEnvironment;
@@ -322,6 +321,56 @@ class HooksListener
             (new MappingArticle($template, $newsEntry, $module, (string)$this->currentPageId))->prepare();
         }
 
+    }
+
+    /**
+     * @param string $pattern
+     * @param string $strString
+     * @return bool
+     */
+    public static function isPatternInString(string $pattern, string $strString): bool
+    {
+        if (\preg_match("/{$pattern}/i", $strString)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function onParseFrontendTemplate(string $buffer, string $template): string
+    {
+        if ($this->checkAccess()) {
+
+            $mappedNewsListTemplates = MappingArticle::getMappedNewsListTemplates();
+            if (\count($mappedNewsListTemplates) > 0) {
+
+                if (\array_key_exists($template, $mappedNewsListTemplates)) {
+
+                    $mappedItems = $mappedNewsListTemplates[$template];
+
+                    foreach ($mappedItems as $mappedItem) {
+
+                        if (self::isPatternInString($mappedItem['mappingString'], $buffer) === true) {
+
+                            $buffer = $this->createElementsTags($buffer, 'alpdeskfee-ce', [
+                                'data-alpdeskfee' => \json_encode($mappedItem['data'])
+                            ]);
+
+                            // Because to modify header also
+                            $buffer = '<div style="margin-top:10px">' . $buffer . '</div>';
+
+                        }
+
+                    }
+
+
+                }
+
+            }
+
+        }
+
+        return $buffer;
     }
 
 }

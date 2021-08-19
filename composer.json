@@ -29,9 +29,11 @@
     "contao/manager-plugin": "<2.0 || >=3.0"
   },
   "require-dev": {
-    "contao/manager-plugin": "^2.0",
     "phpstan/phpstan": "^0.12.81",
-    "vimeo/psalm": "^4.6"
+    "contao/manager-bundle": "^4.11",
+    "vimeo/psalm": "^4.6",
+    "phpunit/phpunit": "^9.5",
+    "symfony/phpunit-bridge": "^5.2"
   },
   "autoload": {
     "psr-4": {

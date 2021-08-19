@@ -15,6 +15,8 @@ class MappingArticle
     private $module;
     private $currentPageId;
 
+    private static $mappedNewsListTemplates = [];
+
     /**
      * NewsListArticle constructor.
      * @param FrontendTemplate $template
@@ -31,32 +33,11 @@ class MappingArticle
     }
 
     /**
-     * @param string $buffer
-     * @param string $classes
-     * @param array $attributes
-     * @return array|string|string[]|null
+     * @return array
      */
-    private function createElementsTags(string $buffer, string $classes, array $attributes)
+    public static function getMappedNewsListTemplates(): array
     {
-        $dataAttributes = \array_filter($attributes, function ($v) {
-            return null !== $v;
-        });
-
-        return \preg_replace_callback('|<([a-zA-Z0-9]+)(\s[^>]*?)?(?<!/)>|', function ($matches) use ($classes, $dataAttributes) {
-            $tag = $matches[1];
-            $attributes = $matches[2];
-
-            $attributes = preg_replace('/class="([^"]+)"/', 'class="$1 ' . $classes . '"', $attributes, 1, $count);
-            if (0 === $count) {
-                $attributes .= ' class="' . $classes . '"';
-            }
-
-            foreach ($dataAttributes as $key => $value) {
-                $attributes .= ' ' . $key . "='" . $value . "'";
-            }
-
-            return "<{$tag}{$attributes}>";
-        }, $buffer, 1);
+        return self::$mappedNewsListTemplates;
     }
 
     public function prepare(): void
@@ -64,6 +45,12 @@ class MappingArticle
         if (class_exists('\Contao\ModuleNewsList') && $this->module instanceof \Contao\ModuleNewsList) {
 
             if (BackendUser::getInstance()->hasAccess($this->newsEntry['pid'], 'news')) {
+
+                $mappingString = 'alpdeskfee_newslist_item_' . $this->newsEntry['id'];
+
+                if (!\array_key_exists($this->template->getName(), self::$mappedNewsListTemplates)) {
+                    self::$mappedNewsListTemplates[$this->template->getName()] = [];
+                }
 
                 $data = [
                     'type' => 'mod',
@@ -76,13 +63,13 @@ class MappingArticle
                     'desc' => 'Teaser'
                 ];
 
-                if ($this->template->teaser === null || $this->template->teaser === '') {
-                    $this->template->teaser = '<p>&nbsp;</p>';
-                }
+                self::$mappedNewsListTemplates[$this->template->getName()][] = [
+                    'mappingString' => $mappingString,
+                    'data' => $data
+                ];
 
-                $this->template->teaser = $this->createElementsTags($this->template->teaser, 'alpdeskfee-ce', [
-                    'data-alpdeskfee' => \json_encode($data)
-                ]);
+                // Not so nice but currently there is no way to modify news_latest Template
+                $this->template->class = $this->template->class . ' ' . $mappingString;
 
             }
 
