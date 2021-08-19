@@ -6,6 +6,7 @@ namespace Alpdesk\AlpdeskFrontendediting;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class AlpdeskFrontendeditingBundle extends Bundle {
-  
+class AlpdeskFrontendeditingBundle extends Bundle
+{
+
 }

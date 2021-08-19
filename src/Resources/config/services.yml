@@ -9,33 +9,39 @@ services:
     arguments:
       - '@event_dispatcher'
     public: true
-    
+
   Alpdesk\AlpdeskFrontendediting\Listener\HooksListener:
-      arguments:
-          - '@contao.security.token_checker'
-          - '@alpdeskfrontendediting.eventservice'
-          - '@twig'
-      tags:
-          - { name: contao.hook, hook: getPageLayout, method: onGetPageLayout, priority: 0 }
-          - { name: contao.hook, hook: compileArticle, method: onCompileArticle, priority: 0 }
-          - { name: contao.hook, hook: getContentElement, method: onGetContentElement, priority: 0 }
-          - { name: contao.hook, hook: getFrontendModule, method: onGetFrontendModule, priority: 0 }
-          
+    arguments:
+      - '@contao.security.token_checker'
+      - '@alpdeskfrontendediting.eventservice'
+      - '@twig'
+      - '@request_stack'
+      - '@contao.routing.scope_matcher'
+    tags:
+      - { name: contao.hook, hook: getPageLayout, method: onGetPageLayout, priority: 0 }
+      - { name: contao.hook, hook: compileArticle, method: onCompileArticle, priority: 0 }
+      - { name: contao.hook, hook: getContentElement, method: onGetContentElement, priority: 0 }
+      - { name: contao.hook, hook: getFrontendModule, method: onGetFrontendModule, priority: 0 }
+      - { name: contao.hook, hook: parseArticles, method: onParseArticles, priority: 0 }
+      - { name: contao.hook, hook: parseFrontendTemplate, method: onParseFrontendTemplate, priority: 0 }
+
   Alpdesk\AlpdeskFrontendediting\Controller\BackendController:
-      arguments:
-          - '@contao.security.token_checker'
-          - '@security.helper'
-          - '@contao.csrf.token_manager'
-          - '%contao.csrf_token_name%'
-      tags:
-          - controller.service_arguments
-          
+    arguments:
+      - '@contao.security.token_checker'
+      - '@security.helper'
+      - '@contao.csrf.token_manager'
+      - '%contao.csrf_token_name%'
+      - '@request_stack'
+      - '@contao.routing.scope_matcher'
+    tags:
+      - controller.service_arguments
+
   Alpdesk\AlpdeskFrontendediting\Controller\AlpdeskbackendController:
-      arguments:
-          - '@twig'
-          - '@contao.csrf.token_manager'
-          - '%contao.csrf_token_name%'
-          - '@router'
-          - '@security.helper'
-      tags:
-          - controller.service_arguments
+    arguments:
+      - '@twig'
+      - '@contao.csrf.token_manager'
+      - '%contao.csrf_token_name%'
+      - '@router'
+      - '@security.helper'
+    tags:
+      - controller.service_arguments

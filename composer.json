@@ -1,7 +1,10 @@
 {
   "name": "alpdesk/alpdesk-frontendediting",
   "description": "Frontendediting for Contao 4",
-  "keywords": ["contao", "frontendediting"],
+  "keywords": [
+    "contao",
+    "frontendediting"
+  ],
   "type": "contao-bundle",
   "homepage": "https://github.com/xprojects-de/alpdesk-frontendediting",
   "license": "MIT",
@@ -19,13 +22,18 @@
   },
   "require": {
     "php": ">=7.2",
+    "ext-json": "*",
     "contao/core-bundle": "^4.9"
   },
   "conflict": {
     "contao/manager-plugin": "<2.0 || >=3.0"
   },
   "require-dev": {
-    "contao/manager-plugin": "^2.0"
+    "phpstan/phpstan": "^0.12.81",
+    "contao/manager-bundle": "^4.11",
+    "vimeo/psalm": "^4.6",
+    "phpunit/phpunit": "^9.5",
+    "symfony/phpunit-bridge": "^5.2"
   },
   "autoload": {
     "psr-4": {

@@ -10,3 +10,4 @@ src/Resources/public/.DS_Store
 /composer.lock
 /public/
 /.run/
+/.phpunit.result.cache

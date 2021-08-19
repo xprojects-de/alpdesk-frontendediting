@@ -1,15 +1,14 @@
-   
 alpdesk_frontendediting:
-    path: /contao/alpdeskfee
-    defaults:
-        _controller: Alpdesk\AlpdeskFrontendediting\Controller\BackendController:endpoint
-        _scope: backend
-        _token_check: false
-    methods: [POST]
-    
+  path: /contao/alpdeskfee
+  defaults:
+    _controller: Alpdesk\AlpdeskFrontendediting\Controller\BackendController:endpoint
+    _scope: backend
+    _token_check: false
+  methods: [ POST ]
+
 alpdesk_frontendediting_backend:
-    path: /contao/alpdeskfeebackend
-    defaults:
-        _controller: Alpdesk\AlpdeskFrontendediting\Controller\AlpdeskbackendController:endpoint
-        _scope: backend
-    methods: [POST, GET]    
+  path: /contao/alpdeskfeebackend
+  defaults:
+    _controller: Alpdesk\AlpdeskFrontendediting\Controller\AlpdeskbackendController:endpoint
+    _scope: backend
+  methods: [ POST, GET ]

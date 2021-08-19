@@ -1,0 +1,26 @@
+name: CIPR
+
+on:
+  pull_request: ~
+
+jobs:
+  tests:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          extensions: dom, fileinfo, filter, gd, hash, intl, json, mbstring, mysqli, pcre, pdo_mysql, zlib
+          tools: flex
+          coverage: none
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install the dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: Run the unit tests
+        run: vendor/bin/phpunit --colors=always

@@ -8,32 +8,37 @@ use Symfony\Contracts\EventDispatcher\Event;
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 use Contao\ContentModel;
 
-class AlpdeskFrontendeditingEventElement extends Event {
+class AlpdeskFrontendeditingEventElement extends Event
+{
+    public const NAME = 'alpdeskfrontendediting.element';
 
-  public const NAME = 'alpdeskfrontendediting.element';
+    private $item;
+    private $element;
 
-  private $item;
-  private $element;
+    public function __construct(CustomViewItem $item, ContentModel $element)
+    {
+        $this->item = $item;
+        $this->element = $element;
+    }
 
-  public function __construct(CustomViewItem $item, ContentModel $element) {
-    $this->item = $item;
-    $this->element = $element;
-  }
+    public function getItem(): CustomViewItem
+    {
+        return $this->item;
+    }
 
-  public function getItem(): CustomViewItem {
-    return $this->item;
-  }
+    public function getElement(): ContentModel
+    {
+        return $this->element;
+    }
 
-  public function getElement(): ContentModel {
-    return $this->element;
-  }
+    public function setItem(CustomViewItem $item): void
+    {
+        $this->item = $item;
+    }
 
-  public function setItem(CustomViewItem $item): void {
-    $this->item = $item;
-  }
-
-  public function setElement(ContentModel $element): void {
-    $this->element = $element;
-  }
+    public function setElement(ContentModel $element): void
+    {
+        $this->element = $element;
+    }
 
 }
