@@ -6,6 +6,7 @@ namespace Alpdesk\AlpdeskFrontendediting\Listener;
 
 use Alpdesk\AlpdeskFrontendediting\Mapping\MappingArticle;
 use Contao\CoreBundle\Routing\ScopeMatcher;
+use Contao\DC_Table;
 use Contao\LayoutModel;
 use Contao\PageModel;
 use Contao\ArticleModel;
@@ -371,6 +372,41 @@ class HooksListener
         }
 
         return $buffer;
+    }
+
+    /**
+     * @param array $attributes
+     * @param null $context
+     * @return array
+     */
+    public function onGetAttributesFromDca(array $attributes, $context = null): array
+    {
+        $isBackend = $this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest());
+        if ($isBackend === true && $this->backendUser !== null && !$this->alpdeskfee_livemodus && $context instanceof DC_Table) {
+
+            $objSession = System::getContainer()->get('session');
+            $alpdeskfeeElementType = $objSession->get('alpdeskfee_tl_content_element_type');
+            if ($alpdeskfeeElementType !== null && $alpdeskfeeElementType !== '' && $attributes["name"] === 'type' && $attributes['strTable'] === "tl_content") {
+
+                $objSession->set('alpdeskfee_tl_content_element_type', null);
+
+                if ($this->backendUser->hasAccess((string)$alpdeskfeeElementType, 'elements') && $context->id !== null && (int)$context->id !== 0) {
+
+                    $contentModel = ContentModel::findById($context->id);
+                    if ($contentModel !== null) {
+
+                        $contentModel->type = (string)$alpdeskfeeElementType;
+                        $contentModel->save();
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return $attributes;
     }
 
 }
