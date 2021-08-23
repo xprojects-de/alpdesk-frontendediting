@@ -9,6 +9,7 @@ use Contao\PageModel;
 use Contao\Database;
 use Contao\Date;
 use Contao\StringUtil;
+use Contao\System;
 
 class Utils
 {
@@ -73,6 +74,76 @@ class Utils
 
             }
         }
+    }
+
+    public static function getAlpdeskFeeElements(BackendUser $user): array
+    {
+        $validElements = [];
+
+        System::loadLanguageFile('default');
+        System::loadLanguageFile('modules');
+
+        $elements = $GLOBALS['TL_CTE'];
+
+        $languagesCTE = $GLOBALS['TL_LANG']['CTE'];
+        $languagesMOD = $GLOBALS['TL_LANG']['MOD'];
+
+        if ($elements !== null && \count($elements) > 0) {
+
+            foreach ($elements as $elementGroupKey => $elementGroup) {
+
+                if (\is_array($elementGroup) && \count($elementGroup) > 0) {
+
+                    foreach ($elementGroup as $key => $item) {
+
+                        if ($user->isAdmin || $user->hasAccess($key, 'alpdesk_fee_elements')) {
+
+                            $labelGroup = (string)$elementGroupKey;
+                            if (\array_key_exists($labelGroup, $languagesCTE)) {
+                                $labelGroup = (string)$languagesCTE[$labelGroup];
+                            } else if (\array_key_exists($labelGroup, $languagesMOD)) {
+                                $labelGroup = (string)$languagesMOD[$labelGroup];
+                            }
+
+                            if (!\array_key_exists($labelGroup, $validElements)) {
+                                $validElements[$labelGroup] = [];
+                            }
+
+                            $labelItem = $key;
+                            if (\array_key_exists($labelItem, $languagesCTE)) {
+
+                                if (\is_array($languagesCTE[$labelItem]) && \count($languagesCTE[$labelItem]) > 0) {
+                                    $labelItem = (string)$languagesCTE[$labelItem][0];
+                                } else if (\is_string($languagesCTE[$labelItem]) && $languagesCTE[$labelItem] !== '') {
+                                    $labelItem = $languagesCTE[$labelItem];
+                                }
+
+                            } else if (\array_key_exists($labelItem, $languagesMOD)) {
+
+                                if (\is_array($languagesMOD[$labelItem]) && \count($languagesMOD[$labelItem]) > 0) {
+                                    $labelItem = (string)$languagesMOD[$labelItem][0];
+                                } else if (\is_string($languagesMOD[$labelItem]) && $languagesMOD[$labelItem] !== '') {
+                                    $labelItem = $languagesMOD[$labelItem];
+                                }
+
+                            }
+
+                            $validElements[$labelGroup][] = [
+                                'key' => $key,
+                                'label' => $labelItem
+                            ];
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return $validElements;
+
     }
 
 }

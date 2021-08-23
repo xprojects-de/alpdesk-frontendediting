@@ -114,6 +114,13 @@ class AlpdeskbackendController extends AbstractController
             $url = '/preview.php' . $objUrlGenerator->generate($alias);
         }
 
+        $elements = [];
+        $elementsData = Utils::getAlpdeskFeeElements(BackendUser::getInstance());
+        if (\count($elementsData) > 0) {
+            $elements = $elementsData;
+        }
+        $elements = \json_encode($elements);
+
         $outputTwig = $this->twig->render('@AlpdeskFrontendediting/alpdeskfee_be.html.twig', [
             'token' => $this->csrfTokenManager->getToken($this->csrfTokenName)->getValue(),
             'base' => Environment::get('base'),
@@ -122,7 +129,8 @@ class AlpdeskbackendController extends AbstractController
             'cachingTime' => time(),
             'label_fullscreen' => $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['fullscreen'],
             'label_livemodus' => $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['live_mode'],
-            'label_pageselect' => $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['page_select']
+            'label_pageselect' => $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['page_select'],
+            'elements' => $elements
         ]);
 
         return new Response($outputTwig);

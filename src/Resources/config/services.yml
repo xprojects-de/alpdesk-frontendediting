@@ -24,6 +24,7 @@ services:
       - { name: contao.hook, hook: getFrontendModule, method: onGetFrontendModule, priority: 0 }
       - { name: contao.hook, hook: parseArticles, method: onParseArticles, priority: 0 }
       - { name: contao.hook, hook: parseFrontendTemplate, method: onParseFrontendTemplate, priority: 0 }
+      - { name: contao.hook, hook: getAttributesFromDca, method: onGetAttributesFromDca, priority: 0 }
 
   Alpdesk\AlpdeskFrontendediting\Controller\BackendController:
     arguments:

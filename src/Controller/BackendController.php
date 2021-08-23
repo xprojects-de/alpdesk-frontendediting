@@ -212,6 +212,12 @@ class BackendController extends AbstractController
             $currentid = System::getContainer()->get('session')->get('CURRENT_ID');
             $data['CURRENT_ID'] = $currentid;
 
+            if (\array_key_exists('element_type', $data) && $data['element_type'] !== null && $data['element_type'] !== '') {
+                System::getContainer()->get('session')->set('alpdeskfee_tl_content_element_type', (string)$data['element_type']);
+            } else {
+                System::getContainer()->get('session')->set('alpdeskfee_tl_content_element_type', null);
+            }
+
             return (new JsonResponse($data));
         }
 
