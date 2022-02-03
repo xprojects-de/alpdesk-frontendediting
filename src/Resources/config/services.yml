@@ -28,6 +28,7 @@ services:
 
   Alpdesk\AlpdeskFrontendediting\Controller\BackendController:
     arguments:
+      - '@contao.framework'
       - '@contao.security.token_checker'
       - '@security.helper'
       - '@contao.csrf.token_manager'
@@ -39,6 +40,7 @@ services:
 
   Alpdesk\AlpdeskFrontendediting\Controller\AlpdeskbackendController:
     arguments:
+      - '@contao.framework'
       - '@twig'
       - '@contao.csrf.token_manager'
       - '%contao.csrf_token_name%'

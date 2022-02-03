@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Alpdesk\AlpdeskFrontendediting\Controller;
 
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Csrf\CsrfToken;
@@ -17,10 +18,10 @@ use Contao\BackendUser;
 use Contao\System;
 use Contao\ContentModel;
 
-// Check Route: sudo /Applications/MAMP/bin/php/php7.4.9/bin/php vendor/bin/contao-console debug:router
-
 class BackendController extends AbstractController
 {
+    protected $contaoFramework;
+
     private $security;
     private $tokenChecker;
     private $backendUser = null;
@@ -49,8 +50,9 @@ class BackendController extends AbstractController
     public static $ACTION_CLIPBOARD = 'clipboard';
     public static $ACTION_NEWRECORDS = 'new_records';
 
-    public function __construct(TokenChecker $tokenChecker, Security $security, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName, RequestStack $requestStack, ScopeMatcher $scopeMatcher)
+    public function __construct(ContaoFramework $contaoFramework, TokenChecker $tokenChecker, Security $security, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName, RequestStack $requestStack, ScopeMatcher $scopeMatcher)
     {
+        $this->contaoFramework = $contaoFramework;
         $this->tokenChecker = $tokenChecker;
         $this->security = $security;
         $this->csrfTokenManager = $csrfTokenManager;
@@ -101,6 +103,8 @@ class BackendController extends AbstractController
     public function endpoint(Request $request): JsonResponse
     {
         try {
+
+            $this->contaoFramework->initialize();
 
             $this->checkAccess();
 
