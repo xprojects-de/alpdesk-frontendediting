@@ -24,6 +24,7 @@ use Alpdesk\AlpdeskFrontendediting\Custom\Custom;
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventService;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Yaml\Yaml;
 use Twig\Environment as TwigEnvironment;
 
@@ -34,6 +35,7 @@ class HooksListener
     private $twig;
     private $requestStack;
     private $scopeMatcher;
+    private $session;
 
     private $backendUser = null;
     private $currentPageId = 0;
@@ -43,13 +45,14 @@ class HooksListener
     private $alpdeskfee_livemodus = false;
     private $mappingconfig = null;
 
-    public function __construct(TokenChecker $tokenChecker, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, TwigEnvironment $twig, RequestStack $requestStack, ScopeMatcher $scopeMatcher)
+    public function __construct(TokenChecker $tokenChecker, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, TwigEnvironment $twig, RequestStack $requestStack, ScopeMatcher $scopeMatcher, SessionInterface $session)
     {
         $this->tokenChecker = $tokenChecker;
         $this->alpdeskfeeEventDispatcher = $alpdeskfeeEventDispatcher;
         $this->twig = $twig;
         $this->requestStack = $requestStack;
         $this->scopeMatcher = $scopeMatcher;
+        $this->session = $session;
 
         $this->getBackendUser();
     }
@@ -64,7 +67,7 @@ class HooksListener
 
             System::loadLanguageFile('default');
 
-            $liveModus = System::getContainer()->get('session')->get('alpdeskfee_livemodus');
+            $liveModus = $this->session->get('alpdeskfee_livemodus');
             if ($liveModus !== null && $liveModus === true) {
                 $this->alpdeskfee_livemodus = true;
             }
@@ -137,6 +140,15 @@ class HooksListener
         return $buffer;
     }
 
+    /**
+     * @param FrontendTemplate $template
+     * @param array $data
+     * @param Module $module
+     * @return void
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     */
     public function onCompileArticle(FrontendTemplate $template, array $data, Module $module): void
     {
         if ($this->checkAccess()) {
@@ -384,7 +396,7 @@ class HooksListener
         $isBackend = $this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest());
         if ($isBackend === true && $this->backendUser !== null && !$this->alpdeskfee_livemodus && $context instanceof DC_Table) {
 
-            $objSession = System::getContainer()->get('session');
+            $objSession = $this->session;
             $alpdeskfeeElementType = $objSession->get('alpdeskfee_tl_content_element_type');
             if ($alpdeskfeeElementType !== null && $alpdeskfeeElementType !== '' && $attributes["name"] === 'type' && $attributes['strTable'] === "tl_content") {
 
@@ -397,6 +409,8 @@ class HooksListener
 
                         $contentModel->type = (string)$alpdeskfeeElementType;
                         $contentModel->save();
+
+                        $attributes['value'] = (string)$alpdeskfeeElementType;
 
                     }
 
