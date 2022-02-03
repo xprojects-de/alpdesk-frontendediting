@@ -23,7 +23,7 @@
   "require": {
     "php": ">=7.2",
     "ext-json": "*",
-    "contao/core-bundle": "^4.9"
+    "contao/core-bundle": "^4.12"
   },
   "conflict": {
     "contao/manager-plugin": "<2.0 || >=3.0"

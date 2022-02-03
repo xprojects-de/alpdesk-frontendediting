@@ -17,6 +17,7 @@ services:
       - '@twig'
       - '@request_stack'
       - '@contao.routing.scope_matcher'
+      - '@session'
     tags:
       - { name: contao.hook, hook: getPageLayout, method: onGetPageLayout, priority: 0 }
       - { name: contao.hook, hook: compileArticle, method: onCompileArticle, priority: 0 }
@@ -35,6 +36,7 @@ services:
       - '%contao.csrf_token_name%'
       - '@request_stack'
       - '@contao.routing.scope_matcher'
+      - '@session'
     tags:
       - controller.service_arguments
 
@@ -46,5 +48,6 @@ services:
       - '%contao.csrf_token_name%'
       - '@router'
       - '@security.helper'
+      - '@session'
     tags:
       - controller.service_arguments

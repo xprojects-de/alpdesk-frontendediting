@@ -6,6 +6,7 @@ namespace Alpdesk\AlpdeskFrontendediting\Controller;
 
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment as TwigEnvironment;
@@ -30,7 +31,9 @@ class AlpdeskbackendController extends AbstractController
     protected $router;
     private $security;
 
-    public function __construct(ContaoFramework $contaoFramework, TwigEnvironment $twig, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName, RouterInterface $router, Security $security)
+    private $session;
+
+    public function __construct(ContaoFramework $contaoFramework, TwigEnvironment $twig, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName, RouterInterface $router, Security $security, SessionInterface $session)
     {
         $this->contaoFramework = $contaoFramework;
         $this->twig = $twig;
@@ -38,6 +41,7 @@ class AlpdeskbackendController extends AbstractController
         $this->csrfTokenName = $csrfTokenName;
         $this->router = $router;
         $this->security = $security;
+        $this->session = $session;
     }
 
     private function toggleFullesize()
@@ -55,28 +59,55 @@ class AlpdeskbackendController extends AbstractController
 
     private function toggleLiveModus()
     {
-        $liveModus = System::getContainer()->get('session')->get('alpdeskfee_livemodus');
+        $liveModus = $this->session->get('alpdeskfee_livemodus');
 
         if ($liveModus === true) {
-            System::getContainer()->get('session')->set('alpdeskfee_livemodus', false);
+            $this->session->set('alpdeskfee_livemodus', false);
         } else {
-            System::getContainer()->get('session')->set('alpdeskfee_livemodus', true);
+            $this->session->set('alpdeskfee_livemodus', true);
         }
 
         Controller::reload();
     }
 
-    private function getPageAlias($id)
+    private function setPageAlias($id)
     {
-        $pageModel = PageModel::findById($id);
+        if ($id !== null && $id !== '') {
 
-        if ($pageModel !== null) {
-            System::getContainer()->get('session')->set('alpdeskfee_pageselect', $pageModel->alias);
-        } else {
-            System::getContainer()->get('session')->set('alpdeskfee_pageselect', '');
+            $pageModel = PageModel::findById($id);
+
+            if ($pageModel !== null) {
+                $this->session->set('alpdeskfee_pageselect', $pageModel->id);
+            } else {
+                $this->session->set('alpdeskfee_pageselect', '');
+            }
+
         }
 
         Controller::redirect($this->router->generate('alpdesk_frontendediting_backend'));
+    }
+
+    private function generatePreviewUrl()
+    {
+        $url = '/preview.php';
+
+        $id = $this->session->get('alpdeskfee_pageselect');
+        if ($id !== null && $id !== '') {
+
+            $pageId = (int)$id;
+            if ($pageId > 0) {
+
+                $pageModel = PageModel::findById((int)$id);
+
+                if ($pageModel !== null) {
+                    $url .= '/' . Controller::replaceInsertTags('{{link_url::' . $pageModel->id . '}}');
+                }
+
+            }
+
+        }
+
+        return $url;
     }
 
     /**
@@ -104,7 +135,7 @@ class AlpdeskbackendController extends AbstractController
         } else if (Input::post('toggleLivemodus')) {
             $this->toggleLiveModus();
         } else if (Input::get('pageselect')) {
-            $this->getPageAlias(Input::get('pageselect'));
+            $this->setPageAlias(Input::get('pageselect'));
         }
 
         System::loadLanguageFile('default');
@@ -112,13 +143,6 @@ class AlpdeskbackendController extends AbstractController
         $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_be.js';
         $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_be.css';
         $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/angular/alpdeskfee-styles.css';
-
-        $url = '/preview.php';
-        $alias = System::getContainer()->get('session')->get('alpdeskfee_pageselect');
-        if ($alias !== null && $alias !== '') {
-            $objUrlGenerator = System::getContainer()->get('contao.routing.url_generator');
-            $url = '/preview.php' . $objUrlGenerator->generate($alias);
-        }
 
         $elements = [];
         $elementsData = Utils::getAlpdeskFeeElements(BackendUser::getInstance());
@@ -130,8 +154,8 @@ class AlpdeskbackendController extends AbstractController
         $outputTwig = $this->twig->render('@AlpdeskFrontendediting/alpdeskfee_be.html.twig', [
             'token' => $this->csrfTokenManager->getToken($this->csrfTokenName)->getValue(),
             'base' => Environment::get('base'),
-            'livemodus' => System::getContainer()->get('session')->get('alpdeskfee_livemodus'),
-            'url' => $url,
+            'livemodus' => $this->session->get('alpdeskfee_livemodus'),
+            'url' => $this->generatePreviewUrl(),
             'cachingTime' => time(),
             'label_fullscreen' => $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['fullscreen'],
             'label_livemodus' => $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['live_mode'],

@@ -7,6 +7,7 @@ namespace Alpdesk\AlpdeskFrontendediting\Controller;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Core\Security;
@@ -15,7 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Contao\BackendUser;
-use Contao\System;
 use Contao\ContentModel;
 
 class BackendController extends AbstractController
@@ -29,6 +29,8 @@ class BackendController extends AbstractController
     private $csrfTokenName;
     private $requestStack;
     private $scopeMatcher;
+
+    private $session;
 
     public static $STATUSCODE_OK = 200;
     public static $STATUSCODE_COMMONERROR = 400;
@@ -50,7 +52,7 @@ class BackendController extends AbstractController
     public static $ACTION_CLIPBOARD = 'clipboard';
     public static $ACTION_NEWRECORDS = 'new_records';
 
-    public function __construct(ContaoFramework $contaoFramework, TokenChecker $tokenChecker, Security $security, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName, RequestStack $requestStack, ScopeMatcher $scopeMatcher)
+    public function __construct(ContaoFramework $contaoFramework, TokenChecker $tokenChecker, Security $security, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName, RequestStack $requestStack, ScopeMatcher $scopeMatcher, SessionInterface $session)
     {
         $this->contaoFramework = $contaoFramework;
         $this->tokenChecker = $tokenChecker;
@@ -59,6 +61,7 @@ class BackendController extends AbstractController
         $this->csrfTokenName = $csrfTokenName;
         $this->requestStack = $requestStack;
         $this->scopeMatcher = $scopeMatcher;
+        $this->session = $session;
 
         $this->getBackendUser();
     }
@@ -164,7 +167,7 @@ class BackendController extends AbstractController
 
         if ($data['action'] == self::$ACTION_ELEMENT_COPY || $data['action'] == self::$ACTION_ELEMENT_CUT) {
 
-            $objSession = System::getContainer()->get('session');
+            $objSession = $this->session;
 
             $clipboard = $objSession->get('CLIPBOARD');
 
@@ -212,14 +215,14 @@ class BackendController extends AbstractController
 
         } else if ($data['action'] == self::$ACTION_ELEMENT_NEW) {
 
-            System::getContainer()->get('session')->set('CURRENT_ID', \intval($data['pid']));
-            $currentid = System::getContainer()->get('session')->get('CURRENT_ID');
+            $this->session->set('CURRENT_ID', \intval($data['pid']));
+            $currentid = $this->session->get('CURRENT_ID');
             $data['CURRENT_ID'] = $currentid;
 
             if (\array_key_exists('element_type', $data) && $data['element_type'] !== null && $data['element_type'] !== '') {
-                System::getContainer()->get('session')->set('alpdeskfee_tl_content_element_type', (string)$data['element_type']);
+                $this->session->set('alpdeskfee_tl_content_element_type', (string)$data['element_type']);
             } else {
-                System::getContainer()->get('session')->set('alpdeskfee_tl_content_element_type', null);
+                $this->session->set('alpdeskfee_tl_content_element_type', null);
             }
 
             return (new JsonResponse($data));
@@ -238,8 +241,8 @@ class BackendController extends AbstractController
 
         if ($data['action'] == self::$ACTION_ELEMENT_NEW) {
 
-            System::getContainer()->get('session')->set('CURRENT_ID', \intval($data['id']));
-            $currentid = System::getContainer()->get('session')->get('CURRENT_ID');
+            $this->session->set('CURRENT_ID', \intval($data['id']));
+            $currentid = $this->session->get('CURRENT_ID');
             $data['CURRENT_ID'] = $currentid;
 
             return (new JsonResponse($data));
@@ -258,7 +261,7 @@ class BackendController extends AbstractController
 
         if ($data['action'] == self::$ACTION_CLIPBOARD) {
 
-            $clipboard = System::getContainer()->get('session')->get('CLIPBOARD');
+            $clipboard = $this->session->get('CLIPBOARD');
             if (!\is_array($clipboard) || $clipboard === null) {
                 $clipboard = [];
             }
@@ -267,7 +270,7 @@ class BackendController extends AbstractController
 
         } else if ($data['action'] == self::$ACTION_NEWRECORDS) {
 
-            $objSession = System::getContainer()->get('session');
+            $objSession = $this->session;
             $objSessionBag = $objSession->getBag('contao_backend');
 
             $new_records = $objSessionBag->get('new_records');
