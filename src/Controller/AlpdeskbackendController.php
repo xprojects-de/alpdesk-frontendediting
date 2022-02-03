@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Alpdesk\AlpdeskFrontendediting\Controller;
 
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,14 +22,17 @@ use Alpdesk\AlpdeskFrontendediting\Utils\Utils;
 
 class AlpdeskbackendController extends AbstractController
 {
+    protected $contaoFramework;
+
     private $twig;
     private $csrfTokenManager;
     private $csrfTokenName;
     protected $router;
     private $security;
 
-    public function __construct(TwigEnvironment $twig, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName, RouterInterface $router, Security $security)
+    public function __construct(ContaoFramework $contaoFramework, TwigEnvironment $twig, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName, RouterInterface $router, Security $security)
     {
+        $this->contaoFramework = $contaoFramework;
         $this->twig = $twig;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->csrfTokenName = $csrfTokenName;
@@ -82,6 +86,8 @@ class AlpdeskbackendController extends AbstractController
      */
     public function endpoint(): Response
     {
+        $this->contaoFramework->initialize();
+
         $backendUser = $this->security->getUser();
 
         if (!$backendUser instanceof BackendUser) {
