@@ -115,10 +115,12 @@ class BackendController extends AbstractController
             $rt = (string)$request->request->get('rt');
 
             if (\count($data) == 0) {
+
                 $content = $request->getContent();
                 $json = \json_decode($content, true);
                 $data = \json_decode($json['data'], true);
                 $rt = (string)$json['rt'];
+
             }
 
             $this->checkToken($rt);
@@ -171,7 +173,7 @@ class BackendController extends AbstractController
 
             $clipboard = $objSession->get('CLIPBOARD');
 
-            if (!\is_array($clipboard) || $clipboard === null) {
+            if (!\is_array($clipboard)) {
                 $clipboard = [];
             }
 
@@ -203,7 +205,7 @@ class BackendController extends AbstractController
             $objSessionBag = $objSession->getBag('contao_backend');
             $new_records = $objSessionBag->get('new_records');
 
-            if (!\is_array($new_records) || $new_records === null) {
+            if (!\is_array($new_records)) {
                 $new_records = [];
             }
 
@@ -262,7 +264,7 @@ class BackendController extends AbstractController
         if ($data['action'] == self::$ACTION_CLIPBOARD) {
 
             $clipboard = $this->session->get('CLIPBOARD');
-            if (!\is_array($clipboard) || $clipboard === null) {
+            if (!\is_array($clipboard)) {
                 $clipboard = [];
             }
 
@@ -274,61 +276,95 @@ class BackendController extends AbstractController
             $objSessionBag = $objSession->getBag('contao_backend');
 
             $new_records = $objSessionBag->get('new_records');
-            if (!\is_array($new_records) || $new_records === null) {
+            if (!\is_array($new_records)) {
                 $new_records = [];
             }
 
             $new_records_blacklist = $objSessionBag->get('alpdeskfee_blacklist');
-            if (!\is_array($new_records_blacklist) || $new_records_blacklist === null) {
+            if (!\is_array($new_records_blacklist)) {
                 $new_records_blacklist = [];
             }
 
             $tlContentBlacklist = [];
+
             if (\count($new_records_blacklist) > 0) {
+
                 foreach ($new_records_blacklist as $key => $value) {
+
                     if ($key == 'tl_content') {
+
                         if (\is_array($value)) {
+
                             foreach ($value as $uId) {
                                 \array_push($tlContentBlacklist, \intval($uId));
                             }
+
                         } else {
                             \array_push($tlContentBlacklist, \intval($value));
                         }
+
                     }
+
                 }
+
             }
 
             $updatedrecords = [];
+
             if ($data['updateContentRecords'] == true && \count($new_records) > 0) {
+
                 foreach ($new_records as $key => $value) {
+
                     if ($key == 'tl_content') {
+
                         if (\is_array($value)) {
+
                             foreach ($value as $uId) {
+
                                 if (!\in_array(\intval($uId), $tlContentBlacklist)) {
+
                                     $contentModel = ContentModel::findById(\intval($uId));
                                     if ($contentModel !== null) {
+
                                         if ($contentModel->tstamp == 0) {
+
                                             $contentModel->tstamp = time();
                                             $contentModel->save();
                                             \array_push($updatedrecords, \intval($uId));
+
                                         }
+
                                     }
+
                                 }
+
                             }
+
                         } else {
+
                             if (!\in_array(\intval($value), $tlContentBlacklist)) {
+
                                 $contentModel = ContentModel::findById(\intval($value));
                                 if ($contentModel !== null) {
+
                                     if ($contentModel->tstamp == 0) {
+
                                         $contentModel->tstamp = time();
                                         $contentModel->save();
                                         \array_push($updatedrecords, \intval($value));
+
                                     }
+
                                 }
+
                             }
+
                         }
+
                     }
+
                 }
+
             }
 
             $result = [
