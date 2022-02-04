@@ -21,7 +21,7 @@
     "wiki": "https://github.com/xprojects-de/alpdesk-frontendediting/wiki"
   },
   "require": {
-    "php": ">=7.2",
+    "php": ">=7.4",
     "ext-json": "*",
     "contao/core-bundle": "^4.12"
   },
