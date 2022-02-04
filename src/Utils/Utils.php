@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Alpdesk\AlpdeskFrontendediting\Utils;
 
+use Contao\ArticleModel;
 use Contao\BackendUser;
 use Contao\PageModel;
 use Contao\Database;
@@ -143,6 +144,42 @@ class Utils
         }
 
         return $validElements;
+
+    }
+
+    /**
+     * @param int|null $articleId
+     * @param array|null $currentRow
+     * @return array|null
+     */
+    public static function mergeArticlePermissions(?int $articleId, ?array $currentRow): ?array
+    {
+        if ($currentRow === null) {
+
+            if ($articleId === null) {
+                return null;
+            }
+
+            $parentArticleModel = ArticleModel::findById($articleId);
+            if ($parentArticleModel === null) {
+                return null;
+            }
+
+            $currentRow = $parentArticleModel->row();
+
+        }
+
+        $parentPage = PageModel::findById((int)$currentRow['pid']);
+        if ($parentPage === null) {
+            return null;
+        }
+
+        $currentRow['includeChmod'] = $parentPage->includeChmod;
+        $currentRow['chmod'] = $parentPage->chmod;
+        $currentRow['cuser'] = $parentPage->cuser;
+        $currentRow['cgroup'] = $parentPage->cgroup;
+
+        return $currentRow;
 
     }
 

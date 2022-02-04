@@ -9,7 +9,6 @@ use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\DC_Table;
 use Contao\LayoutModel;
 use Contao\PageModel;
-use Contao\ArticleModel;
 use Contao\PageRegular;
 use Contao\ContentModel;
 use Contao\ModuleModel;
@@ -155,8 +154,18 @@ class HooksListener
 
             if ($this->backendUser->hasAccess('article', 'modules')) {
 
-                $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $module->getModel()->row());
-                $canDelete = $this->backendUser->isAllowed(BackendUser::CAN_DELETE_ARTICLES, $module->getModel()->row());
+                $aRow = Utils::mergeArticlePermissions(null, $module->getModel()->row());
+
+                $canEdit = false;
+                if ($aRow !== null) {
+                    $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $aRow);
+                }
+
+                $canDelete = false;
+                if ($aRow !== null) {
+                    $canDelete = $this->backendUser->isAllowed(BackendUser::CAN_DELETE_ARTICLES, $aRow);
+                }
+
                 $canPublish = $this->backendUser->hasAccess('tl_article::published', 'alexf');
 
                 $tdata = [
@@ -214,9 +223,9 @@ class HooksListener
             $canEdit = true;
             if ($element->ptable == 'tl_article') {
 
-                $parentArticleModel = ArticleModel::findById($element->pid);
-                if ($parentArticleModel !== null) {
-                    $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $parentArticleModel->row());
+                $aRow = Utils::mergeArticlePermissions((int)$element->pid, null);
+                if ($aRow !== null) {
+                    $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $aRow);
                 }
 
             }
