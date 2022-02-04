@@ -35,7 +35,7 @@ abstract class Base
 
     public static function findClassByElement(ContentModel $element, array $mappingconfig)
     {
-        if ($mappingconfig !== null && \is_array($mappingconfig)) {
+        if (\is_array($mappingconfig)) {
 
             foreach ($mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'] as $value) {
 
@@ -81,7 +81,7 @@ abstract class Base
 
     public static function findClassByModule(Module $module, array $mappingconfig)
     {
-        if ($mappingconfig !== null && \is_array($mappingconfig)) {
+        if (\is_array($mappingconfig)) {
 
             foreach ($mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'] as $value) {
 
@@ -129,7 +129,7 @@ abstract class Base
     public static function findClassByForm(Form $form, array $mappingconfig)
     {
 
-        if ($mappingconfig !== null && \is_array($mappingconfig)) {
+        if (\is_array($mappingconfig)) {
 
             foreach ($mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'] as $value) {
 
