@@ -33,8 +33,6 @@
             <div class="clear"></div>
         </div>
         <app-alpdeskfee base="{{ base }}" rt="{{ token }}" frameheight="100%" frameurl="{{ url }}" elements='{{ elements }}'></app-alpdeskfee>
-        <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements-es5.js?v={{ cachingTime }}"></script>
-        <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements-es6.js?v={{ cachingTime }}" nomodule
-                defer></script>
+        <script src="bundles/alpdeskfrontendediting/js/angular/alpdeskfee-elements.js?v={{ cachingTime }}" type="module"></script>
     </div>
 {% endblock %}
