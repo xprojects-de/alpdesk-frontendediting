@@ -29,22 +29,29 @@ use Twig\Environment as TwigEnvironment;
 
 class HooksListener
 {
-    private $tokenChecker;
-    private $alpdeskfeeEventDispatcher;
-    private $twig;
-    private $requestStack;
-    private $scopeMatcher;
-    private $session;
+    private TokenChecker $tokenChecker;
+    private AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher;
+    private TwigEnvironment $twig;
+    private RequestStack $requestStack;
+    private ScopeMatcher $scopeMatcher;
+    private SessionInterface $session;
 
-    private $backendUser = null;
-    private $currentPageId = 0;
-    private $pagemountAccess = false;
-    private $pageChmodEdit = 0;
-    private $accessFilesmanagement = 0;
-    private $alpdeskfee_livemodus = false;
-    private $mappingconfig = null;
+    private ?BackendUser $backendUser = null;
+    private int $currentPageId = 0;
+    private bool $pagemountAccess = false;
+    private int $pageChmodEdit = 0;
+    private int $accessFilesmanagement = 0;
+    private bool $alpdeskfee_livemodus = false;
+    private mixed $mappingconfig = null;
 
-    public function __construct(TokenChecker $tokenChecker, AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, TwigEnvironment $twig, RequestStack $requestStack, ScopeMatcher $scopeMatcher, SessionInterface $session)
+    public function __construct(
+        TokenChecker                       $tokenChecker,
+        AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher,
+        TwigEnvironment                    $twig,
+        RequestStack                       $requestStack,
+        ScopeMatcher                       $scopeMatcher,
+        SessionInterface                   $session
+    )
     {
         $this->tokenChecker = $tokenChecker;
         $this->alpdeskfeeEventDispatcher = $alpdeskfeeEventDispatcher;
@@ -56,7 +63,7 @@ class HooksListener
         $this->getBackendUser();
     }
 
-    private function getBackendUser()
+    private function getBackendUser(): void
     {
         if ($this->tokenChecker->hasBackendUser()) {
 
@@ -76,7 +83,7 @@ class HooksListener
         }
     }
 
-    private function addLabelsToHeader()
+    private function addLabelsToHeader(): void
     {
         $labels = \json_encode($GLOBALS['TL_LANG']['alpdeskfee_lables']);
         $GLOBALS['TL_HEAD'][] = "<script>const alpdeskfeePageid=" . $this->currentPageId . "; const alpdeskfeeCanPageEdit=" . $this->pageChmodEdit . "; const alpdeskfeeAccessFilemanagement=" . $this->accessFilesmanagement . "; const alpdeskfeeLabels='" . $labels . "';</script>";
@@ -114,7 +121,7 @@ class HooksListener
         return false;
     }
 
-    private function createElementsTags(string $buffer, string $classes, array $attributes)
+    private function createElementsTags(string $buffer, string $classes, array $attributes): string
     {
         $dataAttributes = \array_filter($attributes, function ($v) {
             return null !== $v;
@@ -291,7 +298,7 @@ class HooksListener
         return $buffer;
     }
 
-    private function renderModuleOutput(CustomViewItem $modDoType, string $buffer)
+    private function renderModuleOutput(CustomViewItem $modDoType, string $buffer): string
     {
         if ($modDoType->getValid() === true && ($modDoType->getType() == CustomViewItem::$TYPE_MODULE || $modDoType->getType() == CustomViewItem::$TYPE_FORM)) {
 

@@ -6,9 +6,9 @@ namespace Alpdesk\AlpdeskFrontendediting\Custom;
 
 class CustomSubviewItem
 {
-    private $path = '';
-    private $icon = '';
-    private $iconclass = '';
+    private string $path = '';
+    private string $icon = '';
+    private string $iconclass = '';
 
     public function getPath(): string
     {

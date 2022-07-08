@@ -23,17 +23,25 @@ use Alpdesk\AlpdeskFrontendediting\Utils\Utils;
 
 class AlpdeskbackendController extends AbstractController
 {
-    protected $contaoFramework;
+    protected ContaoFramework $contaoFramework;
 
-    private $twig;
-    private $csrfTokenManager;
-    private $csrfTokenName;
-    protected $router;
-    private $security;
+    private TwigEnvironment $twig;
+    private CsrfTokenManagerInterface $csrfTokenManager;
+    private string $csrfTokenName;
+    protected RouterInterface $router;
+    private Security $security;
 
-    private $session;
+    private SessionInterface $session;
 
-    public function __construct(ContaoFramework $contaoFramework, TwigEnvironment $twig, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName, RouterInterface $router, Security $security, SessionInterface $session)
+    public function __construct(
+        ContaoFramework           $contaoFramework,
+        TwigEnvironment           $twig,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        string                    $csrfTokenName,
+        RouterInterface           $router,
+        Security                  $security,
+        SessionInterface          $session
+    )
     {
         $this->contaoFramework = $contaoFramework;
         $this->twig = $twig;
@@ -44,7 +52,7 @@ class AlpdeskbackendController extends AbstractController
         $this->session = $session;
     }
 
-    private function toggleFullesize()
+    private function toggleFullesize(): void
     {
         $userModel = UserModel::findById(BackendUser::getInstance()->id);
         if ($userModel !== null) {
@@ -57,7 +65,7 @@ class AlpdeskbackendController extends AbstractController
         Controller::reload();
     }
 
-    private function toggleLiveModus()
+    private function toggleLiveModus(): void
     {
         $liveModus = $this->session->get('alpdeskfee_livemodus');
 
@@ -70,7 +78,7 @@ class AlpdeskbackendController extends AbstractController
         Controller::reload();
     }
 
-    private function setPageAlias($id)
+    private function setPageAlias(mixed $id): void
     {
         if ($id !== null && $id !== '') {
 
@@ -87,7 +95,7 @@ class AlpdeskbackendController extends AbstractController
         Controller::redirect($this->router->generate('alpdesk_frontendediting_backend'));
     }
 
-    private function generatePreviewUrl()
+    private function generatePreviewUrl(): string
     {
         $url = '/preview.php';
 
@@ -100,7 +108,7 @@ class AlpdeskbackendController extends AbstractController
                 $pageModel = PageModel::findById((int)$id);
 
                 if ($pageModel !== null) {
-                    $url .= '/' . Controller::replaceInsertTags('{{link_url::' . $pageModel->id . '}}');
+                    $url .= '/' . Utils::replaceInsertTags('{{link_url::' . $pageModel->id . '}}');
                 }
 
             }

@@ -183,4 +183,27 @@ class Utils
 
     }
 
+    /**
+     * @param string $strBuffer
+     * @param bool $blnCache
+     * @return string
+     */
+    public static function replaceInsertTags(string $strBuffer, bool $blnCache = true): string
+    {
+        try {
+
+            $parser = System::getContainer()->get('contao.insert_tag.parser');
+
+            if ($blnCache) {
+                return $parser->replace($strBuffer);
+            }
+
+            return $parser->replaceInline($strBuffer);
+
+        } catch (\Exception $ex) {
+            return $strBuffer;
+        }
+
+    }
+
 }

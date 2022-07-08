@@ -12,8 +12,8 @@ class AlpdeskFrontendeditingEventForm extends Event
 {
     public const NAME = 'alpdeskfrontendediting.form';
 
-    private $item;
-    private $form;
+    private CustomViewItem $item;
+    private Form $form;
 
     public function __construct(CustomViewItem $item, Form $form)
     {

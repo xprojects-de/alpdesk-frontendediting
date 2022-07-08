@@ -6,20 +6,20 @@ namespace Alpdesk\AlpdeskFrontendediting\Custom;
 
 class CustomViewItem
 {
-    public static $TYPE_MODULE = 1;
-    public static $TYPE_CE = 2;
-    public static $TYPE_FORM = 3;
-    private $type = 0;
-    private $valid = false;
-    private $path = '';
-    private $sublevelpath = '';
-    private $label = '';
-    private $subviewitems = [];
+    public static int $TYPE_MODULE = 1;
+    public static int $TYPE_CE = 2;
+    public static int $TYPE_FORM = 3;
+    private int $type = 0;
+    private bool $valid = false;
+    private string $path = '';
+    private string $sublevelpath = '';
+    private string $label = '';
+    private array $subviewitems = [];
     // Access to BackendModule
-    private $hasParentAccess = true;
-    private $icon = '';
-    private $iconclass = '';
-    private $customBackendModule = '';
+    private bool $hasParentAccess = true;
+    private string $icon = '';
+    private string $iconclass = '';
+    private string $customBackendModule = '';
 
     public function getType(): int
     {

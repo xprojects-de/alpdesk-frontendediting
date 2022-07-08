@@ -10,12 +10,12 @@ use Contao\Module;
 
 class MappingArticle
 {
-    private $template;
-    private $newsEntry;
-    private $module;
-    private $currentPageId;
+    private FrontendTemplate $template;
+    private array $newsEntry;
+    private Module $module;
+    private string $currentPageId;
 
-    private static $mappedNewsListTemplates = [];
+    private static array $mappedNewsListTemplates = [];
 
     /**
      * NewsListArticle constructor.
