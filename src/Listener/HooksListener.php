@@ -78,6 +78,16 @@ class HooksListener
                 $this->alpdeskfee_livemodus = true;
             }
 
+            if ($this->backendUser !== null && $this->backendUser->isAdmin) {
+
+                if (
+                    $this->backendUser->alpdesk_fee_admin_disabled !== null &&
+                    $this->backendUser->alpdesk_fee_admin_disabled === 1) {
+                    $this->alpdeskfee_livemodus = true;
+                }
+
+            }
+
             $this->mappingconfig = Yaml::parse(\file_get_contents(__DIR__ . '/../Resources/config/config.yml'), Yaml::PARSE_CONSTANT);
 
         }
@@ -386,7 +396,8 @@ class HooksListener
                             ]);
 
                             // Because to modify header also
-                            $buffer = '<div style="margin-top:10px">' . $buffer . '</div>';
+                            // @TODO if no space is set in some layout maybe the parent NewsModule is not accessible
+                            // $buffer = '<div style="margin-top:10px">' . $buffer . '</div>';
 
                         }
 

@@ -148,6 +148,15 @@ class AlpdeskbackendController extends AbstractController
 
         System::loadLanguageFile('default');
 
+        $liveModus = ($this->session->get('alpdeskfee_livemodus') === true);
+        if (
+            $backendUser->isAdmin === true &&
+            $backendUser->alpdesk_fee_admin_disabled !== null &&
+            $backendUser->alpdesk_fee_admin_disabled === 1
+        ) {
+            $liveModus = true;
+        }
+
         $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_be.js';
         $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_be.css';
         $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/angular/alpdeskfee-styles.css';
@@ -162,7 +171,7 @@ class AlpdeskbackendController extends AbstractController
         $outputTwig = $this->twig->render('@AlpdeskFrontendediting/alpdeskfee_be.html.twig', [
             'token' => $this->csrfTokenManager->getToken($this->csrfTokenName)->getValue(),
             'base' => Environment::get('base'),
-            'livemodus' => $this->session->get('alpdeskfee_livemodus'),
+            'livemodus' => $liveModus,
             'url' => $this->generatePreviewUrl(),
             'cachingTime' => time(),
             'label_fullscreen' => $GLOBALS['TL_LANG']['alpdeskfee_backend_lables']['fullscreen'],
