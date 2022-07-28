@@ -12,8 +12,8 @@ class AlpdeskFrontendeditingEventElement extends Event
 {
     public const NAME = 'alpdeskfrontendediting.element';
 
-    private $item;
-    private $element;
+    private CustomViewItem $item;
+    private ContentModel $element;
 
     public function __construct(CustomViewItem $item, ContentModel $element)
     {

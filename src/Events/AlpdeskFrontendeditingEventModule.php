@@ -12,8 +12,8 @@ class AlpdeskFrontendeditingEventModule extends Event
 {
     public const NAME = 'alpdeskfrontendediting.module';
 
-    private $item;
-    private $module;
+    private CustomViewItem $item;
+    private Module $module;
 
     public function __construct(CustomViewItem $item, Module $module)
     {

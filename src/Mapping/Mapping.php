@@ -17,20 +17,20 @@ use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventForm;
 
 class Mapping
 {
-    private $alpdeskfeeEventDispatcher;
-    private $mappingconfig;
+    private AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher;
+    private ?array $mappingconfig;
 
-    public function __construct(AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, array $mappingconfig)
+    public function __construct(AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, ?array $mappingconfig)
     {
         $this->alpdeskfeeEventDispatcher = $alpdeskfeeEventDispatcher;
         $this->mappingconfig = $mappingconfig;
     }
 
-    public function checkCustomTypeElementAccess(ContentModel $element, CustomViewItem $item)
+    public function checkCustomTypeElementAccess(ContentModel $element, CustomViewItem $item): void
     {
         //e.g. if user has access to special news item or event item defined in user settings
         // Check if tl_content element can be editied e.g. news which have a different ptable
-        if ($this->mappingconfig !== null && \is_array($this->mappingconfig)) {
+        if (\is_array($this->mappingconfig)) {
 
             $pTable = str_replace('tl_', '', $element->ptable);
             if (\array_key_exists($pTable, $this->mappingconfig['alpdesk_frontendediting_mapping']['element_access_check'])) {
@@ -57,7 +57,7 @@ class Mapping
         }
     }
 
-    public function checkCustomBackendModule(ContentModel $element, CustomViewItem $item)
+    public function checkCustomBackendModule(ContentModel $element, CustomViewItem $item): void
     {
         // Maybe a tl_content element hast a custom BackendModule not equal to ptable
         if ($this->mappingconfig !== null && \is_array($this->mappingconfig)) {

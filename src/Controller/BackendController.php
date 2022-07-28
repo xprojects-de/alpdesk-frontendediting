@@ -20,39 +20,47 @@ use Contao\ContentModel;
 
 class BackendController extends AbstractController
 {
-    protected $contaoFramework;
+    protected ContaoFramework $contaoFramework;
 
-    private $security;
-    private $tokenChecker;
-    private $backendUser = null;
-    private $csrfTokenManager;
-    private $csrfTokenName;
-    private $requestStack;
-    private $scopeMatcher;
+    private Security $security;
+    private TokenChecker $tokenChecker;
+    private ?BackendUser $backendUser = null;
+    private CsrfTokenManagerInterface $csrfTokenManager;
+    private string $csrfTokenName;
+    private RequestStack $requestStack;
+    private ScopeMatcher $scopeMatcher;
+    private SessionInterface $session;
 
-    private $session;
+    public static int $STATUSCODE_OK = 200;
+    public static int $STATUSCODE_COMMONERROR = 400;
+    public static string $TARGETTYPE_PAGE = 'page';
+    public static string $TARGETTYPE_ARTICLE = 'article';
+    public static string $TARGETTYPE_CE = 'ce';
+    public static string $TARGETTYPE_MOD = 'mod';
+    public static string $TARGETTYPE_INFO = 'info';
+    public static string $ACTION_PARENT_EDIT = 'parent_edit';
+    public static string $ACTION_ELEMENT_EDIT = 'element_edit';
+    public static string $ACTION_ELEMENT_VISIBILITY = 'element_visibility';
+    public static string $ACTION_ELEMENT_DELETE = 'element_delete';
+    public static string $ACTION_ELEMENT_SHOW = 'element_show';
+    public static string $ACTION_ELEMENT_NEW = 'element_new';
+    public static string $ACTION_ELEMENT_COPY = 'element_copy';
+    public static string $ACTION_ELEMENT_CUT = 'element_cut';
+    public static string $ACTION_ELEMENT_DRAG = 'element_drag';
+    public static string $ACTION_ELEMENT_PASTEAFTER = 'element_pasteafter';
+    public static string $ACTION_CLIPBOARD = 'clipboard';
+    public static string $ACTION_NEWRECORDS = 'new_records';
 
-    public static $STATUSCODE_OK = 200;
-    public static $STATUSCODE_COMMONERROR = 400;
-    public static $TARGETTYPE_PAGE = 'page';
-    public static $TARGETTYPE_ARTICLE = 'article';
-    public static $TARGETTYPE_CE = 'ce';
-    public static $TARGETTYPE_MOD = 'mod';
-    public static $TARGETTYPE_INFO = 'info';
-    public static $ACTION_PARENT_EDIT = 'parent_edit';
-    public static $ACTION_ELEMENT_EDIT = 'element_edit';
-    public static $ACTION_ELEMENT_VISIBILITY = 'element_visibility';
-    public static $ACTION_ELEMENT_DELETE = 'element_delete';
-    public static $ACTION_ELEMENT_SHOW = 'element_show';
-    public static $ACTION_ELEMENT_NEW = 'element_new';
-    public static $ACTION_ELEMENT_COPY = 'element_copy';
-    public static $ACTION_ELEMENT_CUT = 'element_cut';
-    public static $ACTION_ELEMENT_DRAG = 'element_drag';
-    public static $ACTION_ELEMENT_PASTEAFTER = 'element_pasteafter';
-    public static $ACTION_CLIPBOARD = 'clipboard';
-    public static $ACTION_NEWRECORDS = 'new_records';
-
-    public function __construct(ContaoFramework $contaoFramework, TokenChecker $tokenChecker, Security $security, CsrfTokenManagerInterface $csrfTokenManager, string $csrfTokenName, RequestStack $requestStack, ScopeMatcher $scopeMatcher, SessionInterface $session)
+    public function __construct(
+        ContaoFramework           $contaoFramework,
+        TokenChecker              $tokenChecker,
+        Security                  $security,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        string                    $csrfTokenName,
+        RequestStack              $requestStack,
+        ScopeMatcher              $scopeMatcher,
+        SessionInterface          $session
+    )
     {
         $this->contaoFramework = $contaoFramework;
         $this->tokenChecker = $tokenChecker;
@@ -66,7 +74,7 @@ class BackendController extends AbstractController
         $this->getBackendUser();
     }
 
-    private function getBackendUser()
+    private function getBackendUser(): void
     {
         if ($this->tokenChecker->hasBackendUser()) {
 
@@ -81,7 +89,7 @@ class BackendController extends AbstractController
     /**
      * @throws \Exception
      */
-    private function checkAccess()
+    private function checkAccess(): void
     {
         $isBackend = $this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest());
 
@@ -91,13 +99,15 @@ class BackendController extends AbstractController
     }
 
     /**
+     * @param string|null $token
+     * @return void
      * @throws \Exception
      */
-    private function checkToken($token)
+    private function checkToken(?string $token): void
     {
-        $token = new CsrfToken($this->csrfTokenName, $token);
+        $tokenObject = new CsrfToken($this->csrfTokenName, $token);
 
-        $valid = $this->csrfTokenManager->isTokenValid($token);
+        $valid = $this->csrfTokenManager->isTokenValid($tokenObject);
         if ($valid !== true) {
             throw new \Exception('Invalid Token');
         }
@@ -160,9 +170,11 @@ class BackendController extends AbstractController
     }
 
     /**
+     * @param array $data
+     * @return JsonResponse
      * @throws \Exception
      */
-    private function procceedType_CE($data): JsonResponse
+    private function procceedType_CE(array $data): JsonResponse
     {
         // currently we do not need any Access-Check because only the clipboard is modified and no record of Database is affected
         // In future be careful!
@@ -234,9 +246,11 @@ class BackendController extends AbstractController
     }
 
     /**
+     * @param array $data
+     * @return JsonResponse
      * @throws \Exception
      */
-    private function procceedType_Article($data): JsonResponse
+    private function procceedType_Article(array $data): JsonResponse
     {
         // currently we do not need any Access-Check because only the clipboard is modified and no record of Database is affected
         // In future be careful!
@@ -256,7 +270,7 @@ class BackendController extends AbstractController
     /**
      * @throws \Exception
      */
-    private function procceedType_Info($data): JsonResponse
+    private function procceedType_Info(array $data): JsonResponse
     {
         // currently we do not need any Access-Check because only the clipboard is modified and no record of Database is affected
         // In future be careful!

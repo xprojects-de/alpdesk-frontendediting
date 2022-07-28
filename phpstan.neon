@@ -1,0 +1,25 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-symfony/rules.neon
+    - vendor/slam/phpstan-extensions/conf/symfony-rules.neon
+
+parameters:
+    level: 6
+
+    paths:
+        - %currentWorkingDirectory%/src
+        - %currentWorkingDirectory%/tests
+
+    universalObjectCratesClasses:
+        - Contao\Model
+
+    excludePaths:
+        - %currentWorkingDirectory%/src/Resources/*
+
+    ignoreErrors:
+        - '#Do not throw the \\Exception base class. Instead, extend the \\Exception base class\. More info: http://bit.ly/subtypeexception#'
+
+    treatPhpDocTypesAsCertain: false
+    checkMissingIterableValueType: false

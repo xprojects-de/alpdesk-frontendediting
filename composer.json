@@ -21,17 +21,21 @@
     "wiki": "https://github.com/xprojects-de/alpdesk-frontendediting/wiki"
   },
   "require": {
-    "php": ">=7.4",
+    "php": "^8.0",
     "ext-json": "*",
-    "contao/core-bundle": "^4.12"
+    "contao/core-bundle": "^4.13"
   },
   "conflict": {
     "contao/manager-plugin": "<2.0 || >=3.0"
   },
   "require-dev": {
-    "phpstan/phpstan": "^0.12.81",
-    "contao/manager-bundle": "^4.11",
-    "vimeo/psalm": "^4.6",
+    "roave/security-advisories": "dev-latest",
+    "contao/manager-bundle": "^4.13",
+    "contao/manager-plugin": "^2.0",
+    "phpstan/phpstan": "^1.0",
+    "phpstan/phpstan-phpunit": "^1.0",
+    "phpstan/phpstan-symfony": "^1.0",
+    "slam/phpstan-extensions": "^6.0",
     "phpunit/phpunit": "^9.5",
     "symfony/phpunit-bridge": "^5.2"
   },
@@ -45,6 +49,12 @@
     "contao-component-dir": "public"
   },
   "config": {
-    "contao-component-dir": "public"
+    "contao-component-dir": "public",
+    "allow-plugins": {
+      "composer/package-versions-deprecated": true,
+      "contao-community-alliance/composer-plugin": true,
+      "contao-components/installer": true,
+      "contao/manager-plugin": true
+    }
   }
 }
