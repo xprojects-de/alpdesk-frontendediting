@@ -1,6 +1,5 @@
 <?php
 
-use Contao\Backend;
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
 
 PaletteManipulator::create()
@@ -35,17 +34,8 @@ $GLOBALS['TL_DCA']['tl_user']['fields']['alpdesk_fee_elements'] = [
     'label' => &$GLOBALS['TL_LANG']['tl_user_group']['alpdesk_fee_elements'],
     'exclude' => true,
     'inputType' => 'checkbox',
-    'options_callback' => ['tl_user_alpdeskfee', 'getContentElements'],
+    'options_callback' => array_map('array_keys', $GLOBALS['TL_CTE']),
     'reference' => &$GLOBALS['TL_LANG']['CTE'],
     'eval' => array('multiple' => true, 'helpwizard' => true, 'tl_class' => 'clr'),
     'sql' => "blob NULL"
 ];
-
-class tl_user_alpdeskfee extends Backend
-{
-    public function getContentElements()
-    {
-        return array_map('array_keys', $GLOBALS['TL_CTE']);
-    }
-
-}

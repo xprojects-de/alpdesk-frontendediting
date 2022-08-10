@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Alpdesk\AlpdeskFrontendediting\Controller;
 
+use Contao\CoreBundle\Controller\AbstractBackendController;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +21,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Security;
 use Alpdesk\AlpdeskFrontendediting\Utils\Utils;
 
-class AlpdeskbackendController extends AbstractController
+class AlpdeskbackendController extends AbstractBackendController
 {
     protected ContaoFramework $contaoFramework;
 
@@ -168,7 +168,7 @@ class AlpdeskbackendController extends AbstractController
         }
         $elements = \json_encode($elements);
 
-        $outputTwig = $this->twig->render('@AlpdeskFrontendediting/alpdeskfee_be.html.twig', [
+        return $this->render('@AlpdeskFrontendediting/alpdeskfee_be.html.twig', [
             'token' => $this->csrfTokenManager->getToken($this->csrfTokenName)->getValue(),
             'base' => Environment::get('base'),
             'livemodus' => $liveModus,
@@ -180,7 +180,6 @@ class AlpdeskbackendController extends AbstractController
             'elements' => $elements
         ]);
 
-        return new Response($outputTwig);
     }
 
 }
