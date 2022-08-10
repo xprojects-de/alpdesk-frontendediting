@@ -23,14 +23,14 @@
   "require": {
     "php": "^8.0",
     "ext-json": "*",
-    "contao/core-bundle": "^4.13 || ^5.0"
+    "contao/core-bundle": "^4.13"
   },
   "conflict": {
     "contao/manager-plugin": "<2.0 || >=3.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
-    "contao/manager-bundle": "^4.13 || ^5.0 ",
+    "contao/manager-bundle": "^4.13",
     "contao/manager-plugin": "^2.0",
     "phpstan/phpstan": "^1.0",
     "phpstan/phpstan-phpunit": "^1.0",
