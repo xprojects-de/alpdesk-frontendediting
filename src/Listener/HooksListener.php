@@ -106,7 +106,7 @@ class HooksListener
             $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_fe.js|async';
 
             if ($this->backendUser->hasAccess('page', 'modules')) {
-                $this->currentPageId = $objPage->id;
+                $this->currentPageId = (int)$objPage->id;
             }
 
             $this->pagemountAccess = Utils::hasPagemountAccess($objPage);
