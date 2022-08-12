@@ -32,8 +32,8 @@ class BackendmenuListener
             return;
         }
 
-        Utils::mergeUserGroupPersmissions();
-        if (!$backendUser->isAdmin && $backendUser->alpdesk_fee_enabled != 1) {
+        Utils::mergeUserGroupPersmissions($backendUser);
+        if (!$backendUser->isAdmin && (int)$backendUser->alpdesk_fee_enabled !== 1) {
             return;
         }
 

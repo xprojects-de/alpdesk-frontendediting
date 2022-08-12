@@ -6,6 +6,7 @@ namespace Alpdesk\AlpdeskFrontendediting\Listener;
 
 use Alpdesk\AlpdeskFrontendediting\Mapping\MappingArticle;
 use Contao\CoreBundle\Routing\ScopeMatcher;
+use Contao\CoreBundle\Security\ContaoCorePermissions;
 use Contao\DC_Table;
 use Contao\LayoutModel;
 use Contao\PageModel;
@@ -24,6 +25,7 @@ use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
 use Alpdesk\AlpdeskFrontendediting\Events\AlpdeskFrontendeditingEventService;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Yaml\Yaml;
 use Twig\Environment as TwigEnvironment;
 
@@ -35,6 +37,7 @@ class HooksListener
     private RequestStack $requestStack;
     private ScopeMatcher $scopeMatcher;
     private SessionInterface $session;
+    private Security $security;
 
     private ?BackendUser $backendUser = null;
     private int $currentPageId = 0;
@@ -50,7 +53,8 @@ class HooksListener
         TwigEnvironment                    $twig,
         RequestStack                       $requestStack,
         ScopeMatcher                       $scopeMatcher,
-        SessionInterface                   $session
+        SessionInterface                   $session,
+        Security                           $security
     )
     {
         $this->tokenChecker = $tokenChecker;
@@ -59,38 +63,48 @@ class HooksListener
         $this->requestStack = $requestStack;
         $this->scopeMatcher = $scopeMatcher;
         $this->session = $session;
+        $this->security = $security;
 
         $this->getBackendUser();
+
     }
 
     private function getBackendUser(): void
     {
         if ($this->tokenChecker->hasBackendUser()) {
 
-            Utils::mergeUserGroupPersmissions();
+            $backendUser = $this->security->getUser();
 
-            $this->backendUser = BackendUser::getInstance();
+            if ($backendUser instanceof BackendUser) {
 
-            System::loadLanguageFile('default');
+                $this->backendUser = $backendUser;
 
-            $liveModus = $this->session->get('alpdeskfee_livemodus');
-            if ($liveModus !== null && $liveModus === true) {
-                $this->alpdeskfee_livemodus = true;
-            }
+                Utils::mergeUserGroupPersmissions($this->backendUser);
 
-            if ($this->backendUser !== null && $this->backendUser->isAdmin) {
+                System::loadLanguageFile('default');
 
-                if (
-                    $this->backendUser->alpdesk_fee_admin_disabled !== null &&
-                    $this->backendUser->alpdesk_fee_admin_disabled === 1) {
+                $liveModus = $this->session->get('alpdeskfee_livemodus');
+                if ($liveModus !== null && $liveModus === true) {
                     $this->alpdeskfee_livemodus = true;
                 }
 
+                if ($this->backendUser->isAdmin) {
+
+                    if (
+                        $this->backendUser->alpdesk_fee_admin_disabled !== null &&
+                        (int)$this->backendUser->alpdesk_fee_admin_disabled === 1
+                    ) {
+                        $this->alpdeskfee_livemodus = true;
+                    }
+
+                }
+
+                $this->mappingconfig = Yaml::parse(\file_get_contents(__DIR__ . '/../Resources/config/config.yml'), Yaml::PARSE_CONSTANT);
+
             }
 
-            $this->mappingconfig = Yaml::parse(\file_get_contents(__DIR__ . '/../Resources/config/config.yml'), Yaml::PARSE_CONSTANT);
-
         }
+
     }
 
     private function addLabelsToHeader(): void
@@ -110,14 +124,16 @@ class HooksListener
             }
 
             $this->pagemountAccess = Utils::hasPagemountAccess($objPage);
-            $this->pageChmodEdit = ($this->backendUser->isAllowed(BackendUser::CAN_EDIT_PAGE, $objPage->row()) == true ? 1 : 0);
+            $this->pageChmodEdit = ($this->security->isGranted(ContaoCorePermissions::USER_CAN_EDIT_PAGE, $objPage->row()) == true ? 1 : 0);
 
             if ($this->backendUser->hasAccess('files', 'modules')) {
                 $this->accessFilesmanagement = 1;
             }
 
             $this->addLabelsToHeader();
+
         }
+
     }
 
     private function checkAccess(): bool
@@ -137,7 +153,7 @@ class HooksListener
             return null !== $v;
         });
 
-        $buffer = \preg_replace_callback('|<([a-zA-Z0-9]+)(\s[^>]*?)?(?<!/)>|', function ($matches) use ($classes, $dataAttributes) {
+        return \preg_replace_callback('|<([a-zA-Z0-9]+)(\s[^>]*?)?(?<!/)>|', function ($matches) use ($classes, $dataAttributes) {
             $tag = $matches[1];
             $attributes = $matches[2];
 
@@ -153,7 +169,6 @@ class HooksListener
             return "<{$tag}{$attributes}>";
         }, $buffer, 1);
 
-        return $buffer;
     }
 
     /**
@@ -175,12 +190,12 @@ class HooksListener
 
                 $canEdit = false;
                 if ($aRow !== null) {
-                    $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $aRow);
+                    $canEdit = $this->security->isGranted(ContaoCorePermissions::USER_CAN_EDIT_ARTICLES, $aRow);
                 }
 
                 $canDelete = false;
                 if ($aRow !== null) {
-                    $canDelete = $this->backendUser->isAllowed(BackendUser::CAN_DELETE_ARTICLES, $aRow);
+                    $canDelete = $this->security->isGranted(ContaoCorePermissions::USER_CAN_DELETE_ARTICLES, $aRow);
                 }
 
                 $canPublish = $this->backendUser->hasAccess('tl_article::published', 'alexf');
@@ -202,10 +217,12 @@ class HooksListener
                 ]);
 
                 $elements = $template->elements;
-                array_unshift($elements, $articleContainerTwig);
+                \array_unshift($elements, $articleContainerTwig);
                 $template->elements = $elements;
             }
+
         }
+
     }
 
     public function onGetContentElement(ContentModel $element, string $buffer, $el): string
@@ -242,7 +259,7 @@ class HooksListener
 
                 $aRow = Utils::mergeArticlePermissions((int)$element->pid, null);
                 if ($aRow !== null) {
-                    $canEdit = $this->backendUser->isAllowed(BackendUser::CAN_EDIT_ARTICLES, $aRow);
+                    $canEdit = $this->security->isGranted(ContaoCorePermissions::USER_CAN_EDIT_ARTICLES, $aRow);
                 }
 
             }
@@ -291,7 +308,7 @@ class HooksListener
                 'parentaccess' => $parentaccess,
                 'id' => $element->id,
                 'pid' => $element->pid,
-                'invisible' => ($element->invisible == 1 ? true : false),
+                'invisible' => ((int)$element->invisible === 1),
                 'canEdit' => $canEdit,
                 'canPublish' => $canPublish,
                 'pageid' => $this->currentPageId,
@@ -306,6 +323,7 @@ class HooksListener
         }
 
         return $buffer;
+
     }
 
     private function renderModuleOutput(CustomViewItem $modDoType, string $buffer): string
@@ -330,6 +348,7 @@ class HooksListener
         }
 
         return $buffer;
+
     }
 
     // @ToDo $module must not be of Type Module!!! Currently when e.g. Form there is a FORM-Object as 3 parameter
@@ -352,6 +371,7 @@ class HooksListener
         }
 
         return $buffer;
+
     }
 
     public function onParseArticles(FrontendTemplate $template, array $newsEntry, Module $module): void
@@ -374,6 +394,7 @@ class HooksListener
         }
 
         return false;
+
     }
 
     public function onParseFrontendTemplate(string $buffer, string $template): string
@@ -411,6 +432,7 @@ class HooksListener
         }
 
         return $buffer;
+
     }
 
     /**

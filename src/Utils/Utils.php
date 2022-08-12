@@ -11,6 +11,7 @@ use Contao\Database;
 use Contao\Date;
 use Contao\StringUtil;
 use Contao\System;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class Utils
 {
@@ -41,40 +42,44 @@ class Utils
         return $check;
     }
 
-    public static function mergeUserGroupPersmissions()
+    public static function mergeUserGroupPersmissions(UserInterface $backendUser): void
     {
-        $backendUser = BackendUser::getInstance();
+        if ($backendUser instanceof BackendUser) {
 
-        if ($backendUser->inherit == 'group' || $backendUser->inherit == 'extend') {
+            if ($backendUser->inherit === 'group' || $backendUser->inherit === 'extend') {
 
-            $time = Date::floorToMinute();
+                $time = Date::floorToMinute();
 
-            foreach ((array)$backendUser->groups as $id) {
+                foreach ((array)$backendUser->groups as $id) {
 
-                $objGroup = Database::getInstance()->prepare("SELECT alpdesk_fee_enabled,alpdesk_fee_elements FROM tl_user_group WHERE id=? AND disable!='1' AND (start='' OR start<='$time') AND (stop='' OR stop>'$time')")->limit(1)->execute($id);
-                if ($objGroup->numRows > 0) {
+                    $objGroup = Database::getInstance()->prepare("SELECT alpdesk_fee_enabled,alpdesk_fee_elements FROM tl_user_group WHERE id=? AND disable!='1' AND (start='' OR start<='$time') AND (stop='' OR stop>'$time')")->limit(1)->execute($id);
+                    if ($objGroup->numRows > 0) {
 
-                    if ($backendUser->alpdesk_fee_enabled == 0) {
-                        $backendUser->alpdesk_fee_enabled = $objGroup->alpdesk_fee_enabled;
-                    }
-
-                    $value = StringUtil::deserialize($objGroup->alpdesk_fee_elements, true);
-                    if (!empty($value)) {
-
-                        if ($backendUser->alpdesk_fee_elements === null) {
-                            $backendUser->alpdesk_fee_elements = $value;
-                        } else {
-                            $backendUser->alpdesk_fee_elements = array_merge($backendUser->alpdesk_fee_elements, $value);
+                        if ((int)$backendUser->alpdesk_fee_enabled === 0) {
+                            $backendUser->alpdesk_fee_enabled = $objGroup->alpdesk_fee_enabled;
                         }
 
-                        $backendUser->alpdesk_fee_elements = array_unique($backendUser->alpdesk_fee_elements);
+                        $value = StringUtil::deserialize($objGroup->alpdesk_fee_elements, true);
+                        if (\is_array($value) && \count($value) > 0) {
+
+                            if ($backendUser->alpdesk_fee_elements === null) {
+                                $backendUser->alpdesk_fee_elements = $value;
+                            } else {
+                                $backendUser->alpdesk_fee_elements = \array_merge($backendUser->alpdesk_fee_elements, $value);
+                            }
+
+                            $backendUser->alpdesk_fee_elements = \array_unique($backendUser->alpdesk_fee_elements);
+
+                        }
 
                     }
 
                 }
 
             }
+
         }
+
     }
 
     public static function getAlpdeskFeeElements(BackendUser $user): array
