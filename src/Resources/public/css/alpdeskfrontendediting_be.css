@@ -1,14 +1,16 @@
 
+#alpdesk-fee_wrapper {
+    background-color: #fff;
+    width: calc(100% - 225px);
+    padding: 10px;
+}
+
 #main #main_headline {
     display: none;
 }
 
 #alpdesk-fee-backendcontainer {
     position: relative;
-}
-
-#alpdesk-fee-frame-legend {
-    background-color: #eaeaec;
 }
 
 .clear {
@@ -57,4 +59,21 @@
 
 #livemodeactive {
     background-color: rgba(244, 124, 0, 1);
+}
+
+#alpdesk-fee_error {
+    background-color: #f60000;
+    color: #fff;
+    padding: 10px;
+    margin-top: 10px;
+    margin-left: 15px;
+    display: inline-block;
+}
+
+@media (max-width: 991px) {
+
+    #alpdesk-fee_wrapper {
+        width: auto;
+    }
+
 }

@@ -1,13 +1,7 @@
-{% extends "@ContaoCore/Backend/be_page.html.twig" %}
-
-{% block headline %}
-
-{% endblock %}
-
-{% block error %}
-    {{ msg }}
-{% endblock %}
+{% extends "@Contao/be_main" %}
 
 {% block main %}
-
+    <div id="alpdesk-fee_wrapper">
+        <span id="alpdesk-fee_error">{{ msg }}</span>
+    </div>
 {% endblock %}

@@ -64,42 +64,44 @@ class HooksListener
         $this->scopeMatcher = $scopeMatcher;
         $this->session = $session;
         $this->security = $security;
-
-        $this->getBackendUser();
-
     }
 
     private function getBackendUser(): void
     {
         if ($this->tokenChecker->hasBackendUser()) {
 
-            $backendUser = $this->security->getUser();
+            if ($this->backendUser === null) {
 
-            if ($backendUser instanceof BackendUser) {
+                // $backendUser = BackendUser::getInstance();
+                $backendUser = $this->security->getUser();
 
-                $this->backendUser = $backendUser;
+                if ($backendUser instanceof BackendUser) {
 
-                Utils::mergeUserGroupPersmissions($this->backendUser);
+                    $this->backendUser = $backendUser;
 
-                System::loadLanguageFile('default');
+                    Utils::mergeUserGroupPersmissions($this->backendUser);
 
-                $liveModus = $this->session->get('alpdeskfee_livemodus');
-                if ($liveModus !== null && $liveModus === true) {
-                    $this->alpdeskfee_livemodus = true;
-                }
+                    System::loadLanguageFile('default');
 
-                if ($this->backendUser->isAdmin) {
-
-                    if (
-                        $this->backendUser->alpdesk_fee_admin_disabled !== null &&
-                        (int)$this->backendUser->alpdesk_fee_admin_disabled === 1
-                    ) {
+                    $liveModus = $this->session->get('alpdeskfee_livemodus');
+                    if ($liveModus !== null && $liveModus === true) {
                         $this->alpdeskfee_livemodus = true;
                     }
 
-                }
+                    if ($this->backendUser->isAdmin) {
 
-                $this->mappingconfig = Yaml::parse(\file_get_contents(__DIR__ . '/../Resources/config/config.yml'), Yaml::PARSE_CONSTANT);
+                        if (
+                            $this->backendUser->alpdesk_fee_admin_disabled !== null &&
+                            (int)$this->backendUser->alpdesk_fee_admin_disabled === 1
+                        ) {
+                            $this->alpdeskfee_livemodus = true;
+                        }
+
+                    }
+
+                    $this->mappingconfig = Yaml::parse(\file_get_contents(__DIR__ . '/../Resources/config/config.yml'), Yaml::PARSE_CONSTANT);
+
+                }
 
             }
 
@@ -115,6 +117,8 @@ class HooksListener
 
     public function onGetPageLayout(PageModel $objPage, LayoutModel $objLayout, PageRegular $objPageRegular): void
     {
+        $this->getBackendUser();
+
         if ($this->backendUser !== null && !$this->alpdeskfee_livemodus) {
 
             $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_fe.js|async';
@@ -138,6 +142,8 @@ class HooksListener
 
     private function checkAccess(): bool
     {
+        $this->getBackendUser();
+
         $isFrontend = $this->scopeMatcher->isFrontendRequest($this->requestStack->getCurrentRequest());
 
         if ($isFrontend === true && $this->backendUser !== null && $this->pagemountAccess == true && !$this->alpdeskfee_livemodus) {
@@ -442,6 +448,8 @@ class HooksListener
      */
     public function onGetAttributesFromDca(array $attributes, $context = null): array
     {
+        $this->getBackendUser();
+
         $isBackend = $this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest());
         if ($isBackend === true && $this->backendUser !== null && !$this->alpdeskfee_livemodus && $context instanceof DC_Table) {
 

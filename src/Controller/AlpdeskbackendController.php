@@ -119,24 +119,24 @@ class AlpdeskbackendController extends AbstractBackendController
     }
 
     /**
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\SyntaxError
+     * @return Response
      */
     public function endpoint(): Response
     {
         $this->contaoFramework->initialize();
 
+        $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_be.css';
+
         $backendUser = $this->security->getUser();
 
         if (!$backendUser instanceof BackendUser) {
-            return new Response($this->twig->render('@AlpdeskFrontendediting/alpdeskfee_be_error.html.twig', ['msg' => 'Permission denied']));
+            return $this->render('@AlpdeskFrontendediting/alpdeskfee_be_error.html.twig', ['msg' => 'Permission denied']);
         }
 
         Utils::mergeUserGroupPersmissions($backendUser);
 
         if (!$backendUser->isAdmin && (int)$backendUser->alpdesk_fee_enabled !== 1) {
-            return new Response($this->twig->render('@AlpdeskFrontendediting/alpdeskfee_be_error.html.twig', ['msg' => 'Permission denied']));
+            return $this->render('@AlpdeskFrontendediting/alpdeskfee_be_error.html.twig', ['msg' => 'Permission denied']);
         }
 
         if (Input::post('toggleFullsize')) {
@@ -159,7 +159,6 @@ class AlpdeskbackendController extends AbstractBackendController
         }
 
         $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_be.js';
-        $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/alpdeskfrontendediting_be.css';
         $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/angular/alpdeskfee-styles.css';
 
         $elements = [];
