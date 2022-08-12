@@ -204,7 +204,7 @@ class HooksListener
                     'type' => 'article',
                     'do' => 'article',
                     'id' => $data['id'],
-                    'invisible' => ($data['published'] == 0 ? true : false),
+                    'invisible' => ((int)$data['published'] === 0),
                     'canEdit' => $canEdit,
                     'canDelete' => $canDelete,
                     'canPublish' => $canPublish,
@@ -451,7 +451,7 @@ class HooksListener
 
                 $objSession->set('alpdeskfee_tl_content_element_type', null);
 
-                if ($this->backendUser->hasAccess((string)$alpdeskfeeElementType, 'elements') && $context->id !== null && (int)$context->id !== 0) {
+                if ($this->backendUser->hasAccess((string)$alpdeskfeeElementType, 'elements') && $context->id !== null && $context->id !== 0) {
 
                     $contentModel = ContentModel::findById($context->id);
                     if ($contentModel !== null) {
