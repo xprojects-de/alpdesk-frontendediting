@@ -50,6 +50,7 @@ class Utils
         return $check;
     }
 
+    // @TODO https://github.com/contao/contao/issues/5138 -> implementation of old method (polyfill) till a solution is found
     public static function isAllowed(int $int, mixed $row, UserInterface $backendUser): bool
     {
         if (!$backendUser instanceof BackendUser) {
