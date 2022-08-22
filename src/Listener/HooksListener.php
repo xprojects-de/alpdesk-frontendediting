@@ -6,7 +6,6 @@ namespace Alpdesk\AlpdeskFrontendediting\Listener;
 
 use Alpdesk\AlpdeskFrontendediting\Mapping\MappingArticle;
 use Contao\CoreBundle\Routing\ScopeMatcher;
-use Contao\CoreBundle\Security\ContaoCorePermissions;
 use Contao\DC_Table;
 use Contao\LayoutModel;
 use Contao\PageModel;
@@ -74,8 +73,7 @@ class HooksListener
 
             if ($this->backendUser === null) {
 
-                // $backendUser = BackendUser::getInstance();
-                $backendUser = $this->security->getUser();
+                $backendUser = BackendUser::getInstance();
 
                 if ($backendUser instanceof BackendUser) {
 
@@ -130,8 +128,8 @@ class HooksListener
                 $this->currentPageId = (int)$objPage->id;
             }
 
-            $this->pagemountAccess = Utils::hasPagemountAccess($objPage);
-            $this->pageChmodEdit = ($this->security->isGranted(ContaoCorePermissions::USER_CAN_EDIT_PAGE, $objPage->row()) == true ? 1 : 0);
+            $this->pagemountAccess = Utils::hasPagemountAccess($objPage, $this->backendUser);
+            $this->pageChmodEdit = (Utils::isAllowed(Utils::CAN_EDIT_PAGE, $objPage->row(), $this->backendUser) == true ? 1 : 0);
 
             if ($this->backendUser->hasAccess('files', 'modules')) {
                 $this->accessFilesmanagement = 1;
@@ -199,12 +197,12 @@ class HooksListener
 
                 $canEdit = false;
                 if ($aRow !== null) {
-                    $canEdit = $this->security->isGranted(ContaoCorePermissions::USER_CAN_EDIT_ARTICLES, $aRow);
+                    $canEdit = Utils::isAllowed(Utils::CAN_EDIT_ARTICLES, $aRow, $this->backendUser);
                 }
 
                 $canDelete = false;
                 if ($aRow !== null) {
-                    $canDelete = $this->security->isGranted(ContaoCorePermissions::USER_CAN_DELETE_ARTICLES, $aRow);
+                    $canDelete = Utils::isAllowed(Utils::CAN_DELETE_ARTICLES, $aRow, $this->backendUser);
                 }
 
                 $canPublish = $this->backendUser->hasAccess('tl_article::published', 'alexf');
@@ -268,7 +266,7 @@ class HooksListener
 
                 $aRow = Utils::mergeArticlePermissions((int)$element->pid, null);
                 if ($aRow !== null) {
-                    $canEdit = $this->security->isGranted(ContaoCorePermissions::USER_CAN_EDIT_ARTICLES, $aRow);
+                    $canEdit = Utils::isAllowed(Utils::CAN_EDIT_ARTICLES, $aRow, $this->backendUser);
                 }
 
             }

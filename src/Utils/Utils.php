@@ -6,6 +6,7 @@ namespace Alpdesk\AlpdeskFrontendediting\Utils;
 
 use Contao\ArticleModel;
 use Contao\BackendUser;
+use Contao\Config;
 use Contao\PageModel;
 use Contao\Database;
 use Contao\Date;
@@ -15,9 +16,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class Utils
 {
-    public static function hasPagemountAccess(PageModel $objPage): bool
+    const CAN_EDIT_PAGE = 1;
+    const CAN_DELETE_PAGE = 3;
+    const CAN_EDIT_ARTICLES = 4;
+    const CAN_DELETE_ARTICLES = 6;
+
+    public static function hasPagemountAccess(PageModel $objPage, UserInterface $backendUser): bool
     {
-        $backendUser = BackendUser::getInstance();
+        if (!$backendUser instanceof BackendUser) {
+            return false;
+        }
 
         if ($backendUser->isAdmin || $backendUser->hasAccess($objPage->id, 'pagemounts')) {
             return true;
@@ -40,6 +48,66 @@ class Utils
         }
 
         return $check;
+    }
+
+    public static function isAllowed(int $int, mixed $row, UserInterface $backendUser): bool
+    {
+        if (!$backendUser instanceof BackendUser) {
+            return false;
+        }
+
+        if ($backendUser->isAdmin) {
+            return true;
+        }
+
+        // Inherit CHMOD settings
+        if (!$row['includeChmod']) {
+            $pid = $row['pid'];
+
+            $row['chmod'] = false;
+            $row['cuser'] = false;
+            $row['cgroup'] = false;
+
+            $objParentPage = PageModel::findById($pid);
+
+            while ($objParentPage !== null && $row['chmod'] === false && $pid > 0) {
+                $pid = $objParentPage->pid;
+
+                $row['chmod'] = $objParentPage->includeChmod ? $objParentPage->chmod : false;
+                $row['cuser'] = $objParentPage->includeChmod ? $objParentPage->cuser : false;
+                $row['cgroup'] = $objParentPage->includeChmod ? $objParentPage->cgroup : false;
+
+                $objParentPage = PageModel::findById($pid);
+            }
+
+            // Set default values
+            if ($row['chmod'] === false) {
+                $row['chmod'] = Config::get('defaultChmod');
+            }
+
+            if ($row['cuser'] === false) {
+                $row['cuser'] = (int)Config::get('defaultUser');
+            }
+
+            if ($row['cgroup'] === false) {
+                $row['cgroup'] = (int)Config::get('defaultGroup');
+            }
+        }
+
+        // Set permissions
+        $chmod = StringUtil::deserialize($row['chmod']);
+        $chmod = \is_array($chmod) ? $chmod : array($chmod);
+        $permission = array('w' . $int);
+
+        if (\in_array($row['cgroup'], $backendUser->groups)) {
+            $permission[] = 'g' . $int;
+        }
+
+        if ($row['cuser'] == $backendUser->id) {
+            $permission[] = 'u' . $int;
+        }
+
+        return \count(array_intersect($permission, $chmod)) > 0;
     }
 
     public static function mergeUserGroupPersmissions(UserInterface $backendUser): void
