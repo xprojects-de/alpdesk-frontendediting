@@ -17,7 +17,6 @@ services:
       - '@twig'
       - '@request_stack'
       - '@contao.routing.scope_matcher'
-      - '@security.helper'
     tags:
       - { name: contao.hook, hook: getPageLayout, method: onGetPageLayout, priority: 0 }
       - { name: contao.hook, hook: compileArticle, method: onCompileArticle, priority: 0 }

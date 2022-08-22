@@ -21,7 +21,7 @@ class Utils
     const CAN_EDIT_ARTICLES = 4;
     const CAN_DELETE_ARTICLES = 6;
 
-    public static function hasPagemountAccess(PageModel $objPage, UserInterface $backendUser): bool
+    public static function hasPageMountAccess(PageModel $objPage, UserInterface $backendUser): bool
     {
         if (!$backendUser instanceof BackendUser) {
             return false;
