@@ -70,20 +70,6 @@ class BackendController extends AbstractController
         $this->requestStack = $requestStack;
         $this->scopeMatcher = $scopeMatcher;
         $this->session = $session;
-
-        $this->getBackendUser();
-    }
-
-    private function getBackendUser(): void
-    {
-        if ($this->tokenChecker->hasBackendUser()) {
-
-            $user = $this->security->getUser();
-
-            if ($user instanceof BackendUser) {
-                $this->backendUser = $user;
-            }
-        }
     }
 
     /**
@@ -91,11 +77,22 @@ class BackendController extends AbstractController
      */
     private function checkAccess(): void
     {
-        $isBackend = $this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest());
-
-        if ($isBackend === false || $this->backendUser === null) {
+        if (!$this->tokenChecker->hasBackendUser()) {
             throw new \Exception('No Access');
         }
+
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser) {
+            throw new \Exception('No Access');
+        }
+
+        if (!$this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest())) {
+            throw new \Exception('No Access');
+        }
+
+        $this->backendUser = $user;
+
     }
 
     /**
@@ -113,18 +110,39 @@ class BackendController extends AbstractController
         }
     }
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function checkPermissions(Request $request): JsonResponse
+    {
+        try {
+
+            $this->contaoFramework->initialize();
+            $this->checkAccess();
+
+            $data = (array)$request->request->get('data');
+
+            $response = new JsonResponse('COMMOM ERROR', self::$STATUSCODE_COMMONERROR);
+            return $response;
+
+        } catch (\Exception $ex) {
+            return (new JsonResponse($ex->getMessage(), self::$STATUSCODE_COMMONERROR));
+        }
+
+    }
+
     public function endpoint(Request $request): JsonResponse
     {
         try {
 
             $this->contaoFramework->initialize();
-
             $this->checkAccess();
 
             $data = (array)$request->request->get('data');
             $rt = (string)$request->request->get('rt');
 
-            if (\count($data) == 0) {
+            if (\count($data) === 0) {
 
                 $content = $request->getContent();
                 $json = \json_decode($content, true);

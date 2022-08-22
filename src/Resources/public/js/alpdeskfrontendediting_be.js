@@ -17,11 +17,23 @@
     ready(function () {
 
         document.getElementById('pageselect').onclick = function () {
-            Backend.openModalSelector({
+            /*Backend.openModalSelector({
                 id: 'tl_listing',
                 title: 'Frontend-Editing',
                 url: '/contao/picker?context=page&fieldType=radio',
                 callback: function (table, value) {
+                    if (value !== null && value !== undefined) {
+                        if (value.length > 0) {
+                            window.location.href = window.location.href + "?pageselect=" + value[0];
+                        }
+                    }
+                }
+            });*/
+            Backend.openModalSelector({
+                'id': 'tl_listing',
+                'title': 'Frontend-Editing',
+                'url': Contao.routes.backend_picker + '?context=page' + '&amp;extras[fieldType]=radio&amp;value=&amp;popup=1',
+                'callback': function(table, value) {
                     if (value !== null && value !== undefined) {
                         if (value.length > 0) {
                             window.location.href = window.location.href + "?pageselect=" + value[0];

@@ -6,6 +6,14 @@ alpdesk_frontendediting:
     _token_check: false
   methods: [ POST ]
 
+alpdesk_frontendediting_permissions:
+  path: /contao/alpdeskfeepermissions
+  defaults:
+    _controller: Alpdesk\AlpdeskFrontendediting\Controller\BackendController:checkPermissions
+    _scope: backend
+    _token_check: false
+  methods: [ POST ]
+
 alpdesk_frontendediting_backend:
   path: /contao/alpdeskfeebackend
   defaults:

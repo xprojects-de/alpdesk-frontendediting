@@ -15,7 +15,6 @@ use Contao\ContentModel;
 use Contao\ModuleModel;
 use Contao\Module;
 use Contao\Form;
-use Contao\BackendUser;
 use Contao\System;
 use Contao\FrontendTemplate;
 use Contao\CoreBundle\Security\Authentication\Token\TokenChecker;
@@ -39,13 +38,14 @@ class HooksListener
     private SessionInterface $session;
     private Security $security;
 
-    private ?BackendUser $backendUser = null;
     private int $currentPageId = 0;
     private bool $pagemountAccess = false;
     private int $pageChmodEdit = 0;
     private int $accessFilesmanagement = 0;
     private bool $alpdeskfee_livemodus = false;
     private mixed $mappingconfig = null;
+
+    private ?BackendUserPermissions $backendUserPermissions = null;
 
     public function __construct(
         TokenChecker                       $tokenChecker,
@@ -64,47 +64,42 @@ class HooksListener
         $this->scopeMatcher = $scopeMatcher;
         $this->session = $session;
         $this->security = $security;
+        $this->backendUserPermissions = new BackendUserPermissions();
+
     }
 
-    private function getBackendUser(): void
+    /**
+     * @return void
+     */
+    private function initBackendEnvironment(): void
     {
-        if ($this->tokenChecker->hasBackendUser()) {
+        try {
 
-            if ($this->backendUser === null) {
+            if ($this->tokenChecker->hasBackendUser() && !$this->backendUserPermissions->isTriggered()) {
 
-                // $backendUser = BackendUser::getInstance();
-                $backendUser = $this->security->getUser();
+                $this->backendUserPermissions->init();
 
-                if ($backendUser instanceof BackendUser) {
+                System::loadLanguageFile('default');
 
-                    $this->backendUser = $backendUser;
+                $liveModus = $this->session->get('alpdeskfee_livemodus');
+                if ($liveModus !== null && $liveModus === true) {
+                    $this->alpdeskfee_livemodus = true;
+                }
 
-                    Utils::mergeUserGroupPersmissions($this->backendUser);
+                if ($this->backendUserPermissions->isAdmin()) {
 
-                    System::loadLanguageFile('default');
-
-                    $liveModus = $this->session->get('alpdeskfee_livemodus');
-                    if ($liveModus !== null && $liveModus === true) {
+                    if ($this->backendUserPermissions->isAdminDisabled()) {
                         $this->alpdeskfee_livemodus = true;
                     }
 
-                    if ($this->backendUser->isAdmin) {
-
-                        if (
-                            $this->backendUser->alpdesk_fee_admin_disabled !== null &&
-                            (int)$this->backendUser->alpdesk_fee_admin_disabled === 1
-                        ) {
-                            $this->alpdeskfee_livemodus = true;
-                        }
-
-                    }
-
-                    $this->mappingconfig = Yaml::parse(\file_get_contents(__DIR__ . '/../Resources/config/config.yml'), Yaml::PARSE_CONSTANT);
-
                 }
+
+                $this->mappingconfig = Yaml::parse(\file_get_contents(__DIR__ . '/../Resources/config/config.yml'), Yaml::PARSE_CONSTANT);
 
             }
 
+        } catch (\Throwable $tr) {
+            $this->backendUserPermissions = null;
         }
 
     }
@@ -117,20 +112,20 @@ class HooksListener
 
     public function onGetPageLayout(PageModel $objPage, LayoutModel $objLayout, PageRegular $objPageRegular): void
     {
-        $this->getBackendUser();
+        $this->initBackendEnvironment();
 
-        if ($this->backendUser !== null && !$this->alpdeskfee_livemodus) {
+        if ($this->backendUserPermissions->isValid() && !$this->alpdeskfee_livemodus) {
 
             $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_fe.js|async';
 
-            if ($this->backendUser->hasAccess('page', 'modules')) {
+            if ($this->backendUserPermissions->hasAccess('page', 'modules')) {
                 $this->currentPageId = (int)$objPage->id;
             }
 
             $this->pagemountAccess = Utils::hasPagemountAccess($objPage);
             $this->pageChmodEdit = ($this->security->isGranted(ContaoCorePermissions::USER_CAN_EDIT_PAGE, $objPage->row()) == true ? 1 : 0);
 
-            if ($this->backendUser->hasAccess('files', 'modules')) {
+            if ($this->backendUserPermissions->hasAccess('files', 'modules')) {
                 $this->accessFilesmanagement = 1;
             }
 
@@ -142,11 +137,11 @@ class HooksListener
 
     private function checkAccess(): bool
     {
-        $this->getBackendUser();
+        $this->initBackendEnvironment();
 
         $isFrontend = $this->scopeMatcher->isFrontendRequest($this->requestStack->getCurrentRequest());
 
-        if ($isFrontend === true && $this->backendUser !== null && $this->pagemountAccess == true && !$this->alpdeskfee_livemodus) {
+        if ($isFrontend === true && $this->backendUserPermissions->isValid() && $this->pagemountAccess == true && !$this->alpdeskfee_livemodus) {
             return true;
         }
 
@@ -190,7 +185,7 @@ class HooksListener
     {
         if ($this->checkAccess()) {
 
-            if ($this->backendUser->hasAccess('article', 'modules')) {
+            if ($this->backendUserPermissions->hasAccess('article', 'modules')) {
 
                 $aRow = Utils::mergeArticlePermissions(null, $module->getModel()->row());
 
@@ -204,7 +199,7 @@ class HooksListener
                     $canDelete = $this->security->isGranted(ContaoCorePermissions::USER_CAN_DELETE_ARTICLES, $aRow);
                 }
 
-                $canPublish = $this->backendUser->hasAccess('tl_article::published', 'alexf');
+                $canPublish = $this->backendUserPermissions->hasAccess('tl_article::published', 'alexf');
 
                 $tdata = [
                     'type' => 'article',
@@ -239,21 +234,21 @@ class HooksListener
 
             // Check if access to element
             $hasElementAccess = true;
-            if (!$this->backendUser->hasAccess($element->type, 'elements') || !$this->backendUser->hasAccess($element->type, 'alpdesk_fee_elements')) {
+            if (!$this->backendUserPermissions->hasAccess($element->type, 'elements') || !$this->backendUserPermissions->hasAccess($element->type, 'alpdesk_fee_elements')) {
                 $hasElementAccess = false;
             }
 
             // Check if user has access to BackendModule
             $hasBackendModuleAccess = true;
             // e.g. Article
-            $modulesCheck = str_replace('tl_', '', $element->ptable);
+            $modulesCheck = \str_replace('tl_', '', $element->ptable);
 
             // e.g. events where ptable= calendar_events and Backendmodule is calendar! Mapped in Custom::class
             if ($modDoType->getCustomBackendModule() !== '') {
                 $modulesCheck = $modDoType->getCustomBackendModule();
             }
 
-            if (!$this->backendUser->hasAccess($modulesCheck, 'modules')) {
+            if (!$this->backendUserPermissions->hasAccess($modulesCheck, 'modules')) {
                 $hasBackendModuleAccess = false;
             }
 
@@ -270,7 +265,7 @@ class HooksListener
 
             }
 
-            $canPublish = $this->backendUser->hasAccess('tl_content::invisible', 'alexf');
+            $canPublish = $this->backendUserPermissions->hasAccess('tl_content::invisible', 'alexf');
 
             $label = $GLOBALS['TL_LANG']['alpdeskfee_lables']['ce'];
             if ($modDoType->getValid() === true) {
@@ -448,10 +443,10 @@ class HooksListener
      */
     public function onGetAttributesFromDca(array $attributes, $context = null): array
     {
-        $this->getBackendUser();
+        $this->initBackendEnvironment();
 
         $isBackend = $this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest());
-        if ($isBackend === true && $this->backendUser !== null && !$this->alpdeskfee_livemodus && $context instanceof DC_Table) {
+        if ($isBackend === true && $this->backendUserPermissions->isValid() && !$this->alpdeskfee_livemodus && $context instanceof DC_Table) {
 
             $objSession = $this->session;
             $alpdeskfeeElementType = $objSession->get('alpdeskfee_tl_content_element_type');
@@ -459,7 +454,7 @@ class HooksListener
 
                 $objSession->set('alpdeskfee_tl_content_element_type', null);
 
-                if ($this->backendUser->hasAccess((string)$alpdeskfeeElementType, 'elements') && $context->id !== null && $context->id !== 0) {
+                if ($this->backendUserPermissions->hasAccess((string)$alpdeskfeeElementType, 'elements') && $context->id !== null && $context->id !== 0) {
 
                     $contentModel = ContentModel::findById($context->id);
                     if ($contentModel !== null) {
