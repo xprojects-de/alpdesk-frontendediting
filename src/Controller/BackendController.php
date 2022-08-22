@@ -7,7 +7,6 @@ namespace Alpdesk\AlpdeskFrontendediting\Controller;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Core\Security;
@@ -29,7 +28,6 @@ class BackendController extends AbstractController
     private string $csrfTokenName;
     private RequestStack $requestStack;
     private ScopeMatcher $scopeMatcher;
-    private SessionInterface $session;
 
     public static int $STATUSCODE_OK = 200;
     public static int $STATUSCODE_COMMONERROR = 400;
@@ -58,8 +56,7 @@ class BackendController extends AbstractController
         CsrfTokenManagerInterface $csrfTokenManager,
         string                    $csrfTokenName,
         RequestStack              $requestStack,
-        ScopeMatcher              $scopeMatcher,
-        SessionInterface          $session
+        ScopeMatcher              $scopeMatcher
     )
     {
         $this->contaoFramework = $contaoFramework;
@@ -69,7 +66,6 @@ class BackendController extends AbstractController
         $this->csrfTokenName = $csrfTokenName;
         $this->requestStack = $requestStack;
         $this->scopeMatcher = $scopeMatcher;
-        $this->session = $session;
 
         $this->getBackendUser();
     }
@@ -179,9 +175,9 @@ class BackendController extends AbstractController
         // currently we do not need any Access-Check because only the clipboard is modified and no record of Database is affected
         // In future be careful!
 
-        if ($data['action'] == self::$ACTION_ELEMENT_COPY || $data['action'] == self::$ACTION_ELEMENT_CUT) {
+        $objSession = $this->requestStack->getCurrentRequest()->getSession();
 
-            $objSession = $this->session;
+        if ($data['action'] == self::$ACTION_ELEMENT_COPY || $data['action'] == self::$ACTION_ELEMENT_CUT) {
 
             $clipboard = $objSession->get('CLIPBOARD');
 
@@ -229,14 +225,14 @@ class BackendController extends AbstractController
 
         } else if ($data['action'] == self::$ACTION_ELEMENT_NEW) {
 
-            $this->session->set('CURRENT_ID', \intval($data['pid']));
-            $currentid = $this->session->get('CURRENT_ID');
+            $objSession->set('CURRENT_ID', \intval($data['pid']));
+            $currentid = $objSession->get('CURRENT_ID');
             $data['CURRENT_ID'] = $currentid;
 
             if (\array_key_exists('element_type', $data) && $data['element_type'] !== null && $data['element_type'] !== '') {
-                $this->session->set('alpdeskfee_tl_content_element_type', (string)$data['element_type']);
+                $objSession->set('alpdeskfee_tl_content_element_type', (string)$data['element_type']);
             } else {
-                $this->session->set('alpdeskfee_tl_content_element_type', null);
+                $objSession->set('alpdeskfee_tl_content_element_type', null);
             }
 
             return (new JsonResponse($data));
@@ -255,10 +251,12 @@ class BackendController extends AbstractController
         // currently we do not need any Access-Check because only the clipboard is modified and no record of Database is affected
         // In future be careful!
 
+        $objSession = $this->requestStack->getCurrentRequest()->getSession();
+
         if ($data['action'] == self::$ACTION_ELEMENT_NEW) {
 
-            $this->session->set('CURRENT_ID', \intval($data['id']));
-            $currentid = $this->session->get('CURRENT_ID');
+            $objSession->set('CURRENT_ID', \intval($data['id']));
+            $currentid = $objSession->get('CURRENT_ID');
             $data['CURRENT_ID'] = $currentid;
 
             return (new JsonResponse($data));
@@ -275,9 +273,11 @@ class BackendController extends AbstractController
         // currently we do not need any Access-Check because only the clipboard is modified and no record of Database is affected
         // In future be careful!
 
+        $objSession = $this->requestStack->getCurrentRequest()->getSession();
+
         if ($data['action'] == self::$ACTION_CLIPBOARD) {
 
-            $clipboard = $this->session->get('CLIPBOARD');
+            $clipboard = $objSession->get('CLIPBOARD');
             if (!\is_array($clipboard)) {
                 $clipboard = [];
             }
@@ -286,7 +286,6 @@ class BackendController extends AbstractController
 
         } else if ($data['action'] == self::$ACTION_NEWRECORDS) {
 
-            $objSession = $this->session;
             $objSessionBag = $objSession->getBag('contao_backend');
 
             $new_records = $objSessionBag->get('new_records');

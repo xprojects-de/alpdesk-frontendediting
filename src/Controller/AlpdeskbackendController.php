@@ -6,10 +6,10 @@ namespace Alpdesk\AlpdeskFrontendediting\Controller;
 
 use Contao\CoreBundle\Controller\AbstractBackendController;
 use Contao\CoreBundle\Framework\ContaoFramework;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Twig\Environment as TwigEnvironment;
 use Contao\Environment;
 use Contao\Input;
 use Contao\Controller;
@@ -25,31 +25,32 @@ class AlpdeskbackendController extends AbstractBackendController
 {
     protected ContaoFramework $contaoFramework;
 
-    private TwigEnvironment $twig;
     private CsrfTokenManagerInterface $csrfTokenManager;
     private string $csrfTokenName;
     protected RouterInterface $router;
     private Security $security;
-
-    private SessionInterface $session;
+    private RequestStack $requestStack;
 
     public function __construct(
         ContaoFramework           $contaoFramework,
-        TwigEnvironment           $twig,
         CsrfTokenManagerInterface $csrfTokenManager,
         string                    $csrfTokenName,
         RouterInterface           $router,
         Security                  $security,
-        SessionInterface          $session
+        RequestStack              $requestStack
     )
     {
         $this->contaoFramework = $contaoFramework;
-        $this->twig = $twig;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->csrfTokenName = $csrfTokenName;
         $this->router = $router;
         $this->security = $security;
-        $this->session = $session;
+        $this->requestStack = $requestStack;
+    }
+
+    private function getCurrentSession(): SessionInterface
+    {
+        return $this->requestStack->getCurrentRequest()->getSession();
     }
 
     private function toggleFullesize(): void
@@ -67,12 +68,12 @@ class AlpdeskbackendController extends AbstractBackendController
 
     private function toggleLiveModus(): void
     {
-        $liveModus = $this->session->get('alpdeskfee_livemodus');
+        $liveModus = $this->getCurrentSession()->get('alpdeskfee_livemodus');
 
         if ($liveModus === true) {
-            $this->session->set('alpdeskfee_livemodus', false);
+            $this->getCurrentSession()->set('alpdeskfee_livemodus', false);
         } else {
-            $this->session->set('alpdeskfee_livemodus', true);
+            $this->getCurrentSession()->set('alpdeskfee_livemodus', true);
         }
 
         Controller::reload();
@@ -85,9 +86,9 @@ class AlpdeskbackendController extends AbstractBackendController
             $pageModel = PageModel::findById($id);
 
             if ($pageModel !== null) {
-                $this->session->set('alpdeskfee_pageselect', $pageModel->id);
+                $this->getCurrentSession()->set('alpdeskfee_pageselect', $pageModel->id);
             } else {
-                $this->session->set('alpdeskfee_pageselect', '');
+                $this->getCurrentSession()->set('alpdeskfee_pageselect', '');
             }
 
         }
@@ -99,7 +100,7 @@ class AlpdeskbackendController extends AbstractBackendController
     {
         $url = '/preview.php';
 
-        $id = $this->session->get('alpdeskfee_pageselect');
+        $id = $this->getCurrentSession()->get('alpdeskfee_pageselect');
         if ($id !== null && $id !== '') {
 
             $pageId = (int)$id;
@@ -149,7 +150,7 @@ class AlpdeskbackendController extends AbstractBackendController
 
         System::loadLanguageFile('default');
 
-        $liveModus = ($this->session->get('alpdeskfee_livemodus') === true);
+        $liveModus = ($this->getCurrentSession()->get('alpdeskfee_livemodus') === true);
         if (
             $backendUser->isAdmin === true &&
             $backendUser->alpdesk_fee_admin_disabled !== null &&

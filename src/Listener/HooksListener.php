@@ -36,7 +36,6 @@ class HooksListener
     private TwigEnvironment $twig;
     private RequestStack $requestStack;
     private ScopeMatcher $scopeMatcher;
-    private SessionInterface $session;
     private Security $security;
 
     private ?BackendUser $backendUser = null;
@@ -53,7 +52,6 @@ class HooksListener
         TwigEnvironment                    $twig,
         RequestStack                       $requestStack,
         ScopeMatcher                       $scopeMatcher,
-        SessionInterface                   $session,
         Security                           $security
     )
     {
@@ -62,8 +60,12 @@ class HooksListener
         $this->twig = $twig;
         $this->requestStack = $requestStack;
         $this->scopeMatcher = $scopeMatcher;
-        $this->session = $session;
         $this->security = $security;
+    }
+
+    private function getCurrentSession(): SessionInterface
+    {
+        return $this->requestStack->getCurrentRequest()->getSession();
     }
 
     private function getBackendUser(): void
@@ -83,7 +85,7 @@ class HooksListener
 
                     System::loadLanguageFile('default');
 
-                    $liveModus = $this->session->get('alpdeskfee_livemodus');
+                    $liveModus = $this->getCurrentSession()->get('alpdeskfee_livemodus');
                     if ($liveModus !== null && $liveModus === true) {
                         $this->alpdeskfee_livemodus = true;
                     }
@@ -124,6 +126,7 @@ class HooksListener
             $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_fe.js|async';
 
             if ($this->backendUser->hasAccess('page', 'modules')) {
+                // !!! Typecast is necessary
                 $this->currentPageId = (int)$objPage->id;
             }
 
@@ -453,7 +456,8 @@ class HooksListener
         $isBackend = $this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest());
         if ($isBackend === true && $this->backendUser !== null && !$this->alpdeskfee_livemodus && $context instanceof DC_Table) {
 
-            $objSession = $this->session;
+            $objSession = $this->getCurrentSession();
+
             $alpdeskfeeElementType = $objSession->get('alpdeskfee_tl_content_element_type');
             if ($alpdeskfeeElementType !== null && $alpdeskfeeElementType !== '' && $attributes["name"] === 'type' && $attributes['strTable'] === "tl_content") {
 

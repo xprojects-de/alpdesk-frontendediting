@@ -17,7 +17,6 @@ services:
       - '@twig'
       - '@request_stack'
       - '@contao.routing.scope_matcher'
-      - '@session'
       - '@security.helper'
     tags:
       - { name: contao.hook, hook: getPageLayout, method: onGetPageLayout, priority: 0 }
@@ -37,18 +36,16 @@ services:
       - '%contao.csrf_token_name%'
       - '@request_stack'
       - '@contao.routing.scope_matcher'
-      - '@session'
     tags:
       - controller.service_arguments
 
   Alpdesk\AlpdeskFrontendediting\Controller\AlpdeskbackendController:
     arguments:
       - '@contao.framework'
-      - '@twig'
       - '@contao.csrf.token_manager'
       - '%contao.csrf_token_name%'
       - '@router'
       - '@security.helper'
-      - '@session'
+      - '@request_stack'
     tags:
       - controller.service_arguments
