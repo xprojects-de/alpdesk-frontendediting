@@ -87,6 +87,10 @@ class BackendUserPermissions
             $httpOptions->verifyHost(false);
             $httpOptions->verifyPeer(false);
 
+            $httpOptions->setHeaders([
+                'Content-Type' => 'application/json'
+            ]);
+
             $this->httpClient = HttpClient::create($httpOptions->toArray());
 
             $backendUser = BackendUser::getInstance();
@@ -107,7 +111,7 @@ class BackendUserPermissions
                 $this->setIsAdminDisabled(true);
             }
 
-            $base = Environment::get('base');
+            /*$base = Environment::get('base');
             if (\str_ends_with($base, '/')) {
                 $this->url = $base . 'contao/alpdeskfeepermissions';
             } else {
@@ -128,7 +132,7 @@ class BackendUserPermissions
                     $this->setIsAdminDisabled(true);
                 }
 
-            }
+            }*/
 
         } catch (\Throwable $tr) {
             throw new \Exception($tr->getMessage());

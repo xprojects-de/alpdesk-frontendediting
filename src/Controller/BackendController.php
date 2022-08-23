@@ -114,6 +114,8 @@ class BackendController extends AbstractController
 
     public function checkPermissions(Request $request): JsonResponse
     {
+        return new JsonResponse(['hallo']);
+
         try {
 
             $this->checkAccess();
