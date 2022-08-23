@@ -23,27 +23,16 @@ class BackendUserPermissions
     private bool $isAdmin = false;
     private bool $isAdminDisabled = false;
 
-    public function __construct()
-    {
-        $this->httpClient = HttpClient::create(
-            (new HttpOptions())
-                ->verifyHost(false)
-                ->verifyPeer(false)
-                ->toArray()
-        );
-
-    }
-
     /**
      * @param string $method
      * @param float $timeout
      * @param bool $decodeEntities
-     * @param array $content
+     * @param array $body
      * @param array $validStatusCodes
      * @return mixed
      * @throws \Exception
      */
-    private function callHttp(string $method, float $timeout, bool $decodeEntities = false, array $content = [], array $validStatusCodes = [200]): mixed
+    private function callHttp(string $method, float $timeout, bool $decodeEntities = false, array $body = [], array $validStatusCodes = [200]): mixed
     {
         try {
 
@@ -51,6 +40,9 @@ class BackendUserPermissions
                 throw new \Exception('invalid url');
             }
 
+            $content['body'] = [
+                'data' => $body
+            ];
             $content['timeout'] = $timeout;
 
             $url = $this->url;
@@ -68,13 +60,13 @@ class BackendUserPermissions
                 throw new \Exception('error sending data. ResponseCode: null');
             }
 
-            $response = \json_decode($response->getContent(), true);
+            $responseFinal = \json_decode($response->getContent(), true);
 
-            if ($response === null) {
+            if (!\is_array($responseFinal)) {
                 throw new \Exception('invalid responseData');
             }
 
-            return $response;
+            return $responseFinal;
 
         } catch (\Throwable $ex) {
             throw new \Exception($ex->getMessage());
@@ -89,6 +81,13 @@ class BackendUserPermissions
     public function init(): void
     {
         try {
+
+            $httpOptions = new HttpOptions();
+
+            $httpOptions->verifyHost(false);
+            $httpOptions->verifyPeer(false);
+
+            $this->httpClient = HttpClient::create($httpOptions->toArray());
 
             $backendUser = BackendUser::getInstance();
             if (!$backendUser instanceof BackendUser) {
@@ -108,7 +107,12 @@ class BackendUserPermissions
                 $this->setIsAdminDisabled(true);
             }
 
-            /*$this->url = Environment::get('base') . '/contao/alpdeskfeepermissions';
+            $base = Environment::get('base');
+            if (\str_ends_with($base, '/')) {
+                $this->url = $base . 'contao/alpdeskfeepermissions';
+            } else {
+                $this->url = $base . '/contao/alpdeskfeepermissions';
+            }
 
             $permissionsResponse = $this->callHttp('POST', 5.5, false, [
                 'type' => 'global'
@@ -124,7 +128,7 @@ class BackendUserPermissions
                     $this->setIsAdminDisabled(true);
                 }
 
-            }*/
+            }
 
         } catch (\Throwable $tr) {
             throw new \Exception($tr->getMessage());

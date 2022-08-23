@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Alpdesk\AlpdeskFrontendediting\Controller;
 
+use Alpdesk\AlpdeskFrontendediting\Utils\Utils;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -67,19 +68,6 @@ class BackendController extends AbstractController
         $this->requestStack = $requestStack;
         $this->scopeMatcher = $scopeMatcher;
 
-        $this->getBackendUser();
-    }
-
-    private function getBackendUser(): void
-    {
-        if ($this->tokenChecker->hasBackendUser()) {
-
-            $user = $this->security->getUser();
-
-            if ($user instanceof BackendUser) {
-                $this->backendUser = $user;
-            }
-        }
     }
 
     /**
@@ -87,11 +75,26 @@ class BackendController extends AbstractController
      */
     private function checkAccess(): void
     {
-        $isBackend = $this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest());
+        $this->contaoFramework->initialize();
 
-        if ($isBackend === false || $this->backendUser === null) {
+        if (!$this->tokenChecker->hasBackendUser()) {
             throw new \Exception('No Access');
         }
+
+        $user = $this->security->getUser();
+
+        if (!$user instanceof BackendUser) {
+            throw new \Exception('No Access');
+        }
+
+        if (!$this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest())) {
+            throw new \Exception('No Access');
+        }
+
+        $this->backendUser = $user;
+
+        Utils::mergeUserGroupPersmissions($this->backendUser);
+
     }
 
     /**
@@ -109,11 +112,48 @@ class BackendController extends AbstractController
         }
     }
 
-    public function endpoint(Request $request): JsonResponse
+    public function checkPermissions(Request $request): JsonResponse
     {
         try {
 
-            $this->contaoFramework->initialize();
+            $this->checkAccess();
+
+            if (!$this->backendUser instanceof BackendUser) {
+                throw new \Exception('invalid user');
+            }
+
+            $data = (array)$request->request->get('data');
+            if (!\array_key_exists('type', $data) || $data['type'] === null) {
+                throw new \Exception('invalid type');
+            }
+
+            switch ((string)$data['type']) {
+
+                case 'global':
+                {
+                    $response = [
+                        'isAdmin' => $this->backendUser->isAdmin,
+                        'isAdminDisabled' => ($this->backendUser->alpdesk_fee_admin_disabled !== null && (int)$this->backendUser->alpdesk_fee_admin_disabled === 1)
+                    ];
+
+                    break;
+                }
+
+                default:
+                    throw new \Exception('invalid type');
+            }
+
+            return new JsonResponse($response);
+
+        } catch (\Exception $ex) {
+            return (new JsonResponse($ex->getMessage(), self::$STATUSCODE_COMMONERROR));
+        }
+
+    }
+
+    public function endpoint(Request $request): JsonResponse
+    {
+        try {
 
             $this->checkAccess();
 
