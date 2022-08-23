@@ -23,8 +23,7 @@
   "require": {
     "php": "^8.0",
     "ext-json": "*",
-    "contao/core-bundle": "^4.13 || ^5.0",
-    "symfony/http-client": "^5.4 || ^6.0"
+    "contao/core-bundle": "^4.13 || ^5.0"
   },
   "conflict": {
     "contao/manager-plugin": "<2.0 || >=3.0"

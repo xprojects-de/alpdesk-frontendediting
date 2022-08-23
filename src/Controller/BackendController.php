@@ -114,8 +114,6 @@ class BackendController extends AbstractController
 
     public function checkPermissions(Request $request): JsonResponse
     {
-        return new JsonResponse(['hallo']);
-
         try {
 
             $this->checkAccess();
@@ -124,8 +122,18 @@ class BackendController extends AbstractController
                 throw new \Exception('invalid user');
             }
 
-            $data = (array)$request->request->get('data');
-            if (!\array_key_exists('type', $data) || $data['type'] === null) {
+            $content = $request->getContent();
+
+            if (!\is_string($content)) {
+                throw new \Exception('invalid inputData');
+            }
+
+            $data = \json_decode($content, true);
+
+            if (
+                !\is_array($data) ||
+                !\array_key_exists('data', $data)
+            ) {
                 throw new \Exception('invalid type');
             }
 
