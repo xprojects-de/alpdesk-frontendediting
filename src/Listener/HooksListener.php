@@ -95,38 +95,6 @@ class HooksListener
 
     }
 
-    private function addLabelsToHeader(): void
-    {
-        $labels = \json_encode($GLOBALS['TL_LANG']['alpdeskfee_lables']);
-        $GLOBALS['TL_HEAD'][] = "<script>const alpdeskfeePageid=" . $this->currentPageId . "; const alpdeskfeeCanPageEdit=" . $this->pageChmodEdit . "; const alpdeskfeeAccessFilemanagement=" . $this->accessFilesmanagement . "; const alpdeskfeeLabels='" . $labels . "';</script>";
-    }
-
-    public function onGetPageLayout(PageModel $objPage): void
-    {
-        $this->getBackendUser();
-
-        if ($this->backendUserPermissions !== null && !$this->alpdeskfee_livemodus) {
-
-            $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_fe.js|async';
-
-            if ($this->backendUserPermissions->hasAccess('page', 'modules')) {
-                // !!! Typecast is necessary
-                $this->currentPageId = (int)$objPage->id;
-            }
-
-            $this->pagemountAccess = $this->backendUserPermissions->hasPageMountAccess($objPage);
-            $this->pageChmodEdit = ($this->backendUserPermissions->isAllowed(Utils::CAN_EDIT_PAGE, $objPage->row()) === true ? 1 : 0);
-
-            if ($this->backendUserPermissions->hasAccess('files', 'modules')) {
-                $this->accessFilesmanagement = 1;
-            }
-
-            $this->addLabelsToHeader();
-
-        }
-
-    }
-
     private function checkAccess(): bool
     {
         $this->getBackendUser();
@@ -138,6 +106,12 @@ class HooksListener
         }
 
         return false;
+    }
+
+    private function addLabelsToHeader(): void
+    {
+        $labels = \json_encode($GLOBALS['TL_LANG']['alpdeskfee_lables']);
+        $GLOBALS['TL_HEAD'][] = "<script>const alpdeskfeePageid=" . $this->currentPageId . "; const alpdeskfeeCanPageEdit=" . $this->pageChmodEdit . "; const alpdeskfeeAccessFilemanagement=" . $this->accessFilesmanagement . "; const alpdeskfeeLabels='" . $labels . "';</script>";
     }
 
     private function createElementsTags(string $buffer, string $classes, array $attributes): string
@@ -161,6 +135,32 @@ class HooksListener
 
             return '<' . $tag . $attributes . '>';
         }, $buffer, 1);
+
+    }
+
+    public function onGetPageLayout(PageModel $objPage): void
+    {
+        $this->checkAccess();
+
+        if ($this->backendUserPermissions !== null && !$this->alpdeskfee_livemodus) {
+
+            $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/alpdeskfrontendediting/js/alpdeskfrontendediting_fe.js|async';
+
+            if ($this->backendUserPermissions->hasAccess('page', 'modules')) {
+                // !!! Typecast is necessary
+                $this->currentPageId = (int)$objPage->id;
+            }
+
+            $this->pagemountAccess = $this->backendUserPermissions->hasPageMountAccess($objPage);
+            $this->pageChmodEdit = ($this->backendUserPermissions->isAllowed(Utils::CAN_EDIT_PAGE, $objPage->row()) === true ? 1 : 0);
+
+            if ($this->backendUserPermissions->hasAccess('files', 'modules')) {
+                $this->accessFilesmanagement = 1;
+            }
+
+            $this->addLabelsToHeader();
+
+        }
 
     }
 
@@ -437,8 +437,12 @@ class HooksListener
     {
         $this->getBackendUser();
 
-        $isBackend = $this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest());
-        if ($isBackend === true && $this->backendUserPermissions !== null && !$this->alpdeskfee_livemodus && $context instanceof DC_Table) {
+        if (
+            $this->scopeMatcher->isBackendRequest($this->requestStack->getCurrentRequest()) === true &&
+            $this->backendUserPermissions !== null &&
+            !$this->alpdeskfee_livemodus &&
+            $context instanceof DC_Table
+        ) {
 
             $objSession = $this->getCurrentSession();
 
