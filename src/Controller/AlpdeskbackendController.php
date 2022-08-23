@@ -99,9 +99,6 @@ class AlpdeskbackendController extends AbstractBackendController
     private function generatePreviewUrl(): string
     {
         $url = '/preview.php';
-        if (\str_ends_with(Environment::get('base'), '/')) {
-            $url = 'preview.php';
-        }
 
         $id = $this->getCurrentSession()->get('alpdeskfee_pageselect');
         if ($id !== null && $id !== '') {
