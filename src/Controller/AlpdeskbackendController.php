@@ -112,7 +112,14 @@ class AlpdeskbackendController extends AbstractBackendController
                 $pageModel = PageModel::findById((int)$id);
 
                 if ($pageModel !== null) {
-                    $url .= '/' . Utils::replaceInsertTags('{{link_url::' . $pageModel->id . '}}');
+
+                    $linkUrl = Utils::replaceInsertTags('{{link_url::' . $pageModel->id . '}}');
+                    if (\str_starts_with($linkUrl, '/')) {
+                        $url .= $linkUrl;
+                    } else {
+                        $url .= '/' . $linkUrl;
+                    }
+
                 }
 
             }
