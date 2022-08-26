@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Alpdesk\AlpdeskFrontendediting\Custom;
 
+use Contao\BackendUser;
+
 class CustomViewItem
 {
     public static int $TYPE_MODULE = 1;
@@ -20,6 +22,16 @@ class CustomViewItem
     private string $icon = '';
     private string $iconclass = '';
     private string $customBackendModule = '';
+    private BackendUser $backendUser;
+
+    /**
+     * @param BackendUser $backendUser
+     */
+    public function __construct(BackendUser $backendUser)
+    {
+        $this->backendUser = $backendUser;
+    }
+
 
     public function getType(): int
     {
@@ -136,6 +148,14 @@ class CustomViewItem
         }
 
         return $data;
+    }
+
+    /**
+     * @return BackendUser
+     */
+    public function getBackendUser(): BackendUser
+    {
+        return $this->backendUser;
     }
 
 }

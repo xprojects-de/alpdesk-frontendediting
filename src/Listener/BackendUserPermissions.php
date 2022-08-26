@@ -84,6 +84,14 @@ class BackendUserPermissions
     }
 
     /**
+     * @return BackendUser|null
+     */
+    public function getBackendUser(): ?BackendUser
+    {
+        return $this->backendUser;
+    }
+
+    /**
      * @return bool
      */
     public function isAdmin(): bool

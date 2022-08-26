@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes;
 
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
-use Contao\BackendUser;
 use Contao\StringUtil;
 
 class TypeEventlist extends Base
@@ -21,7 +20,7 @@ class TypeEventlist extends Base
                 $objCalendar = \Contao\CalendarModel::findById($calendars[0]);
                 if ($objCalendar !== null) {
 
-                    if (BackendUser::getInstance()->hasAccess($objCalendar->id, 'calendars')) {
+                    if ($item->getBackendUser()->hasAccess($objCalendar->id, 'calendars')) {
                         $item->setValid(true);
                         $item->setPath('do=' . $this->backendmodule . '&table=' . $this->table . '&id=' . $objCalendar->id);
                     }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes;
 
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
-use Contao\BackendUser;
 use Contao\Input;
 use Contao\StringUtil;
 
@@ -20,7 +19,7 @@ class TypeNewsReader extends Base
             if ($objNews !== null) {
 
                 $objArchive = $objNews->getRelated('pid');
-                if (BackendUser::getInstance()->hasAccess($objArchive->id, 'news')) {
+                if ($item->getBackendUser()->hasAccess($objArchive->id, 'news')) {
                     $item->setValid(true);
                     $item->setPath('do=' . $this->backendmodule . '&table=' . $this->table . '&id=' . $objNews->id);
                 }

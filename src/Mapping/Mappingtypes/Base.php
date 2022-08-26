@@ -14,26 +14,26 @@ abstract class Base
 {
     abstract public function run(CustomViewItem $item): CustomViewItem;
 
-    public $module;
-    public $element;
-    public $form;
-    public $icon;
-    public $iconclass;
-    public $label;
-    public $backendmodule;
-    public $additional_static_params = [];
-    public $table;
+    public mixed $module;
+    public mixed $element;
+    public mixed $form;
+    public mixed $icon;
+    public mixed $iconclass;
+    public mixed $label;
+    public mixed $backendmodule;
+    public mixed $additional_static_params = [];
+    public mixed $table;
 
-    private static function checkModuleAccess($moduletype): bool
+    private static function checkModuleAccess(mixed $moduletype, BackendUser $backendUser): bool
     {
-        if (!BackendUser::getInstance()->hasAccess($moduletype, 'modules')) {
+        if (!$backendUser->hasAccess($moduletype, 'modules')) {
             return false;
         }
 
         return true;
     }
 
-    public static function findClassByElement(ContentModel $element, array $mappingconfig)
+    public static function findClassByElement(ContentModel $element, ?array $mappingconfig, BackendUser $backendUser): mixed
     {
         if (\is_array($mappingconfig)) {
 
@@ -51,7 +51,7 @@ abstract class Base
                         $additional_static_params = $value['additional_static_params'];
                         $table = $value['table'];
 
-                        if (self::checkModuleAccess($backendmodule)) {
+                        if (self::checkModuleAccess($backendmodule, $backendUser)) {
 
                             $class = new $mappingObject();
                             $class->element = $element;
@@ -79,7 +79,7 @@ abstract class Base
         return null;
     }
 
-    public static function findClassByModule(Module $module, array $mappingconfig)
+    public static function findClassByModule(Module $module, ?array $mappingconfig, BackendUser $backendUser): mixed
     {
         if (\is_array($mappingconfig)) {
 
@@ -98,7 +98,7 @@ abstract class Base
 
                     if (class_exists($moduleobject) && $module instanceof $moduleobject) {
 
-                        if (self::checkModuleAccess($backendmodule)) {
+                        if (self::checkModuleAccess($backendmodule, $backendUser)) {
 
                             $class = new $mappingObject();
                             $class->module = $module;
@@ -126,9 +126,8 @@ abstract class Base
         return null;
     }
 
-    public static function findClassByForm(Form $form, array $mappingconfig)
+    public static function findClassByForm(Form $form, ?array $mappingconfig, BackendUser $backendUser): mixed
     {
-
         if (\is_array($mappingconfig)) {
 
             foreach ($mappingconfig['alpdesk_frontendediting_mapping']['type_mapping'] as $value) {
@@ -146,7 +145,7 @@ abstract class Base
 
                     if (class_exists($moduleobject) && $form instanceof $moduleobject) {
 
-                        if (self::checkModuleAccess($backendmodule)) {
+                        if (self::checkModuleAccess($backendmodule, $backendUser)) {
 
                             $class = new $mappingObject();
                             $class->form = $form;

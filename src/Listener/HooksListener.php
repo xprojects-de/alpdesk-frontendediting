@@ -222,7 +222,7 @@ class HooksListener
     {
         if ($this->checkAccess()) {
 
-            $modDoType = Custom::processElement($element, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
+            $modDoType = Custom::processElement($element, $this->alpdeskfeeEventDispatcher, $this->mappingconfig, $this->backendUserPermissions->getBackendUser());
 
             // Check if access to element
             $hasElementAccess = true;
@@ -352,12 +352,12 @@ class HooksListener
 
             if ($module instanceof Module) {
 
-                $modDoType = Custom::processModule($module, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
+                $modDoType = Custom::processModule($module, $this->alpdeskfeeEventDispatcher, $this->mappingconfig, $this->backendUserPermissions->getBackendUser());
                 return $this->renderModuleOutput($modDoType, $buffer);
 
             } else if ($module instanceof Form) {
 
-                $modDoType = Custom::processForm($module, $this->alpdeskfeeEventDispatcher, $this->mappingconfig);
+                $modDoType = Custom::processForm($module, $this->alpdeskfeeEventDispatcher, $this->mappingconfig, $this->backendUserPermissions->getBackendUser());
                 return $this->renderModuleOutput($modDoType, $buffer);
 
             }
@@ -370,7 +370,7 @@ class HooksListener
     public function onParseArticles(FrontendTemplate $template, array $newsEntry, Module $module): void
     {
         if ($this->checkAccess()) {
-            (new MappingArticle($template, $newsEntry, $module, (string)$this->currentPageId))->prepare();
+            (new MappingArticle($template, $newsEntry, $module, (string)$this->currentPageId, $this->backendUserPermissions->getBackendUser()))->prepare();
         }
 
     }

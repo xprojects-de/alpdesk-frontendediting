@@ -53,9 +53,9 @@ class AlpdeskbackendController extends AbstractBackendController
         return $this->requestStack->getCurrentRequest()->getSession();
     }
 
-    private function toggleFullesize(): void
+    private function toggleFullesize(BackendUser $backendUser): void
     {
-        $userModel = UserModel::findById(BackendUser::getInstance()->id);
+        $userModel = UserModel::findById($backendUser->id);
         if ($userModel !== null) {
 
             $userModel->fullscreen = ($userModel->fullscreen == 1 ? 0 : 1);
@@ -148,7 +148,7 @@ class AlpdeskbackendController extends AbstractBackendController
         }
 
         if (Input::post('toggleFullsize')) {
-            $this->toggleFullesize();
+            $this->toggleFullesize($backendUser);
         } else if (Input::post('toggleLivemodus')) {
             $this->toggleLiveModus();
         } else if (Input::get('pageselect')) {
@@ -170,7 +170,7 @@ class AlpdeskbackendController extends AbstractBackendController
         $GLOBALS['TL_CSS'][] = 'bundles/alpdeskfrontendediting/css/angular/alpdeskfee-styles.css';
 
         $elements = [];
-        $elementsData = Utils::getAlpdeskFeeElements(BackendUser::getInstance());
+        $elementsData = Utils::getAlpdeskFeeElements($backendUser);
         if (\count($elementsData) > 0) {
             $elements = $elementsData;
         }

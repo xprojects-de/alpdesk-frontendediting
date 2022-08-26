@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Alpdesk\AlpdeskFrontendediting\Mapping\Mappingtypes;
 
 use Alpdesk\AlpdeskFrontendediting\Custom\CustomViewItem;
-use Contao\BackendUser;
 use Contao\Input;
 use Contao\StringUtil;
 
@@ -21,7 +20,7 @@ class TypeEventreader extends Base
             if ($objEvent !== null) {
 
                 $objCalendar = $objEvent->getRelated('pid');
-                if (BackendUser::getInstance()->hasAccess($objCalendar->id, 'calendars')) {
+                if ($item->getBackendUser()->hasAccess($objCalendar->id, 'calendars')) {
                     $item->setValid(true);
                     $item->setPath('do=' . $this->backendmodule . '&table=' . $this->table . '&id=' . $objEvent->id);
                 }

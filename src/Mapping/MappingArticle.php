@@ -17,6 +17,8 @@ class MappingArticle
 
     private static array $mappedNewsListTemplates = [];
 
+    private BackendUser $backendUser;
+
     /**
      * NewsListArticle constructor.
      * @param FrontendTemplate $template
@@ -24,12 +26,19 @@ class MappingArticle
      * @param Module $module
      * @param string $currentPageId
      */
-    public function __construct(FrontendTemplate $template, array $newsEntry, Module $module, string $currentPageId)
+    public function __construct(
+        FrontendTemplate $template,
+        array            $newsEntry,
+        Module           $module,
+        string           $currentPageId,
+        BackendUser      $backendUser
+    )
     {
         $this->template = $template;
         $this->newsEntry = $newsEntry;
         $this->module = $module;
         $this->currentPageId = $currentPageId;
+        $this->backendUser = $backendUser;
     }
 
     /**
@@ -44,7 +53,7 @@ class MappingArticle
     {
         if (class_exists('\Contao\ModuleNewsList') && $this->module instanceof \Contao\ModuleNewsList) {
 
-            if (BackendUser::getInstance()->hasAccess($this->newsEntry['pid'], 'news')) {
+            if ($this->backendUser->hasAccess($this->newsEntry['pid'], 'news')) {
 
                 $mappingString = 'alpdeskfee_newslist_item_' . $this->newsEntry['id'];
 

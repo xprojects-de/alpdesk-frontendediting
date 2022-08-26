@@ -20,10 +20,13 @@ class Mapping
     private AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher;
     private ?array $mappingconfig;
 
-    public function __construct(AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, ?array $mappingconfig)
+    private BackendUser $backendUser;
+
+    public function __construct(AlpdeskFrontendeditingEventService $alpdeskfeeEventDispatcher, ?array $mappingconfig, BackendUser $backendUser)
     {
         $this->alpdeskfeeEventDispatcher = $alpdeskfeeEventDispatcher;
         $this->mappingconfig = $mappingconfig;
+        $this->backendUser = $backendUser;
     }
 
     public function checkCustomTypeElementAccess(ContentModel $element, CustomViewItem $item): void
@@ -44,7 +47,7 @@ class Mapping
                     if ($objModel !== null) {
 
                         $objModelParent = $objModel->getRelated('pid');
-                        if (BackendUser::getInstance()->hasAccess($objModelParent->id, $accesskey)) {
+                        if ($this->backendUser->hasAccess($objModelParent->id, $accesskey)) {
                             $item->setHasParentAccess(true);
                         }
 
@@ -77,7 +80,7 @@ class Mapping
         $this->checkCustomTypeElementAccess($element, $item);
         $this->checkCustomBackendModule($element, $item);
 
-        $instance = Base::findClassByElement($element, $this->mappingconfig);
+        $instance = Base::findClassByElement($element, $this->mappingconfig, $this->backendUser);
         if ($instance !== null) {
 
             $item->setIcon($instance->icon);
@@ -101,7 +104,7 @@ class Mapping
 
     public function mapModule(CustomViewItem $item, Module $module): CustomViewItem
     {
-        $instance = Base::findClassByModule($module, $this->mappingconfig);
+        $instance = Base::findClassByModule($module, $this->mappingconfig, $this->backendUser);
         if ($instance !== null) {
 
             $item->setIcon($instance->icon);
@@ -125,7 +128,7 @@ class Mapping
 
     public function mapForm(CustomViewItem $item, Form $form): CustomViewItem
     {
-        $instance = Base::findClassByForm($form, $this->mappingconfig);
+        $instance = Base::findClassByForm($form, $this->mappingconfig, $this->backendUser);
         if ($instance !== null) {
 
             $item->setIcon($instance->icon);
