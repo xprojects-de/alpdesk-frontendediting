@@ -5,7 +5,6 @@ src/Mapping/.DS_Store
 src/Resources/.DS_Store
 src/Resources/public/.DS_Store
 .DS_Store
-/.idea/
 /vendor/
 /composer.lock
 /public/
