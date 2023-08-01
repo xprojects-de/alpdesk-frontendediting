@@ -20,7 +20,7 @@
             Backend.openModalSelector({
                 id: 'tl_listing',
                 title: 'Frontend-Editing',
-                url: '/contao/picker?context=page&fieldType=radio',
+                url: window.location.href + '/picker?context=page&fieldType=radio',
                 callback: function (table, value) {
                     if (value !== null && value !== undefined) {
                         if (value.length > 0) {
