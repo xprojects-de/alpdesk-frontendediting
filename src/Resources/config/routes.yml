@@ -1,5 +1,5 @@
 alpdesk_frontendediting:
-  path: /contao/alpdeskfee
+  path: /%contao.backend.route_prefix%/alpdeskfee
   defaults:
     _controller: Alpdesk\AlpdeskFrontendediting\Controller\BackendController:endpoint
     _scope: backend
@@ -7,7 +7,7 @@ alpdesk_frontendediting:
   methods: [ POST ]
 
 alpdesk_frontendediting_backend:
-  path: /contao/alpdeskfeebackend
+  path: /%contao.backend.route_prefix%/alpdeskfeebackend
   defaults:
     _controller: Alpdesk\AlpdeskFrontendediting\Controller\AlpdeskbackendController:endpoint
     _scope: backend
