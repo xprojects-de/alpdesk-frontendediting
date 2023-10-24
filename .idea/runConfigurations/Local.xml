@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Local" type="PhpWebAppRunConfigurationType" factoryName="PHP Web Application" is_https="true" server_name="https://contao.local5.latest:8890" start_url="https://contao.local5.latest:8890">
+    <method v="2" />
+  </configuration>
+</component>

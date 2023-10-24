@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="ALpdesk-FrontendEditing" confirmBeforeUploading="false" confirmBeforeDeletion="false" autoUploadExternalChanges="true" showAutoUploadSettingsWarning="false">
+  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="Alpdesk-FrontendEditingC5" confirmBeforeUploading="false" confirmBeforeDeletion="false" autoUploadExternalChanges="true" showAutoUploadSettingsWarning="false">
     <option name="confirmBeforeDeletion" value="false" />
     <option name="confirmBeforeUploading" value="false" />
     <serverData>
-      <paths name="ALpdesk-FrontendEditing">
-        <serverdata>
-          <mappings>
-            <mapping deploy="alpdesk-frontendediting" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
       <paths name="Alpdesk-FrontendEditingC5">
         <serverdata>
           <mappings>

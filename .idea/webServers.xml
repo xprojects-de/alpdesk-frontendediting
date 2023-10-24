@@ -2,9 +2,6 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="1b3ea783-8e36-4950-beab-49c9cb8e3a4d" name="ALpdesk-FrontendEditing" url="https://contao.local-latest:8890">
-        <fileTransfer mountedRoot="$PROJECT_DIR$/../../MAMPP/contao.local-latest/vendor/alpdesk" accessType="MOUNT" port="0" />
-      </webServer>
       <webServer id="313884ec-1c09-453c-9497-0c76137aebaf" name="Alpdesk-FrontendEditingC5" url="https://contao.local5-latest:8890">
         <fileTransfer mountedRoot="$PROJECT_DIR$/../../MAMPP/contao.local5-latest/vendor/alpdesk" accessType="MOUNT" port="0" />
       </webServer>
